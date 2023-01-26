@@ -1,4 +1,3 @@
-//import { v4 as uuidv4 } from "uuid";
 import { bikes } from "../../lib/bikes.js";
 import Image from "next/image";
 

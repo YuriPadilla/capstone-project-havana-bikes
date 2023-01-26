@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const StyledHeader = styled.header`
   margin: 0;
@@ -26,8 +26,3 @@ export const StyledHeading = styled.h1`
   font-family: FugazOne-Regular;
   font-size: 1.2em;
 `;
-
-/*
-font-size: 1.5em;
-  font-weight: bold;
-*/

@@ -8,9 +8,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <p>
-        <Link href="">Home</Link>
-      </p>
+      <p>Home</p>
       <PriceInfo />
       <BikesPreview bikes={bikes} />
     </>
