@@ -7,9 +7,6 @@ export const StyledHeader = styled.header`
   width: 100%;
   height: 75px;
 
-  font-family: FugazOne-Regular;
-  font-size: 1em;
-
   background-color: #323d47;
   color: #5cafa5;
 
@@ -23,6 +20,11 @@ export const StyledIconFacebook = styled.div`
   padding: 0;
   position: absolute;
   right: 15px;
+`;
+
+export const StyledHeading = styled.h1`
+  font-family: FugazOne-Regular;
+  font-size: 1.2em;
 `;
 
 /*

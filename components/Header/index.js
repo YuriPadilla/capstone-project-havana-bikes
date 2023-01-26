@@ -1,13 +1,17 @@
-import { StyledHeader, StyledIconFacebook } from "./StyledHeader.styled";
+import {
+  StyledHeader,
+  StyledHeading,
+  StyledIconFacebook,
+} from "./StyledHeader.styled";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Header() {
   return (
     <StyledHeader>
-      <h3>
+      <StyledHeading>
         <em>HAVANA BIKES</em>
-      </h3>
+      </StyledHeading>
       <StyledIconFacebook>
         <Link href="https://www.facebook.com/havana.bike">
           <Image

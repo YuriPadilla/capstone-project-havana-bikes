@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+//import { v4 as uuidv4 } from "uuid";
 import { bikes } from "../../lib/bikes.js";
 import Image from "next/image";
 
@@ -10,11 +10,11 @@ export default function BikesList() {
         {bikes.map((bike) => {
           return (
             <Image
-              key={uuidv4()}
+              key={bike.id}
               src={bike.imageSource}
               height={100}
               width={120}
-              alt={bike.marke}
+              alt={bike.mark}
               priority
             />
           );
