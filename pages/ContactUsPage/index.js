@@ -15,8 +15,6 @@ export default function ContactUsPage() {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    console.log(data);
-
     event.target.reset();
     event.target.elements.name.focus();
 

@@ -1,5 +1,5 @@
+import { StyledToast } from "./ToastNotification.styled";
+
 export default function ToastNotification({ toastAction }) {
-  return (
-    <button className={`toast ${toastAction}`}>Your message was sent</button>
-  );
+  return <StyledToast action={toastAction}>Your message was sent</StyledToast>;
 }
