@@ -17,6 +17,9 @@ export default function ContactUsPage() {
 
     console.log(data);
 
+    event.target.reset();
+    event.target.elements.name.focus();
+
     setToastAction("enter");
     setTimeout(exitToast, 3000);
   }
@@ -25,7 +28,7 @@ export default function ContactUsPage() {
     <>
       <Header />
       <p>
-        <Link href="/">Home</Link>→<Link href="">Contact us</Link>
+        <Link href="/">Home</Link>→Contact us
       </p>
       <ContactUsForm handleSubmit={handleSubmit} />
       <ToastNotification toastAction={toastAction} />
