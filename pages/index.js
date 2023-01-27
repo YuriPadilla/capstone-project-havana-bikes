@@ -1,3 +1,15 @@
+import PriceInfo from "../components/PriceInfo";
+import BikesPreview from "../components/BikesPreview";
+import { bikes } from "../lib/bikes.js";
+import Header from "../components/Header";
+
 export default function HomePage() {
-  return <h1>Hello from Next.js</h1>;
+  return (
+    <>
+      <Header />
+      <p>Home</p>
+      <PriceInfo />
+      <BikesPreview bikes={bikes} />
+    </>
+  );
 }
