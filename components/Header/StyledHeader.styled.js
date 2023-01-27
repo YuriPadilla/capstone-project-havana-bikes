@@ -15,13 +15,6 @@ export const StyledHeader = styled.header`
   position: relative;
 `;
 
-export const StyledIconFacebook = styled.div`
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  right: 15px;
-`;
-
 export const StyledHeading = styled.h1`
   font-family: FugazOne-Regular;
   font-size: 1.2em;
