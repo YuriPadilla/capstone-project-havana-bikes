@@ -9,11 +9,19 @@ export const StyledForm = styled.form`
   gap: 10px;
 `;
 
+export const StyledFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: 1rem;
+`;
+
 export const StyledFieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  align-self: center;
   gap: 0.8rem;
 `;
 
@@ -33,5 +41,7 @@ export const StyledOutput = styled.output`
 `;
 
 export const StyledButtonContainer = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: space-between;
 `;
