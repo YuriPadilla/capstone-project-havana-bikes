@@ -1,34 +1,59 @@
-import { StyledForm } from "./ContactUsForm.styled";
-import { StyledButton } from "../Button/Button.styled";
-//import { useRouter } from "next/router";
-import Link from "next/link";
+import {
+  StyledForm,
+  StyledFieldset,
+  StyledInputContainer,
+  StyledOutput,
+  StyledButtonContainer,
+} from "./ContactUsForm.styled";
+import { StyledButton, StyledLinkAsButton } from "../Button/Button.styled";
 
-export default function ContactUsForm({ handleSubmit }) {
+export default function ContactUsForm({
+  handleSubmit,
+  onMessageChange,
+  inicialAmountChar,
+  amountCharLeft,
+}) {
   return (
     <StyledForm onSubmit={handleSubmit}>
       <h2>Contact us</h2>
-
-      <label htmlFor="name">*Name:</label>
-      <input type="text" id="name" name="name" required />
-
-      <label htmlFor="email">*Email:</label>
-      <input type="email" id="email" name="email" required />
-
-      <label htmlFor="message">*Message:</label>
-      <textarea
-        id="message"
-        name="message"
-        rows="8"
-        cols="40"
-        placeholder="Write your message here..."
-      />
-
-      <div>
+      <StyledFieldset>
+        <StyledInputContainer>
+          <label htmlFor="name">*Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            minLength="2"
+            maxLength="30"
+            required
+          />
+        </StyledInputContainer>
+        <StyledInputContainer>
+          <label htmlFor="email">*Email:</label>
+          <input type="email" id="email" name="email" maxLength="30" required />
+        </StyledInputContainer>
+        <StyledInputContainer>
+          <label htmlFor="message">*Message:</label>
+          <textarea
+            onChange={onMessageChange}
+            id="message"
+            name="message"
+            rows="9"
+            cols="40"
+            maxLength={inicialAmountChar}
+            placeholder="Write your message here..."
+            required
+          />
+          <StyledOutput>
+            {amountCharLeft}
+            {" characters left"}
+          </StyledOutput>
+        </StyledInputContainer>
+      </StyledFieldset>
+      <StyledButtonContainer>
         <StyledButton type="submit">Send</StyledButton>
-        <StyledButton type="button">
-          <Link href="/">← Home</Link>
-        </StyledButton>
-      </div>
+        <StyledLinkAsButton href="/">← Home</StyledLinkAsButton>
+      </StyledButtonContainer>
     </StyledForm>
   );
 }

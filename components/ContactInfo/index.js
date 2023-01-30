@@ -1,6 +1,4 @@
-//import { useRouter } from "next/router";
-import { StyledButton } from "../Button/Button.styled";
-import Link from "next/link";
+import { StyledLinkAsButton } from "../Button/Button.styled";
 
 export default function ContactInfo() {
   return (
@@ -18,9 +16,9 @@ export default function ContactInfo() {
             email: yuripadilla017@gmail.com
           </p>
         </article>
-        <StyledButton type="button">
-          <Link href="/ContactUsPage">Contact us</Link>
-        </StyledButton>
+        <StyledLinkAsButton href="/ContactUsPage">
+          Contact us
+        </StyledLinkAsButton>
       </section>
     </>
   );
