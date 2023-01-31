@@ -7,7 +7,7 @@ export default function BikeParts() {
     <>
       <Header />
       <p>
-        <Link href="/">Home</Link>→<Link href="">Bike Parts</Link>
+        <Link href="/">Home</Link>→Bike Parts
       </p>
       <BikePartsList />
     </>
