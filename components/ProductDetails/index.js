@@ -9,12 +9,12 @@ export default function ProductDetails({ product }) {
           src={product.imageSource}
           height={240}
           width={400}
-          alt={product.marke}
+          alt={product.mark}
           priority
         />
         <article>
           <p>
-            <strong>Mark:</strong> {product.marke}
+            <strong>Mark:</strong> {product.mark}
             <br />
             <strong>Size:</strong> {product.size}
           </p>
