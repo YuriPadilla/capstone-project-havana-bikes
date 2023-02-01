@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import styled from "styled-components";
-
-const StyledBikePreview = styled.section`
-  display: flex;
-`;
+import {
+  StyledPreviewSection,
+  StyledBikesPreviewUl,
+  StyledBikePreviewLi,
+} from "./BikesPreview.styled";
 
 export default function BikesPreview({ bikes }) {
   const bikesForPreview = bikes.slice(0, 4);
@@ -12,21 +12,24 @@ export default function BikesPreview({ bikes }) {
   return (
     <>
       <h2>Bikes</h2>
-      <StyledBikePreview>
-        {bikesForPreview.map((bike) => {
-          return (
-            <Image
-              key={bike.id}
-              src={bike.imageSource}
-              height={50}
-              width={60}
-              alt={bike.mark}
-              priority
-            />
-          );
-        })}
+      <StyledPreviewSection>
+        <StyledBikesPreviewUl>
+          {bikesForPreview.map((bike) => {
+            return (
+              <StyledBikePreviewLi key={bike.id}>
+                <Image
+                  src={bike.imageSource}
+                  height={40}
+                  width={60}
+                  alt={bike.brand}
+                  priority
+                />
+              </StyledBikePreviewLi>
+            );
+          })}
+        </StyledBikesPreviewUl>
         <Link href="/Bikes">Show all...</Link>
-      </StyledBikePreview>
+      </StyledPreviewSection>
     </>
   );
 }

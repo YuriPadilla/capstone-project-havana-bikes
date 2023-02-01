@@ -35,19 +35,16 @@ export default function ContactUsPage() {
 
   return (
     <>
-      <Header />
-      <main>
-        <p>
-          <Link href="/">Home</Link>→Contact us
-        </p>
-        <ContactUsForm
-          handleSubmit={handleSubmit}
-          onMessageChange={handleMessageChange}
-          inicialAmountChar={inicialAmountChar}
-          amountCharLeft={amountCharLeft}
-        />
-        <ToastNotification toastAction={toastAction} />
-      </main>
+      <p>
+        <Link href="/">Home</Link>→Contact us
+      </p>
+      <ContactUsForm
+        handleSubmit={handleSubmit}
+        onMessageChange={handleMessageChange}
+        inicialAmountChar={inicialAmountChar}
+        amountCharLeft={amountCharLeft}
+      />
+      <ToastNotification toastAction={toastAction} />
     </>
   );
 }

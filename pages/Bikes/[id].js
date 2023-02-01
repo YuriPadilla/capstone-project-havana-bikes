@@ -16,13 +16,10 @@ export default function Bike() {
 
   return (
     <>
-      <Header />
-      <main>
-        <p>
-          <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Details
-        </p>
-        <ProductDetails product={currentBike} />
-      </main>
+      <p>
+        <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Details
+      </p>
+      <ProductDetails product={currentBike} />
     </>
   );
 }

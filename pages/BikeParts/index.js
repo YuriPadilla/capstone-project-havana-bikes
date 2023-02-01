@@ -5,13 +5,10 @@ import BikePartsList from "../../components/BikePartsList";
 export default function BikeParts() {
   return (
     <>
-      <Header />
-      <main>
-        <p>
-          <Link href="/">Home</Link>→Bike Parts
-        </p>
-        <BikePartsList />
-      </main>
+      <p>
+        <Link href="/">Home</Link>→Bike Parts
+      </p>
+      <BikePartsList />
     </>
   );
 }
