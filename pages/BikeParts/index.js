@@ -6,10 +6,12 @@ export default function BikeParts() {
   return (
     <>
       <Header />
-      <p>
-        <Link href="/">Home</Link>→Bike Parts
-      </p>
-      <BikePartsList />
+      <main>
+        <p>
+          <Link href="/">Home</Link>→Bike Parts
+        </p>
+        <BikePartsList />
+      </main>
     </>
   );
 }

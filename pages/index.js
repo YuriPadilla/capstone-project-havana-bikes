@@ -10,11 +10,13 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <p>Home</p>
-      <PriceInfo />
-      <BikesPreview bikes={bikes} />
-      <BikePartsPreview bikeParts={bikeParts} />
-      <ContactInfo />
+      <main>
+        <p>Home</p>
+        <PriceInfo />
+        <BikesPreview bikes={bikes} />
+        <BikePartsPreview bikeParts={bikeParts} />
+        <ContactInfo />
+      </main>
     </>
   );
 }

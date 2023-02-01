@@ -1,4 +1,9 @@
 import Image from "next/image";
+import styled from "styled-components";
+
+const StyledUl = styled.ul`
+  list-style-type: none;
+`;
 
 export default function ProductDetails({ product }) {
   return (
@@ -13,11 +18,14 @@ export default function ProductDetails({ product }) {
           priority
         />
         <article>
-          <p>
-            <strong>Mark:</strong> {product.mark}
-            <br />
-            <strong>Size:</strong> {product.size}
-          </p>
+          <StyledUl>
+            <li>
+              <strong>Mark:</strong> {product.mark}
+            </li>
+            <li>
+              <strong>Size:</strong> {product.size}
+            </li>
+          </StyledUl>
         </article>
       </section>
     </>
