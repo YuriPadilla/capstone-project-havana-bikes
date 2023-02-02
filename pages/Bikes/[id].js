@@ -4,6 +4,7 @@ import ProductDetails from "../../components/ProductDetails";
 import Link from "next/link";
 import { StyledButton } from "../../components/Button/Button.styled";
 import useLocalStorageState from "use-local-storage-state";
+import ShoppingCart from "../../components/ShoppingCart";
 
 export default function Bike() {
   const [selectedProducts, setSelectedProducts] = useLocalStorageState(
@@ -29,6 +30,7 @@ export default function Bike() {
       <p>
         <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Details
       </p>
+      <ShoppingCart />
       <ProductDetails product={currentBike} />
       <StyledButton type="button" onClick={onAddToShoppingCart}>
         Add to Shopping Cart

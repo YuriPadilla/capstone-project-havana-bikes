@@ -1,5 +1,5 @@
-import Header from "../../components/Header";
 import Link from "next/link";
+import ShoppingCart from "../../components/ShoppingCart";
 import BikePartsList from "../../components/BikePartsList";
 
 export default function BikeParts() {
@@ -8,6 +8,7 @@ export default function BikeParts() {
       <p>
         <Link href="/">Home</Link>→Bike Parts
       </p>
+      <ShoppingCart />
       <BikePartsList />
     </>
   );

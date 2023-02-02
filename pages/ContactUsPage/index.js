@@ -1,6 +1,6 @@
-import Header from "../../components/Header";
 import ContactUsForm from "../../components/ContactUsForm";
 import Link from "next/link";
+import ShoppingCart from "../../components/ShoppingCart";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
 
@@ -38,6 +38,7 @@ export default function ContactUsPage() {
       <p>
         <Link href="/">Home</Link>→Contact us
       </p>
+      <ShoppingCart />
       <ContactUsForm
         handleSubmit={handleSubmit}
         onMessageChange={handleMessageChange}
