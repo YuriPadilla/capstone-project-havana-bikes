@@ -1,8 +1,8 @@
-import Header from "../../components/Header";
 import { bikes } from "../../lib/bikes.js";
 import { useRouter } from "next/router";
 import ProductDetails from "../../components/ProductDetails";
 import Link from "next/link";
+import { StyledButton } from "../../components/Button/Button.styled";
 
 export default function Bike() {
   const router = useRouter();
@@ -20,6 +20,7 @@ export default function Bike() {
         <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Details
       </p>
       <ProductDetails product={currentBike} />
+      <StyledButton type="button">Add to Shopping Cart</StyledButton>
     </>
   );
 }
