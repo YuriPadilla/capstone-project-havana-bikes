@@ -35,7 +35,6 @@ export default function ContactUsPage() {
 
   return (
     <>
-      <Header />
       <p>
         <Link href="/">Home</Link>→Contact us
       </p>
