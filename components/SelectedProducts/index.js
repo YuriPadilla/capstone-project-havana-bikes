@@ -8,7 +8,7 @@ import {
 } from "./SelectedProducts.styled";
 import SVGIcon from "../SVGIcon";
 
-export default function SelectedProducts({ products }) {
+export default function SelectedProducts({ products, onRemoveFromShopCart }) {
   return (
     <>
       <h2>Your selection</h2>
@@ -33,7 +33,11 @@ export default function SelectedProducts({ products }) {
                       <strong>Size:</strong> {product.size}
                     </li>
                   </StyledDescriptionUl>
-                  <StyledRemoveButton>
+                  <StyledRemoveButton
+                    onClick={() => {
+                      onRemoveFromShopCart(product.id);
+                    }}
+                  >
                     <SVGIcon variant="remove" width="30px" color="black" />
                   </StyledRemoveButton>
                 </StyledProductDiv>
