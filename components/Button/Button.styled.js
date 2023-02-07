@@ -24,3 +24,9 @@ export const StyledLinkAsButton = styled(Link)`
   background: rgb(216, 216, 204);
   box-shadow: 0px 0px 8px rgb(95, 117, 129);
 `;
+
+export const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px;
+`;
