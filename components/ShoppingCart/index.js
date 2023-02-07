@@ -10,7 +10,7 @@ export default function ShoppingCart() {
   return (
     <>
       {selectedProducts?.length > 0 || !selectedProducts === null ? (
-        <StyledShoppingCart href="">
+        <StyledShoppingCart href="/ShoppingCartPage">
           <SVGIcon variant="shoppingCart" width="50px" color="black" />
           <StyledQuantityDiv>{selectedProducts?.length}</StyledQuantityDiv>
         </StyledShoppingCart>
