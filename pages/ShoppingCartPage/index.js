@@ -8,12 +8,15 @@ import {
 import LeaseTimeForm from "../../components/LeaseTimeForm";
 import { useAtom } from "jotai";
 import { inputDateAtom } from "@/store/atoms";
+import { useState } from "react";
+import ToastNotification from "../../components/ToastNotification";
 
 export default function ShoppingCartPage() {
   const [selectedProducts, setSelectedProducts, { removeItem }] =
     useLocalStorageState("selectedProducts", { defaultValue: [] });
 
   const [inputDateValues, setInputDateValues] = useAtom(inputDateAtom);
+  const [toastAction, setToastAction] = useState("");
 
   function handleEmptyShoppingCart() {
     removeItem();
@@ -33,6 +36,22 @@ export default function ShoppingCartPage() {
     }
   }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData);
+    console.log(data);
+
+    setInputDateValues({ from: "", until: "" });
+    event.target.elements.from.value = "";
+    event.target.elements.until.value = "";
+    event.target.elements.from.focus();
+    removeItem();
+
+    setToastAction("enter");
+    setTimeout(() => setToastAction("exit"), 3000);
+  }
+
   return (
     <>
       <p>
@@ -50,9 +69,14 @@ export default function ShoppingCartPage() {
       </StyledButtonContainer>
       <LeaseTimeForm
         handleChange={handleChange}
+        onSubmit={handleSubmit}
         howManyBikes={selectedProducts.length}
         fromDate={inputDateValues.from}
         untilDate={inputDateValues.until}
+      />
+      <ToastNotification
+        toastAction={toastAction}
+        toastMessage="Booking successful"
       />
     </>
   );
