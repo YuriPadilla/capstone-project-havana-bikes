@@ -2,10 +2,9 @@ import { bikes } from "../../lib/bikes.js";
 import { useRouter } from "next/router";
 import ProductDetails from "../../components/ProductDetails";
 import Link from "next/link";
-import { StyledButton } from "../../components/Button/Button.styled";
 import useLocalStorageState from "use-local-storage-state";
 import SVGIcon from "../../components/SVGIcon";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -26,6 +25,27 @@ const StyledLinkButton = styled(Link)`
   box-shadow: 5px 5px 15px #272727;
 `;
 
+const StyledButton = styled.button`
+  text-decoration: none;
+  border: 1px solid #acacac;
+  border-radius: 8px;
+  color: #acacac;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 3px 7px;
+  background: transparent;
+  ${({ disabled }) => {
+    if (disabled === false) {
+      return css`
+        border: 1px solid black;
+        box-shadow: 1px 3px 12px rgb(95, 117, 129);
+        background: rgb(216, 216, 204);
+        color: black;
+      `;
+    }
+  }}
+`;
+
 export default function Bike() {
   const [selectedProducts, setSelectedProducts] = useLocalStorageState(
     "selectedProducts",
@@ -40,6 +60,10 @@ export default function Bike() {
     return null;
   }
 
+  const isInShoppingCart = selectedProducts.some((product) => {
+    return product.id === currentBike.id;
+  });
+
   function handleAddToShoppingCart() {
     setSelectedProducts([...selectedProducts, currentBike]);
     router.push("/Bikes");
@@ -52,7 +76,11 @@ export default function Bike() {
       </p>
       <ProductDetails product={currentBike} />
       <StyledWrapper>
-        <StyledButton type="button" onClick={handleAddToShoppingCart}>
+        <StyledButton
+          type="button"
+          onClick={handleAddToShoppingCart}
+          disabled={isInShoppingCart}
+        >
           Add to Shopping Cart
         </StyledButton>
         <StyledLinkButton href="/Bikes">
