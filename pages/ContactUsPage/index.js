@@ -26,11 +26,7 @@ export default function ContactUsPage() {
     event.target.elements.name.focus();
 
     setToastAction("enter");
-    setTimeout(exitToast, 3000);
-  }
-
-  function exitToast() {
-    setToastAction("exit");
+    setTimeout(() => setToastAction("exit"), 3000);
   }
 
   return (
@@ -44,7 +40,10 @@ export default function ContactUsPage() {
         inicialAmountChar={inicialAmountChar}
         amountCharLeft={amountCharLeft}
       />
-      <ToastNotification toastAction={toastAction} />
+      <ToastNotification
+        toastAction={toastAction}
+        toastMessage="Your message was sent"
+      />
     </>
   );
 }
