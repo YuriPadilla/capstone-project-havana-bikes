@@ -31,7 +31,7 @@ export const StyledPreviousNextLink = styled(Link)`
   }
 `;
 
-export const StyledPreviousNext = styled.div`
+export const StyledPrevNextWrapper = styled.div`
   border-radius: 50%;
   display: flex;
   justify-content: center;

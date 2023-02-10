@@ -8,21 +8,21 @@ export default function NavBar() {
   return (
     <>
       <StyledNavBar>
-        <Link href={router.pathname === "/" ? "" : "/"}>
+        <Link href="/">
           <SVGIcon
             variant={router.pathname === "/" ? "homeFilled" : "home"}
             width="40px"
             color={router.pathname === "/" ? "#213327" : "#acacac"}
           />
         </Link>
-        <Link href={router.pathname === "/InfoPage" ? "" : "/InfoPage"}>
+        <Link href="/InfoPage">
           <SVGIcon
             variant={router.pathname === "/InfoPage" ? "infoFilled" : "info"}
             width="40px"
             color={router.pathname === "/InfoPage" ? "#213327" : "#acacac"}
           />
         </Link>
-        <Link href={router.pathname === "/Bikes" ? "" : "/Bikes"}>
+        <Link href="/Bikes">
           <SVGIcon
             variant="bicylce"
             width="40px"
@@ -33,9 +33,7 @@ export default function NavBar() {
             }
           />
         </Link>
-        <Link
-          href={router.pathname === "/ContactUsPage" ? "" : "/ContactUsPage"}
-        >
+        <Link href="/ContactUsPage">
           <SVGIcon
             variant={
               router.pathname === "/ContactUsPage" ? "sendFilled" : "send"

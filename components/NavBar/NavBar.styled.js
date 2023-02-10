@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const StyledNavBar = styled.nav`
   position: fixed;
   bottom: 0;
-  z-index: 10;
   width: 100%;
   padding: 5px;
   display: flex;

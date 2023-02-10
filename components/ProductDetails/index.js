@@ -3,7 +3,7 @@ import {
   StyledImage,
   StyledWrapper,
   StyledPreviousNextLink,
-  StyledPreviousNext,
+  StyledPrevNextWrapper,
 } from "./ProductDetails.styled";
 import SVGIcon from "../SVGIcon";
 import { bikes } from "../../lib/bikes";
@@ -32,9 +32,9 @@ export default function ProductDetails({ product }) {
               <SVGIcon variant="previous" width="50px" color="black" />
             </StyledPreviousNextLink>
           ) : (
-            <StyledPreviousNext>
+            <StyledPrevNextWrapper>
               <SVGIcon variant="previous" width="50px" color="#acacac" />
-            </StyledPreviousNext>
+            </StyledPrevNextWrapper>
           )}
 
           {productIndex < bikes.length - 1 ? (
@@ -44,9 +44,9 @@ export default function ProductDetails({ product }) {
               <SVGIcon variant="next" width="50px" color="black" />
             </StyledPreviousNextLink>
           ) : (
-            <StyledPreviousNext>
+            <StyledPrevNextWrapper>
               <SVGIcon variant="next" width="50px" color="#acacac" />
-            </StyledPreviousNext>
+            </StyledPrevNextWrapper>
           )}
         </StyledWrapper>
         <article>
