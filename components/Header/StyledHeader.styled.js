@@ -1,18 +1,16 @@
 import styled from "styled-components";
 
 export const StyledHeader = styled.header`
-  margin: 0;
-  padding: 1em;
-
+  position: fixed;
+  top: 0;
   width: 100%;
   height: 75px;
-
-  background-color: #323d47;
-  color: #5cafa5;
-
+  margin: 0;
+  padding: 1em;
   display: flex;
   align-items: center;
-  position: relative;
+  background-color: #323d47;
+  color: #5cafa5;
 `;
 
 export const StyledHeading = styled.h1`

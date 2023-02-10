@@ -6,6 +6,7 @@ import {
   StyledDescriptionUl,
   StyledRemoveButton,
 } from "./SelectedProducts.styled";
+import Link from "next/link";
 import SVGIcon from "../SVGIcon";
 
 export default function SelectedProducts({ products, onRemoveFromShopCart }) {
@@ -18,13 +19,16 @@ export default function SelectedProducts({ products, onRemoveFromShopCart }) {
             return (
               <StyledProductLi key={product.id}>
                 <StyledProductDiv>
-                  <StyledImage
-                    src={product.imageSource}
-                    height={70}
-                    width={120}
-                    alt={product.brand}
-                    priority
-                  />
+                  <Link href={`/Bikes/${product.id}`}>
+                    <StyledImage
+                      src={product.imageSource}
+                      height={70}
+                      width={120}
+                      alt={product.brand}
+                      priority
+                    />
+                  </Link>
+
                   <StyledDescriptionUl>
                     <li>
                       <strong>Brand:</strong> {product.brand}
