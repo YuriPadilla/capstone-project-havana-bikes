@@ -54,17 +54,13 @@ export default function Bike() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data } = useSWR("/api/bikes");
+  const { data } = useSWR(id ? `/api/bikes/${id}` : null);
 
   if (!data) {
     return <h1>Loading...</h1>;
   }
 
-  const currentBike = data.find((bike) => bike._id === id);
-
-  if (!currentBike) {
-    return null;
-  }
+  const currentBike = data;
 
   const isInShoppingCart = selectedProducts.some((product) => {
     return product._id === currentBike._id;
