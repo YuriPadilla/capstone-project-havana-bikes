@@ -1,10 +1,10 @@
-import { bikes } from "../../lib/bikes.js";
 import { useRouter } from "next/router";
 import ProductDetails from "../../components/ProductDetails";
 import Link from "next/link";
 import useLocalStorageState from "use-local-storage-state";
 import SVGIcon from "../../components/SVGIcon";
 import styled, { css } from "styled-components";
+import useSWR from "swr";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -54,14 +54,20 @@ export default function Bike() {
   const router = useRouter();
   const { id } = router.query;
 
-  const currentBike = bikes.find((bike) => bike.id === id);
+  const { data } = useSWR("/api/bikes");
+
+  if (!data) {
+    return <h1>Loading...</h1>;
+  }
+
+  const currentBike = data.find((bike) => bike._id === id);
 
   if (!currentBike) {
     return null;
   }
 
   const isInShoppingCart = selectedProducts.some((product) => {
-    return product.id === currentBike.id;
+    return product._id === currentBike._id;
   });
 
   function handleAddToShoppingCart() {

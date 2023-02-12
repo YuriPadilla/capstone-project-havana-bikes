@@ -6,11 +6,17 @@ import {
   StyledPrevNextWrapper,
 } from "./ProductDetails.styled";
 import SVGIcon from "../SVGIcon";
-import { bikes } from "../../lib/bikes";
+import useSWR from "swr";
 
 export default function ProductDetails({ product }) {
-  const productIndex = bikes.findIndex((bike) => {
-    return bike.id === product.id;
+  const { data } = useSWR("/api/bikes");
+
+  if (!data) {
+    return <h1>Loading...</h1>;
+  }
+
+  const productIndex = data.findIndex((bike) => {
+    return bike._id === product._id;
   });
 
   return (
@@ -27,7 +33,7 @@ export default function ProductDetails({ product }) {
         <StyledWrapper>
           {productIndex > 0 ? (
             <StyledPreviousNextLink
-              href={`/Bikes/${bikes[productIndex - 1].id}`}
+              href={`/Bikes/${data[productIndex - 1]._id}`}
             >
               <SVGIcon variant="previous" width="50px" color="black" />
             </StyledPreviousNextLink>
@@ -37,9 +43,9 @@ export default function ProductDetails({ product }) {
             </StyledPrevNextWrapper>
           )}
 
-          {productIndex < bikes.length - 1 ? (
+          {productIndex < data.length - 1 ? (
             <StyledPreviousNextLink
-              href={`/Bikes/${bikes[productIndex + 1].id}`}
+              href={`/Bikes/${data[productIndex + 1]._id}`}
             >
               <SVGIcon variant="next" width="50px" color="black" />
             </StyledPreviousNextLink>
