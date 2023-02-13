@@ -9,11 +9,10 @@ import SVGIcon from "../SVGIcon";
 import useSWR from "swr";
 
 export default function ProductDetails({ product }) {
-  const { data } = useSWR("/api/bikes");
+  const { data, error, isLoading } = useSWR("/api/bikes");
 
-  if (!data) {
-    return <h1>Loading...</h1>;
-  }
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   const productIndex = data.findIndex((bike) => {
     return bike._id === product._id;

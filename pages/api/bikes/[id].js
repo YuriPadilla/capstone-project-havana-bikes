@@ -5,11 +5,15 @@ export default async function handler(request, response) {
   await dbConnect();
   const { id } = request.query;
 
-  const bike = await Bike.findById(id);
+  if (request.method === "GET") {
+    const bike = await Bike.findById(id);
 
-  if (!bike) {
-    return response.status(404).json({ status: "Not Found" });
+    if (!bike) {
+      return response.status(404).json({ status: "Not Found" });
+    }
+
+    return response.status(200).json(bike);
+  } else {
+    return response.status(405).json({ status: "Method Not Allowed" });
   }
-
-  return response.status(200).json(bike);
 }

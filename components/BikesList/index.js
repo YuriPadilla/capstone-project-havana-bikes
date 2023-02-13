@@ -9,11 +9,10 @@ export default function BikesList() {
     defaultValue: [],
   });
 
-  const { data } = useSWR("/api/bikes");
+  const { data, error, isLoading } = useSWR("/api/bikes");
 
-  if (!data) {
-    return <h1>Loading...</h1>;
-  }
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   const bikesToShow = data.filter((bike) => {
     let isSelected;

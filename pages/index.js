@@ -4,11 +4,10 @@ import ContactInfo from "../components/ContactInfo";
 import useSWR from "swr";
 
 export default function HomePage() {
-  const { data } = useSWR("/api/bikes");
+  const { data, error, isLoading } = useSWR("/api/bikes");
 
-  if (!data) {
-    return <h1>Loading...</h1>;
-  }
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   return (
     <>

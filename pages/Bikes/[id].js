@@ -54,11 +54,15 @@ export default function Bike() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data } = useSWR(id ? `/api/bikes/${id}` : null);
+  // if (id === undefined) {
+  //   return <div>Not found</div>;
+  // }
 
-  if (!data) {
-    return <h1>Loading...</h1>;
-  }
+  const { data, error, isLoading } = useSWR(id ? `/api/bikes/${id}` : null);
+  //const { data, error, isLoading } = useSWR(`/api/bikes/${id}`);
+
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   const currentBike = data;
 
