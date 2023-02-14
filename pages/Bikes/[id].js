@@ -56,11 +56,11 @@ export default function Bike() {
 
   const { data, error, isLoading } = useSWR(id ? `/api/bikes/${id}` : null);
 
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
   if (!data) {
     return <div>loading...</div>;
   }
-  if (error) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
 
   const currentBike = data;
 
