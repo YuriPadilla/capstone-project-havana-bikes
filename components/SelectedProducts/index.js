@@ -17,9 +17,9 @@ export default function SelectedProducts({ products, onRemoveFromShopCart }) {
         {products.length > 0 ? (
           products.map((product) => {
             return (
-              <StyledProductLi key={product.id}>
+              <StyledProductLi key={product._id}>
                 <StyledProductDiv>
-                  <Link href={`/Bikes/${product.id}`}>
+                  <Link href={`/Bikes/${product._id}`}>
                     <StyledImage
                       src={product.imageSource}
                       height={70}
@@ -39,7 +39,7 @@ export default function SelectedProducts({ products, onRemoveFromShopCart }) {
                   </StyledDescriptionUl>
                   <StyledRemoveButton
                     onClick={() => {
-                      onRemoveFromShopCart(product.id);
+                      onRemoveFromShopCart(product._id);
                     }}
                   >
                     <SVGIcon variant="remove" width="30px" color="black" />

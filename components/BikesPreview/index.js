@@ -16,7 +16,7 @@ export default function BikesPreview({ bikes }) {
         <StyledBikesPreviewUl>
           {bikesForPreview.map((bike) => {
             return (
-              <StyledBikePreviewLi key={bike.id}>
+              <StyledBikePreviewLi key={bike._id}>
                 <Image
                   src={bike.imageSource}
                   height={40}

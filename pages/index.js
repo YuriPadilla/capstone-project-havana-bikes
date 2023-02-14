@@ -1,14 +1,19 @@
 import PriceInfo from "../components/PriceInfo";
 import BikesPreview from "../components/BikesPreview";
-import { bikes } from "../lib/bikes.js";
 import ContactInfo from "../components/ContactInfo";
+import useSWR from "swr";
 
 export default function HomePage() {
+  const { data, error, isLoading } = useSWR("/api/bikes");
+
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+
   return (
     <>
       <p>Home</p>
       <PriceInfo />
-      <BikesPreview bikes={bikes} />
+      <BikesPreview bikes={data} />
       <ContactInfo />
     </>
   );

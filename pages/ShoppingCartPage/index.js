@@ -24,7 +24,7 @@ export default function ShoppingCartPage() {
 
   function handleRemoveFromShopCart(id) {
     setSelectedProducts((previousState) => {
-      return previousState.filter((product) => product.id !== id);
+      return previousState.filter((product) => product._id !== id);
     });
   }
 
