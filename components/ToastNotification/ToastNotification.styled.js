@@ -4,6 +4,7 @@ export const StyledToast = styled.div`
   position: fixed;
   top: 20px;
   right: 25px;
+  z-index: 30;
   padding: 1rem 2rem;
   border: none;
   font-size: 0.8rem;
