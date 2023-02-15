@@ -34,7 +34,6 @@ export default function Bike() {
 
   function handleAddToShoppingCart() {
     setSelectedProducts([...selectedProducts, currentBike]);
-    router.push("/Bikes");
   }
 
   return (

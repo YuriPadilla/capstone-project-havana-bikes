@@ -1,17 +1,21 @@
 import Link from "next/link";
 import SelectedProducts from "../../components/SelectedProducts";
 import useLocalStorageState from "use-local-storage-state";
-import {
-  StyledButton,
-  StyledButtonContainer,
-} from "../../components/Button/Button.styled";
 import LeaseTimeForm from "../../components/LeaseTimeForm";
 import { useAtom } from "jotai";
 import { inputDateAtom } from "@/store/atoms";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
+import styled from "styled-components";
+import { useRouter } from "next/router";
+
+const StyledP = styled.p`
+  margin: 0;
+  padding: 0;
+`;
 
 export default function ShoppingCartPage() {
+  const router = useRouter();
   const [selectedProducts, setSelectedProducts, { removeItem }] =
     useLocalStorageState("selectedProducts", { defaultValue: [] });
 
@@ -20,6 +24,7 @@ export default function ShoppingCartPage() {
 
   function handleEmptyShoppingCart() {
     removeItem();
+    router.push("/Bikes");
   }
 
   function handleRemoveFromShopCart(id) {
@@ -53,19 +58,15 @@ export default function ShoppingCartPage() {
 
   return (
     <>
-      <p>
+      <StyledP>
         <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Shopping
         Cart
-      </p>
+      </StyledP>
       <SelectedProducts
         products={selectedProducts}
+        handleEmptyShoppingCart={handleEmptyShoppingCart}
         onRemoveFromShopCart={handleRemoveFromShopCart}
       />
-      <StyledButtonContainer>
-        <StyledButton type="button" onClick={handleEmptyShoppingCart}>
-          Empty shopping cart
-        </StyledButton>
-      </StyledButtonContainer>
       <LeaseTimeForm
         handleChange={handleChange}
         onSubmit={handleSubmit}

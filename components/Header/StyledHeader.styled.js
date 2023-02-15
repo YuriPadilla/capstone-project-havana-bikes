@@ -9,6 +9,7 @@ export const StyledHeader = styled.header`
   margin: 0;
   padding: 1em;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: #323d47;
   color: #5cafa5;

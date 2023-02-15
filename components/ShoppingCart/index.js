@@ -1,4 +1,7 @@
-import { StyledShoppingCart, StyledQuantityDiv } from "./ShoppingCart.styled";
+import {
+  StyledShoppingCart,
+  StyledQuantityWrapper,
+} from "./ShoppingCart.styled";
 import SVGIcon from "../SVGIcon";
 import useLocalStorageState from "use-local-storage-state";
 
@@ -11,8 +14,10 @@ export default function ShoppingCart() {
     <>
       {selectedProducts?.length > 0 || !selectedProducts === null ? (
         <StyledShoppingCart href="/ShoppingCartPage">
-          <SVGIcon variant="shoppingCart" width="50px" color="black" />
-          <StyledQuantityDiv>{selectedProducts?.length}</StyledQuantityDiv>
+          <SVGIcon variant="shoppingCart" width="40px" color="black" />
+          <StyledQuantityWrapper>
+            <strong>{selectedProducts?.length}</strong>
+          </StyledQuantityWrapper>
         </StyledShoppingCart>
       ) : null}
     </>
