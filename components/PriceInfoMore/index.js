@@ -11,11 +11,6 @@ const StyledSection = styled.section`
   overflow: hidden;
 `;
 
-const StyledHeadingH2 = styled.h2`
-  margin: 0;
-  padding: 0;
-`;
-
 const StyledHeadingH3 = styled.h3`
   margin: 0;
   padding: 0;
@@ -39,21 +34,6 @@ const StyledTr = styled.tr`
 
 const StyledTd = styled.td`
   padding: 1px;
-`;
-
-const StyledLinkAsButton = styled(Link)`
-  text-decoration: none;
-  border: 1px solid rgb(205, 211, 205);
-  border-radius: 8px;
-  color: black;
-  font-size: inherit;
-  font-family: inherit;
-  padding: 3px 7px;
-  background: rgb(222, 245, 234);
-  box-shadow: 3px 3px 8px rgb(95, 117, 129);
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
 `;
 
 const StyledP = styled.p`

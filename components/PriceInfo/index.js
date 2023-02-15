@@ -9,11 +9,6 @@ const StyledSection = styled.section`
   overflow: hidden;
 `;
 
-const StyledHeadingH2 = styled.h2`
-  margin: 0;
-  padding: 0;
-`;
-
 const StyledHeadingH3 = styled.h3`
   margin: 0;
   padding: 0;

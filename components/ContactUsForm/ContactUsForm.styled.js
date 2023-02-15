@@ -1,28 +1,12 @@
 import styled from "styled-components";
 
 export const StyledForm = styled.form`
-  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 10px;
-`;
-
-export const StyledFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  gap: 1rem;
-`;
-
-export const StyledFieldset = styled.fieldset`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-self: center;
-  gap: 0.8rem;
+  width: 100%;
 `;
 
 export const StyledInputContainer = styled.div`
@@ -43,5 +27,6 @@ export const StyledOutput = styled.output`
 export const StyledButtonContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  padding: 20px 20px 108px 0;
 `;
