@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import Link from "next/link";
+import PriceCalculatorForm from "../PriceCalculatorForm";
+import { useState } from "react";
 
 const StyledSection = styled.section`
   background-color: rgb(254, 254, 254);
   padding: 20px;
   position: relative;
   width: 100%;
-  height: 300px;
   overflow: hidden;
 `;
 
@@ -23,8 +24,8 @@ const StyledHeadingH3 = styled.h3`
 const StyledTable = styled.table`
   width: 100%;
   border: none;
-  margin-bottom: 20px;
 `;
+//margin-bottom: 25px;
 
 const StyledTr = styled.tr`
   border: none;
@@ -37,25 +38,50 @@ const StyledTr = styled.tr`
 `;
 
 const StyledTd = styled.td`
-  padding: 5px;
+  padding: 1px;
 `;
 
 const StyledLinkAsButton = styled(Link)`
   text-decoration: none;
-  border: 1px solid black;
+  border: 1px solid rgb(205, 211, 205);
   border-radius: 8px;
   color: black;
   font-size: inherit;
   font-family: inherit;
   padding: 3px 7px;
-  background: rgb(216, 216, 204);
-  box-shadow: 0px 0px 8px rgb(95, 117, 129);
+  background: rgb(222, 245, 234);
+  box-shadow: 3px 3px 8px rgb(95, 117, 129);
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 10px;
+  right: 20px;
 `;
 
-export default function PriceInfo() {
+const StyledP = styled.p`
+  margin: 17px 0 0 0;
+  padding: 0;
+`;
+
+export default function PriceInfoMore() {
+  const [inputAmountBikesDays, setInputAmountBikesDays] = useState({
+    amountBikes: "",
+    amountDays: "",
+  });
+  //const [inputAmountDays, setInputAmountDays] = useState("");
+
+  function handleChangePrices(event) {
+    if (event.target.name === "amountBikes") {
+      setInputAmountBikesDays({
+        ...inputAmountBikesDays,
+        amountBikes: event.target.value,
+      });
+    } else if (event.target.name === "amountDays") {
+      setInputAmountBikesDays({
+        ...inputAmountBikesDays,
+        amountDays: event.target.value,
+      });
+    }
+  }
+
   return (
     <>
       <StyledSection>
@@ -77,6 +103,17 @@ export default function PriceInfo() {
             </StyledTr>
           </tbody>
         </StyledTable>
+      </StyledSection>
+      <StyledSection>
+        <StyledHeadingH3>Price calculator</StyledHeadingH3>
+        <hr />
+        <PriceCalculatorForm
+          handleChangePrices={handleChangePrices}
+          amountBikes={inputAmountBikesDays.amountBikes}
+          amountDays={inputAmountBikesDays.amountDays}
+        />
+      </StyledSection>
+      <StyledSection>
         <StyledHeadingH3>Hours</StyledHeadingH3>
         <hr />
         <StyledTable>
@@ -87,7 +124,19 @@ export default function PriceInfo() {
             </StyledTr>
           </tbody>
         </StyledTable>
-        <StyledLinkAsButton href="/InfoPage">Show more</StyledLinkAsButton>
+      </StyledSection>
+      <StyledSection>
+        <StyledHeadingH3>Deposit</StyledHeadingH3>
+        <hr />
+        <StyledTable>
+          <tbody>
+            <StyledTr>
+              <StyledTd>1 bike</StyledTd>
+              <StyledTd>$50</StyledTd>
+            </StyledTr>
+          </tbody>
+        </StyledTable>
+        <StyledP>The Deposit will be returned at the end.</StyledP>
       </StyledSection>
     </>
   );
