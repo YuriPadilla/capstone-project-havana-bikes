@@ -1,14 +1,20 @@
 import styled from "styled-components";
 
 export const StyledPreviewSection = styled.section`
-  display: flex;
+  background-color: rgb(254, 254, 254);
+  position: relative;
 `;
 
 export const StyledBikesPreviewUl = styled.ul`
   list-style-type: none;
   display: flex;
-  margin: 0;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   padding: 0;
+  margin-top: 0;
+  margin-bottom: 45px;
 `;
 
 export const StyledBikePreviewLi = styled.li`

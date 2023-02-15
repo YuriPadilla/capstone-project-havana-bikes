@@ -6,6 +6,7 @@ const StyledSection = styled.section`
   padding: 20px;
   position: relative;
   width: 100%;
+  height: 300px;
   overflow: hidden;
 `;
 
@@ -22,7 +23,7 @@ const StyledHeadingH3 = styled.h3`
 const StyledTable = styled.table`
   width: 100%;
   border: none;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 `;
 
 const StyledTr = styled.tr`
@@ -36,22 +37,22 @@ const StyledTr = styled.tr`
 `;
 
 const StyledTd = styled.td`
-  padding: 1px;
+  padding: 5px;
 `;
 
 const StyledLinkAsButton = styled(Link)`
   text-decoration: none;
-  border: 1px solid rgb(205, 211, 205);
+  border: 1px solid black;
   border-radius: 8px;
   color: black;
   font-size: inherit;
   font-family: inherit;
   padding: 3px 7px;
-  background: rgb(222, 245, 234);
-  box-shadow: 3px 3px 8px rgb(95, 117, 129);
+  background: rgb(216, 216, 204);
+  box-shadow: 0px 0px 8px rgb(95, 117, 129);
   position: absolute;
-  bottom: 10px;
-  right: 20px;
+  bottom: 0;
+  right: 0;
 `;
 
 export default function PriceInfo() {
@@ -73,6 +74,16 @@ export default function PriceInfo() {
             <StyledTr>
               <StyledTd>1 day, after the second day on</StyledTd>
               <StyledTd>$10</StyledTd>
+            </StyledTr>
+          </tbody>
+        </StyledTable>
+        <StyledHeadingH3>Hours</StyledHeadingH3>
+        <hr />
+        <StyledTable>
+          <tbody>
+            <StyledTr>
+              <StyledTd>Monday - Sunday</StyledTd>
+              <StyledTd>8:00 AM - 8:00 PM</StyledTd>
             </StyledTr>
           </tbody>
         </StyledTable>
