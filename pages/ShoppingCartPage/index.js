@@ -49,7 +49,6 @@ export default function ShoppingCartPage() {
     setInputDateValues({ from: "", until: "" });
     event.target.elements.from.value = "";
     event.target.elements.until.value = "";
-    event.target.elements.from.focus();
     removeItem();
 
     setToastAction("enter");
