@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
 export const StyledForm = styled.form`
-  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -27,8 +26,7 @@ export const StyledInputContainer = styled.div`
 `;
 
 export const StyledOutput = styled.output`
-  width: 100%;
-  height: 60px;
+  height: 56px;
 `;
 
 export const StyledDescriptionUl = styled.ul`
@@ -37,10 +35,11 @@ export const StyledDescriptionUl = styled.ul`
   padding: 0;
 `;
 
-export const StyledButtonContainer = styled.div`
+export const StyledWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const StyledButton = styled.button`
@@ -50,15 +49,15 @@ export const StyledButton = styled.button`
   color: #acacac;
   font-size: inherit;
   font-family: inherit;
-  margin: 0 8px;
+  margin: 0 15px;
   padding: 4px 12px;
-  transition: border 1s, box-shadow 1s, background 1s, color 1s;
+  background: transparent;
   ${({ disabled }) => {
     if (disabled === false) {
       return css`
-        border: 1px solid black;
-        box-shadow: 1px 3px 12px rgb(95, 117, 129);
-        background: rgb(216, 216, 204);
+        border: 1px solid rgb(205, 211, 205);
+        box-shadow: 3px 3px 8px rgb(95, 117, 129);
+        background: rgb(222, 245, 234);
         color: black;
       `;
     }

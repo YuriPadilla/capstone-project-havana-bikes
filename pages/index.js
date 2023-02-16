@@ -11,7 +11,6 @@ export default function HomePage() {
 
   return (
     <>
-      <p>Home</p>
       <PriceInfo />
       <BikesPreview bikes={data} />
       <ContactInfo />

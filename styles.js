@@ -9,6 +9,7 @@ export default createGlobalStyle`
 
   body {
     margin: 0;
-    font-family: system-ui;
+    font-family: Cambria, times;
+    background-color: rgb(231, 231, 228);
   }
 `;

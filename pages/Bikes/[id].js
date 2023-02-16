@@ -2,48 +2,12 @@ import { useRouter } from "next/router";
 import ProductDetails from "../../components/ProductDetails";
 import Link from "next/link";
 import useLocalStorageState from "use-local-storage-state";
-import SVGIcon from "../../components/SVGIcon";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import useSWR from "swr";
 
-const StyledWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 10px;
-`;
-
-const StyledLinkButton = styled(Link)`
-  border: 1px solid black;
-  border-radius: 50%;
-  padding: 6px;
-  background: rgb(216, 216, 204);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 5px 5px 15px #272727;
-`;
-
-const StyledButton = styled.button`
-  text-decoration: none;
-  border: 1px solid #acacac;
-  border-radius: 8px;
-  color: #acacac;
-  font-size: inherit;
-  font-family: inherit;
-  padding: 3px 7px;
-  background: transparent;
-  ${({ disabled }) => {
-    if (disabled === false) {
-      return css`
-        border: 1px solid black;
-        box-shadow: 1px 3px 12px rgb(95, 117, 129);
-        background: rgb(216, 216, 204);
-        color: black;
-      `;
-    }
-  }}
+const StyledP = styled.p`
+  margin: 0;
+  padding: 0;
 `;
 
 export default function Bike() {
@@ -70,27 +34,18 @@ export default function Bike() {
 
   function handleAddToShoppingCart() {
     setSelectedProducts([...selectedProducts, currentBike]);
-    router.push("/Bikes");
   }
 
   return (
     <>
-      <p>
+      <StyledP>
         <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Details
-      </p>
-      <ProductDetails product={currentBike} />
-      <StyledWrapper>
-        <StyledButton
-          type="button"
-          onClick={handleAddToShoppingCart}
-          disabled={isInShoppingCart}
-        >
-          Add to Shopping Cart
-        </StyledButton>
-        <StyledLinkButton href="/Bikes">
-          <SVGIcon variant="back" width="30px" color="black" />
-        </StyledLinkButton>
-      </StyledWrapper>
+      </StyledP>
+      <ProductDetails
+        product={currentBike}
+        handleAddToShoppingCart={handleAddToShoppingCart}
+        isInShoppingCart={isInShoppingCart}
+      />
     </>
   );
 }
