@@ -1,8 +1,28 @@
-# New Project
+# Havana Bikes
 
-This project was created from the neue fische next template.
+<img width="1419" alt="Bildschirmfoto 2023-02-20 um 00 03 31" src="https://user-images.githubusercontent.com/53151968/219977847-2cc28467-bc4c-4de9-bc55-80b672f2d0ff.png">
 
-## Development
+This is a webApp for a bike rental family business in Havana. It enables people who travel to Havana (Cuba) to rent bikes. In this capstone project you can see the MVP (Minimal Viable Product) of this webApp, which has been first developed for small mobile devices and will be developed continuously.
+
+## Demo
+
+See the Deployment in Vercel [here](https://havana-bikes.vercel.app/).
+
+## Tech Stack
+
+- React 
+- Next.js
+- Styled Components
+- React Hooks
+- React Router
+- Node.js
+- MongoDB Atlas
+- Mongoose
+- Cloudinary
+- Atom
+- Jest
+
+## Setup
 
 To run project commands locally, you need to install the dependencies using `npm i` first.
 
