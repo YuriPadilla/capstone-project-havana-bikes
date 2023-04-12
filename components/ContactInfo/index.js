@@ -6,6 +6,7 @@ const StyledSection = styled.section`
   background-color: rgb(254, 254, 254);
   padding: 20px;
   position: relative;
+  width: 100%;
 `;
 
 const StyledHeadingH3 = styled.h3`

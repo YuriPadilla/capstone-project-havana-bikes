@@ -6,7 +6,6 @@ const StyledSection = styled.section`
   padding: 20px;
   position: relative;
   width: 100%;
-  overflow: hidden;
 `;
 
 const StyledHeadingH3 = styled.h3`
