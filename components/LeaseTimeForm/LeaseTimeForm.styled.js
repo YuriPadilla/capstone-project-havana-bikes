@@ -42,24 +42,24 @@ export const StyledWrapper = styled.div`
   align-items: center;
 `;
 
-export const StyledButton = styled.button`
-  text-decoration: none;
-  border: 1px solid #acacac;
-  border-radius: 8px;
-  color: #acacac;
-  font-size: inherit;
-  font-family: inherit;
-  margin: 0 15px;
-  padding: 4px 12px;
-  background: transparent;
-  ${({ disabled }) => {
-    if (disabled === false) {
-      return css`
-        border: 1px solid rgb(205, 211, 205);
-        box-shadow: 3px 3px 8px rgb(95, 117, 129);
-        background: rgb(222, 245, 234);
-        color: black;
-      `;
-    }
-  }}
-`;
+// export const StyledButton = styled.button`
+//   text-decoration: none;
+//   border: 1px solid #acacac;
+//   border-radius: 8px;
+//   color: #acacac;
+//   font-size: inherit;
+//   font-family: inherit;
+//   margin: 0 15px;
+//   padding: 4px 12px;
+//   background: transparent;
+//   ${({ disabled }) => {
+//     if (disabled === false) {
+//       return css`
+//         border: 1px solid rgb(205, 211, 205);
+//         box-shadow: 3px 3px 8px rgb(95, 117, 129);
+//         background: rgb(222, 245, 234);
+//         color: black;
+//       `;
+//     }
+//   }}
+// `;

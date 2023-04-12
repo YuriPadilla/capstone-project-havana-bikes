@@ -5,9 +5,10 @@ import {
   StyledOutput,
   StyledDescriptionUl,
   StyledWrapper,
-  StyledButton,
+  /*StyledButton,*/
 } from "./LeaseTimeForm.styled.js";
 import styled, { css } from "styled-components";
+import { StyledButton } from "../Button/Button.styled";
 
 const StyledSection = styled.section`
   background-color: rgb(254, 254, 254);
