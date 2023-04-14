@@ -10,23 +10,7 @@ import Link from "next/link";
 import SVGIcon from "../SVGIcon";
 import styled from "styled-components";
 import { StyledButton } from "../Button/Button.styled";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
+import StandardSectionApp from "../StandardSectionApp";
 
 const StyledButtonWrapper = styled.div`
   display: flex;
@@ -40,11 +24,7 @@ export default function SelectedProducts({
 }) {
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Your selection</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Your selection">
         <StyledSelectionUl>
           {products.length > 0 ? (
             products.map((product) => {
@@ -92,7 +72,7 @@ export default function SelectedProducts({
             Empty shopping cart
           </StyledButton>
         </StyledButtonWrapper>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }

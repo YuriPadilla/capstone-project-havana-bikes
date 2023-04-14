@@ -1,17 +1,6 @@
 import styled from "styled-components";
 import { StyledLinkAsButton } from "../Button/Button.styled.js";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
+import StandardSectionApp from "../StandardSectionApp/index.js";
 
 const StyledTable = styled.table`
   width: 100%;
@@ -36,9 +25,7 @@ const StyledTd = styled.td`
 export default function PriceInfo() {
   return (
     <>
-      <StyledSection>
-        <StyledHeadingH3>Lease Time & Price</StyledHeadingH3>
-        <hr />
+      <StandardSectionApp sectionTitle="Lease Time & Price">
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -56,7 +43,7 @@ export default function PriceInfo() {
           </tbody>
         </StyledTable>
         <StyledLinkAsButton href="/InfoPage">Show more</StyledLinkAsButton>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }

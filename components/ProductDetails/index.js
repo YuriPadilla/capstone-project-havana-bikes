@@ -9,26 +9,10 @@ import {
 } from "./ProductDetails.styled";
 import SVGIcon from "../SVGIcon";
 import useSWR from "swr";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Link from "next/link";
 import { StyledButton } from "../Button/Button.styled.js";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
+import StandardSectionApp from "../StandardSectionApp";
 
 const StyledButtonCartWrapper = styled.div`
   display: flex;
@@ -73,11 +57,7 @@ export default function ProductDetails({
 
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Details</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Details">
         <StyledWrapper>
           {productIndex > 0 ? (
             <StyledPreviousLink href={`/Bikes/${data[productIndex - 1]._id}`}>
@@ -127,7 +107,7 @@ export default function ProductDetails({
             <SVGIcon variant="back" width="30px" color="black" />
           </StyledLinkAsButton>
         </StyledButtonBackWrapper>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }

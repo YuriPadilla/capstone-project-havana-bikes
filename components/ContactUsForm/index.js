@@ -5,23 +5,7 @@ import {
   StyledButtonContainer,
 } from "./ContactUsForm.styled";
 import { StyledButton } from "../Button/Button.styled";
-import styled from "styled-components";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
+import StandardSectionApp from "../StandardSectionApp";
 
 export default function ContactUsForm({
   handleSubmit,
@@ -31,11 +15,7 @@ export default function ContactUsForm({
 }) {
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Contact us</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Contact us">
         <StyledForm onSubmit={handleSubmit}>
           <StyledInputContainer>
             <label htmlFor="name">*Name:</label>
@@ -81,7 +61,7 @@ export default function ContactUsForm({
             </StyledButton>
           </StyledButtonContainer>
         </StyledForm>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }
