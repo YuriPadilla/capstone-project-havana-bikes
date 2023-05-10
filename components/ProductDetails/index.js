@@ -6,40 +6,14 @@ import {
   StyledPreviousWrapper,
   StyledNextLink,
   StyledNextWrapper,
+  StyledButtonCartWrapper,
+  StyledButtonBackWrapper,
+  StyledLinkAsButton,
 } from "./ProductDetails.styled";
 import SVGIcon from "../SVGIcon";
 import useSWR from "swr";
-import styled from "styled-components";
-import Link from "next/link";
 import { StyledButton } from "../Button/Button.styled.js";
 import StandardSectionApp from "../StandardSectionApp";
-
-const StyledButtonCartWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: 20px;
-  margin: 14px 0;
-`;
-
-const StyledButtonBackWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 20px;
-  margin: 15px 0;
-`;
-
-const StyledLinkAsButton = styled(Link)`
-  border: 1px solid rgb(205, 211, 205);
-  border-radius: 50%;
-  padding: 6px;
-  background: rgb(222, 245, 234);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 3px 3px 8px rgb(95, 117, 129);
-`;
 
 export default function ProductDetails({
   product,

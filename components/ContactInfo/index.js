@@ -1,27 +1,7 @@
 import { StyledLinkAsButton } from "../Button/Button.styled.js";
-import styled from "styled-components";
 import SVGIcon from "../SVGIcon";
 import StandardSectionApp from "../StandardSectionApp/index.js";
-
-const StyledTable = styled.table`
-  width: 100%;
-  border: none;
-  margin-bottom: 25px;
-`;
-
-const StyledTr = styled.tr`
-  border: none;
-  &:nth-child(odd) {
-    background-color: #d9f5f3;
-  }
-  &:nth-child(even) {
-    background-color: rgb(211, 245, 197);
-  }
-`;
-
-const StyledTd = styled.td`
-  vertical-align: center;
-`;
+import { StyledTable, StyledTr, StyledTd } from "./ContactInfo.styled";
 
 export default function ContactInfo() {
   return (

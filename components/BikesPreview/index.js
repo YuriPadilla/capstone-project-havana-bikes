@@ -4,19 +4,10 @@ import {
   StyledPreviewSection,
   StyledBikesPreviewUl,
   StyledBikePreviewLi,
-} from "./BikesPreview.styled";
-import styled from "styled-components";
+  StyledWrapperHeading,
+  StyledHeadingH3,
+} from "./BikesPreview.styled.js";
 import { StyledLinkAsButton } from "../Button/Button.styled.js";
-
-const StyledWrapperHeading = styled.div`
-  padding: 20px 20px 0 20px;
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
 
 export default function BikesPreview({ bikes }) {
   const bikesForPreview = bikes.slice(0, 4);

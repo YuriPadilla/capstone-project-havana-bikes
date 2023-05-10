@@ -1,31 +1,12 @@
-import styled from "styled-components";
 import PriceCalculatorForm from "../PriceCalculatorForm";
 import { useState } from "react";
 import StandardSectionApp from "../StandardSectionApp";
-
-const StyledTable = styled.table`
-  width: 100%;
-  border: none;
-`;
-
-const StyledTr = styled.tr`
-  border: none;
-  &:nth-child(odd) {
-    background-color: rgb(211, 245, 197);
-  }
-  &:nth-child(even) {
-    background-color: #d9f5f3;
-  }
-`;
-
-const StyledTd = styled.td`
-  padding: 1px;
-`;
-
-const StyledP = styled.p`
-  margin: 17px 0 0 0;
-  padding: 0;
-`;
+import {
+  StyledTable,
+  StyledTr,
+  StyledTd,
+  StyledP,
+} from "./PriceInfoMore.styled.js";
 
 export default function PriceInfoMore() {
   const [inputAmountBikesDays, setInputAmountBikesDays] = useState({

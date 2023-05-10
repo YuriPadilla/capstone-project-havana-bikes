@@ -23,3 +23,13 @@ export const StyledBikePreviewLi = styled.li`
   margin: 3px;
   padding 2px;
 `;
+
+export const StyledWrapperHeading = styled.div`
+  padding: 20px 20px 0 20px;
+  width: 100%;
+`;
+
+export const StyledHeadingH3 = styled.h3`
+  margin: 0;
+  padding: 0;
+`;
