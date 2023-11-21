@@ -4,55 +4,27 @@ import {
   StyledOutput,
   StyledButtonContainer,
 } from "./ContactUsForm.styled";
-//import { StyledButton } from "../Button/Button.styled";
-import styled from "styled-components";
-import Link from "next/link";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
-
-const StyledButton = styled.button`
-  text-decoration: none;
-  border: 1px solid rgb(205, 211, 205);
-  border-radius: 8px;
-  color: black;
-  font-size: inherit;
-  font-family: inherit;
-  padding: 3px 7px;
-  background: rgb(222, 245, 234);
-  box-shadow: 3px 3px 8px rgb(95, 117, 129);
-`;
+import { StyledButton } from "../Button/Button.styled";
+import StandardSectionApp from "../StandardSectionApp";
 
 export default function ContactUsForm({
   handleSubmit,
+  onNameChange,
+  onEmailChange,
   onMessageChange,
+  inputName,
+  inputEmail,
   inicialAmountChar,
   amountCharLeft,
 }) {
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Contact us</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Contact us">
         <StyledForm onSubmit={handleSubmit}>
           <StyledInputContainer>
             <label htmlFor="name">*Name:</label>
             <input
+              onChange={onNameChange}
               type="text"
               id="name"
               name="name"
@@ -64,6 +36,7 @@ export default function ContactUsForm({
           <StyledInputContainer>
             <label htmlFor="email">*Email:</label>
             <input
+              onChange={onEmailChange}
               type="email"
               id="email"
               name="email"
@@ -89,10 +62,12 @@ export default function ContactUsForm({
             </StyledOutput>
           </StyledInputContainer>
           <StyledButtonContainer>
-            <StyledButton type="submit">Send</StyledButton>
+            <StyledButton type="submit" disabled={inputName === "" || inputEmail === "" || amountCharLeft === 250 ? true : false}>
+              Send
+            </StyledButton>
           </StyledButtonContainer>
         </StyledForm>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }

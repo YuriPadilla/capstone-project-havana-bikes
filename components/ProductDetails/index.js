@@ -6,76 +6,14 @@ import {
   StyledPreviousWrapper,
   StyledNextLink,
   StyledNextWrapper,
+  StyledButtonCartWrapper,
+  StyledButtonBackWrapper,
+  StyledLinkAsButton,
 } from "./ProductDetails.styled";
 import SVGIcon from "../SVGIcon";
 import useSWR from "swr";
-import styled, { css } from "styled-components";
-import Link from "next/link";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
-
-const StyledButtonCartWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: 20px;
-  margin: 14px 0;
-`;
-
-const StyledButtonBackWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 20px;
-  margin: 15px 0;
-`;
-
-const StyledLinkAsButton = styled(Link)`
-  border: 1px solid rgb(205, 211, 205);
-  border-radius: 50%;
-  padding: 6px;
-  background: rgb(222, 245, 234);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 3px 3px 8px rgb(95, 117, 129);
-`;
-
-const StyledButton = styled.button`
-  text-decoration: none;
-  border: 1px solid #acacac;
-  border-radius: 8px;
-  color: #acacac;
-  font-size: inherit;
-  font-family: inherit;
-  padding: 3px 7px;
-  background: transparent;
-  ${({ disabled }) => {
-    if (disabled === false) {
-      return css`
-        border: 1px solid rgb(205, 211, 205);
-        box-shadow: 3px 3px 8px rgb(95, 117, 129);
-        background: rgb(222, 245, 234);
-        color: black;
-      `;
-    }
-  }}
-`;
+import { StyledButton } from "../Button/Button.styled.js";
+import StandardSectionApp from "../StandardSectionApp";
 
 export default function ProductDetails({
   product,
@@ -93,11 +31,7 @@ export default function ProductDetails({
 
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Details</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Details">
         <StyledWrapper>
           {productIndex > 0 ? (
             <StyledPreviousLink href={`/Bikes/${data[productIndex - 1]._id}`}>
@@ -147,7 +81,7 @@ export default function ProductDetails({
             <SVGIcon variant="back" width="30px" color="black" />
           </StyledLinkAsButton>
         </StyledButtonBackWrapper>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }

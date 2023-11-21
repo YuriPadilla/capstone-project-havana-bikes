@@ -3,24 +3,7 @@ import Link from "next/link.js";
 import { StyledBikesUl, StyledBikeLi } from "./BikesList.styled";
 import useLocalStorageState from "use-local-storage-state";
 import useSWR from "swr";
-import styled from "styled-components";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
+import StandardSectionApp from "../StandardSectionApp";
 
 export default function BikesList() {
   const [selectedProducts] = useLocalStorageState("selectedProducts", {
@@ -44,11 +27,7 @@ export default function BikesList() {
 
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Bikes</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Bikes">
         <StyledBikesUl>
           {bikesToShow.length > 0 ? (
             bikesToShow.map((bike) => {
@@ -70,7 +49,7 @@ export default function BikesList() {
             <p>No bikes to show</p>
           )}
         </StyledBikesUl>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }

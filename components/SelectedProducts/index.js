@@ -8,49 +8,13 @@ import {
 } from "./SelectedProducts.styled";
 import Link from "next/link";
 import SVGIcon from "../SVGIcon";
-import styled, { css } from "styled-components";
-
-const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-`;
-
-const StyledWrapperHeading = styled.div`
-  width: 100%;
-`;
-
-const StyledHeadingH3 = styled.h3`
-  margin: 0;
-  padding: 0;
-`;
+import styled from "styled-components";
+import { StyledButton } from "../Button/Button.styled";
+import StandardSectionApp from "../StandardSectionApp";
 
 const StyledButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-`;
-
-const StyledButton = styled.button`
-  text-decoration: none;
-  border: 1px solid #acacac;
-  border-radius: 8px;
-  color: #acacac;
-  font-size: inherit;
-  font-family: inherit;
-  padding: 3px 7px;
-  background: transparent;
-  ${({ disabled }) => {
-    if (disabled === false) {
-      return css`
-        border: 1px solid rgb(205, 211, 205);
-        box-shadow: 3px 3px 8px rgb(95, 117, 129);
-        background: rgb(222, 245, 234);
-        color: black;
-      `;
-    }
-  }}
 `;
 
 export default function SelectedProducts({
@@ -60,11 +24,7 @@ export default function SelectedProducts({
 }) {
   return (
     <>
-      <StyledSection>
-        <StyledWrapperHeading>
-          <StyledHeadingH3>Your selection</StyledHeadingH3>
-          <hr />
-        </StyledWrapperHeading>
+      <StandardSectionApp sectionTitle="Your selection">
         <StyledSelectionUl>
           {products.length > 0 ? (
             products.map((product) => {
@@ -112,7 +72,7 @@ export default function SelectedProducts({
             Empty shopping cart
           </StyledButton>
         </StyledButtonWrapper>
-      </StyledSection>
+      </StandardSectionApp>
     </>
   );
 }
