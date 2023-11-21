@@ -9,7 +9,11 @@ import StandardSectionApp from "../StandardSectionApp";
 
 export default function ContactUsForm({
   handleSubmit,
+  onNameChange,
+  onEmailChange,
   onMessageChange,
+  inputName,
+  inputEmail,
   inicialAmountChar,
   amountCharLeft,
 }) {
@@ -20,6 +24,7 @@ export default function ContactUsForm({
           <StyledInputContainer>
             <label htmlFor="name">*Name:</label>
             <input
+              onChange={onNameChange}
               type="text"
               id="name"
               name="name"
@@ -31,6 +36,7 @@ export default function ContactUsForm({
           <StyledInputContainer>
             <label htmlFor="email">*Email:</label>
             <input
+              onChange={onEmailChange}
               type="email"
               id="email"
               name="email"
@@ -56,7 +62,7 @@ export default function ContactUsForm({
             </StyledOutput>
           </StyledInputContainer>
           <StyledButtonContainer>
-            <StyledButton type="submit" disabled={false}>
+            <StyledButton type="submit" disabled={inputName === "" || inputEmail === "" || amountCharLeft === 250 ? true : false}>
               Send
             </StyledButton>
           </StyledButtonContainer>
