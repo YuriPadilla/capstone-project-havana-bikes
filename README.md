@@ -6,7 +6,7 @@ This is a webApp for a bike rental family business in Havana. It enables people 
 
 ## Demo
 
-See the Deployment in Vercel [here](https://havana-bikes.vercel.app/). (Please see it in an Iphone SE)
+See the Deployment in Vercel [here](https://havana-bikes.vercel.app/). (Please see it in an Iphone SE or other mobile devices)
 
 ## Tech Stack
 
