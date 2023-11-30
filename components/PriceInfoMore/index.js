@@ -30,7 +30,7 @@ export default function PriceInfoMore() {
 
   return (
     <>
-      <StandardSectionApp sectionTitle="Lease Time & Price">
+      <StandardSectionApp sectionTitle="Lease Time & Price" sectionHeight={30}>
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -48,14 +48,14 @@ export default function PriceInfoMore() {
           </tbody>
         </StyledTable>
       </StandardSectionApp>
-      <StandardSectionApp sectionTitle="Price calculator">
+      <StandardSectionApp sectionTitle="Price calculator" sectionHeight={24}>
         <PriceCalculatorForm
           handleChangePrices={handleChangePrices}
           amountBikes={inputAmountBikesDays.amountBikes}
           amountDays={inputAmountBikesDays.amountDays}
         />
       </StandardSectionApp>
-      <StandardSectionApp sectionTitle="Hours">
+      <StandardSectionApp sectionTitle="Hours" sectionHeight={21}>
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -65,7 +65,7 @@ export default function PriceInfoMore() {
           </tbody>
         </StyledTable>
       </StandardSectionApp>
-      <StandardSectionApp sectionTitle="Deposit">
+      <StandardSectionApp sectionTitle="Deposit" sectionHeight={25}>
         <StyledTable>
           <tbody>
             <StyledTr>
