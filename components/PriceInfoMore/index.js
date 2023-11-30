@@ -74,7 +74,7 @@ export default function PriceInfoMore() {
             </StyledTr>
           </tbody>
         </StyledTable>
-        <StyledP>The Deposit will be returned at the end.</StyledP>
+        <p>The Deposit will be returned at the end.</p>
       </StandardSectionApp>
     </>
   );
