@@ -4,17 +4,8 @@ const StyledForm = styled.form`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 10px;
+  gap: 0.35rem;
 `;
-
-const StyledFieldset = styled.fieldset`
-  display: flex;
-  align-items: center;
-  align-self: center;
-  gap: 1rem;
-  width: 100%;
-`;
-//justify-content: space-around;
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -64,7 +55,7 @@ export default function PriceCalculatorForm({
           />
         </StyledWrapper>
         <StyledWrapper>
-          <label htmlFor="amountDays">Price:</label>
+          <label htmlFor="price">Price:</label>
           <StyledOutput id="price">
             {amountBikes >= 1 && amountDays >= 1 ? (
               <strong>${(amountDays * 10 + 5) * amountBikes}</strong>
