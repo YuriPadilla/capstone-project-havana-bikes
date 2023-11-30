@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const StyledTable = styled.table`
   width: 100%;
   border: none;
-  margin-bottom: 25px;
 `;
 
 export const StyledTr = styled.tr`
@@ -17,5 +16,5 @@ export const StyledTr = styled.tr`
 `;
 
 export const StyledTd = styled.td`
-  padding: 1px;
+  padding: 0.1rem;
 `;

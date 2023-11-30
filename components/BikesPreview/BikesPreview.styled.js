@@ -3,6 +3,8 @@ import styled from "styled-components";
 export const StyledPreviewSection = styled.section`
   background-color: rgb(254, 254, 254);
   position: relative;
+  width: 100%;
+  height: 34%;
 `;
 
 export const StyledBikesPreviewUl = styled.ul`
@@ -25,7 +27,7 @@ export const StyledBikePreviewLi = styled.li`
 `;
 
 export const StyledWrapperHeading = styled.div`
-  padding: 20px 20px 0 20px;
+  padding: 1.25rem 1.25rem 0 1.25rem;
   width: 100%;
 `;
 

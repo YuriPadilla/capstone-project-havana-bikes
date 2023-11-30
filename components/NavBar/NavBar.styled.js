@@ -5,7 +5,7 @@ export const StyledNavBar = styled.nav`
   bottom: 0;
   z-index: 10;
   width: 100%;
-  height: 50px;
+  height: 8vh;
   display: flex;
   justify-content: space-around;
   align-items: center;

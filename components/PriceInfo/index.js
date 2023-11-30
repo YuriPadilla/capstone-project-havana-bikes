@@ -5,7 +5,7 @@ import { StyledTable, StyledTr, StyledTd } from "./PriceInfo.styled.js";
 export default function PriceInfo() {
   return (
     <>
-      <StandardSectionApp sectionTitle="Lease Time & Price">
+      <StandardSectionApp sectionTitle="Lease Time & Price" sectionHeight={33}>
         <StyledTable>
           <tbody>
             <StyledTr>
