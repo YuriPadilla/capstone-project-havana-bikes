@@ -1,14 +1,7 @@
 import { useRouter } from "next/router";
 import ProductDetails from "../../components/ProductDetails";
-import Link from "next/link";
 import useLocalStorageState from "use-local-storage-state";
-import styled from "styled-components";
 import useSWR from "swr";
-
-const StyledP = styled.p`
-  margin: 0;
-  padding: 0;
-`;
 
 export default function Bike() {
   const [selectedProducts, setSelectedProducts] = useLocalStorageState(
@@ -38,9 +31,6 @@ export default function Bike() {
 
   return (
     <>
-      <StyledP>
-        <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Details
-      </StyledP>
       <ProductDetails
         product={currentBike}
         handleAddToShoppingCart={handleAddToShoppingCart}

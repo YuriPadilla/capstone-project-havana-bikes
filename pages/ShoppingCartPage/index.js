@@ -1,4 +1,3 @@
-import Link from "next/link";
 import SelectedProducts from "../../components/SelectedProducts";
 import useLocalStorageState from "use-local-storage-state";
 import LeaseTimeForm from "../../components/LeaseTimeForm";
@@ -6,13 +5,7 @@ import { useAtom } from "jotai";
 import { inputDateAtom } from "@/store/atoms";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
-import styled from "styled-components";
 import { useRouter } from "next/router";
-
-const StyledP = styled.p`
-  margin: 0;
-  padding: 0;
-`;
 
 export default function ShoppingCartPage() {
   const router = useRouter();
@@ -57,10 +50,6 @@ export default function ShoppingCartPage() {
 
   return (
     <>
-      <StyledP>
-        <Link href="/">Home</Link>→<Link href="/Bikes">Bikes</Link>→Shopping
-        Cart
-      </StyledP>
       <SelectedProducts
         products={selectedProducts}
         handleEmptyShoppingCart={handleEmptyShoppingCart}
