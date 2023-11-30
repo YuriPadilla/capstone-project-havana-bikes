@@ -10,7 +10,6 @@ import {
 import { StyledLinkAsButton } from "../Button/Button.styled.js";
 
 export default function BikesPreview({ bikes }) {
-  const bikesForPreview = bikes.slice(0, 4);
 
   return (
     <>
