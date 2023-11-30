@@ -29,7 +29,7 @@ export const StyledLinkAsButton = styled(Link)`
   color: black;
   font-size: inherit;
   font-family: inherit;
-  padding: 3px 7px;
+  padding: 0.2rem 0.5rem;
   background: rgb(222, 245, 234);
   box-shadow: 3px 3px 8px rgb(95, 117, 129);
 

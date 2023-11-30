@@ -2,9 +2,10 @@ import styled from "styled-components";
 
 const StyledSection = styled.section`
   background-color: rgb(254, 254, 254);
-  padding: 20px;
+  padding: 1.25rem;
   position: relative;
   width: 100%;
+  height: ${({sectionHeight}) => sectionHeight}%;
   overflow: hidden;
 `;
 
@@ -13,9 +14,9 @@ const StyledHeadingH3 = styled.h3`
   padding: 0;
 `;
 
-export default function StandardSectionApp({ sectionTitle, children }) {
+export default function StandardSectionApp({ sectionTitle, sectionHeight, children }) {
   return (
-    <StyledSection>
+    <StyledSection sectionHeight={sectionHeight}>
       <StyledHeadingH3>{sectionTitle}</StyledHeadingH3>
       <hr />
       {children}
