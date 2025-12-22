@@ -1,0 +1,15 @@
+
+> delphodile-capstone-template@0.0.0-unreleased dev
+> next dev
+
+ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+info  - Loaded env from /Users/yuripadilla/Documents/NeueFische/capstone-project-havana-bikes/.env.local
+event - compiled client and server successfully in 212 ms (261 modules)
+wait  - compiling /api/bikes (client and server)...
+event - compiled successfully in 29 ms (104 modules)
+(node:63954) [MONGOOSE] DeprecationWarning: Mongoose: the `strictQuery` option will be switched back to `false` by default in Mongoose 7. Use `mongoose.set('strictQuery', false);` if you want to prepare for this change. Or use `mongoose.set('strictQuery', true);` to suppress this warning.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+wait  - compiling...
+event - compiled client and server successfully in 60 ms (261 modules)
+wait  - compiling...
+event - compiled client and server successfully in 61 ms (261 modules)
