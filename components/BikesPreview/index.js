@@ -10,6 +10,22 @@ import {
 import { StyledLinkAsButton } from "../Button/Button.styled.js";
 
 export default function BikesPreview({ bikes }) {
+  if (!bikes) {
+    return null;
+  }
+
+  if (!Array.isArray(bikes)) {
+    console.warn("BikesPreview: expected bikes to be an array but got:", bikes);
+    return (
+      <StyledPreviewSection>
+        <StyledWrapperHeading>
+          <StyledHeadingH3>Bikes</StyledHeadingH3>
+          <hr />
+        </StyledWrapperHeading>
+        <p>No bikes available</p>
+      </StyledPreviewSection>
+    );
+  }
 
   return (
     <>

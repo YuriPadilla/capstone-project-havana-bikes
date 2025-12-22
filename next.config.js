@@ -14,6 +14,9 @@ const nextConfig = {
     return config;
   },
   images: { domains: ["res.cloudinary.com"] },
+  // allowlist additional external image hosts used for debugging/mocks
+  // add more domains here if you serve images from other CDNs
+  images: { domains: ["res.cloudinary.com", "images.unsplash.com"] },
 };
 
 module.exports = nextConfig;

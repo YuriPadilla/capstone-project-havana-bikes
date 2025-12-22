@@ -32,13 +32,13 @@ export default function SelectedProducts({
                 <StyledProductLi key={product._id}>
                   <StyledProductDiv>
                     <Link href={`/Bikes/${product._id}`}>
-                      <StyledImage
-                        src={product.imageSource}
-                        height={70}
-                        width={120}
-                        alt={product.brand}
-                        priority
-                      />
+                        <StyledImage
+                          src={product.imageSource}
+                          height={70}
+                          width={120}
+                          alt={product.brand}
+                          priority
+                        />
                     </Link>
                     <StyledDescriptionUl>
                       <li>
