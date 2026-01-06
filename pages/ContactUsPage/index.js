@@ -1,13 +1,6 @@
 import ContactUsForm from "../../components/ContactUsForm";
-import Link from "next/link";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
-import styled from "styled-components";
-
-const StyledP = styled.p`
-  margin: 0;
-  padding: 0;
-`;
 
 const inicialAmountChar = 250;
 
@@ -46,9 +39,6 @@ export default function ContactUsPage() {
 
   return (
     <>
-      <StyledP>
-        <Link href="/">Home</Link>→Contact us
-      </StyledP>
       <ContactUsForm
         handleSubmit={handleSubmit}
         onNameChange={handleNameChange}

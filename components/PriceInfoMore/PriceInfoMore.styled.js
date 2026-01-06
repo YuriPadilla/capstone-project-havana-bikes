@@ -16,10 +16,5 @@ export const StyledTr = styled.tr`
 `;
 
 export const StyledTd = styled.td`
-  padding: 1px;
-`;
-
-export const StyledP = styled.p`
-  margin: 17px 0 0 0;
-  padding: 0;
+  padding: 0.1rem;
 `;

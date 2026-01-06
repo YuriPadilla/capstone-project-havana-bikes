@@ -6,7 +6,7 @@ import { StyledTable, StyledTr, StyledTd } from "./ContactInfo.styled";
 export default function ContactInfo() {
   return (
     <>
-      <StandardSectionApp sectionTitle="Contact Information">
+      <StandardSectionApp sectionTitle="Contact Information" sectionHeight={33}>
         <StyledTable>
           <tbody>
             <StyledTr>
