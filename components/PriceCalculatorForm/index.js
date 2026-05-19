@@ -1,3 +1,4 @@
+import { calculateRentalPrice } from "@/utils/calculateRentalPrice";
 import styled from "styled-components";
 
 const StyledForm = styled.form`
@@ -58,7 +59,7 @@ export default function PriceCalculatorForm({
           <label htmlFor="price">Price:</label>
           <StyledOutput id="price">
             {amountBikes >= 1 && amountDays >= 1 ? (
-              <strong>${(amountDays * 10 + 5) * amountBikes}</strong>
+              <strong>${calculateRentalPrice(amountBikes, amountDays)}</strong>
             ) : (
               "???"
             )}
