@@ -1,3 +1,4 @@
+import { calculateRentalPrice } from "@/utils/calculateRentalPrice";
 import {
   StyledForm,
   StyledFieldset,
@@ -72,7 +73,7 @@ export default function LeaseTimeForm({
                 </li>
                 <li>
                   <strong>Final price:</strong> $
-                  {(leaseDays() * 10 + 5) * howManyBikes}
+                  {calculateRentalPrice(howManyBikes, leaseDays())}
                 </li>
               </StyledDescriptionUl>
             ) : (
