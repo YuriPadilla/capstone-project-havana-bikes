@@ -1,8 +1,8 @@
 import SelectedProducts from "../../components/SelectedProducts";
 import useLocalStorageState from "use-local-storage-state";
 import LeaseTimeForm from "../../components/LeaseTimeForm";
-import { useAtom } from "jotai";
-import { inputDateAtom } from "@/store/atoms";
+import { useAtom, useSetAtom } from "jotai";
+import { bookingConfirmationAtom, inputDateAtom } from "@/store/atoms";
 import { calculateRentalPrice } from "@/utils/calculateRentalPrice";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
@@ -14,6 +14,7 @@ export default function ShoppingCartPage() {
     useLocalStorageState("selectedProducts", { defaultValue: [] });
 
   const [inputDateValues, setInputDateValues] = useAtom(inputDateAtom);
+  const setBookingConfirmation = useSetAtom(bookingConfirmationAtom);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     email: "",
@@ -92,10 +93,24 @@ export default function ShoppingCartPage() {
         return;
       }
 
+      const savedBooking = await response.json();
+      const confirmationData = {
+        selectedProducts,
+        fromDate: bookingPayload.fromDate,
+        untilDate: bookingPayload.untilDate,
+        totalPrice: bookingPayload.totalPrice,
+        customerName: bookingPayload.customerName,
+        customerEmail: bookingPayload.customerEmail,
+        customerPhone: bookingPayload.customerPhone,
+        booking: savedBooking,
+      };
+
+      setBookingConfirmation(confirmationData);
       setInputDateValues({ from: "", until: "" });
       setCustomerInfo({ name: "", email: "", phone: "" });
       form.reset();
       removeItem();
+      router.push("/BookingConfirmationPage");
 
       setToastAction("enter");
       setTimeout(() => setToastAction("exit"), 3000);
