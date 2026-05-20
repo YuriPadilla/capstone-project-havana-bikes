@@ -10,11 +10,15 @@ export const StyledForm = styled.form`
 
 export const StyledFieldset = styled.fieldset`
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   align-self: center;
-  gap: 1rem;
+  gap: 0.75rem;
   width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
 `;
 
 export const StyledInputContainer = styled.div`
@@ -22,7 +26,21 @@ export const StyledInputContainer = styled.div`
   flex-direction: column;
   gap: 0.2rem;
   justify-content: space-between;
+  flex: 1 1 100%;
+  min-width: 0;
   width: 100%;
+
+  input {
+    width: 100%;
+  }
+
+  @media (min-width: 480px) {
+    flex-basis: calc(50% - 0.75rem);
+  }
+
+  @media (min-width: 768px) {
+    flex-basis: calc(33.333% - 0.75rem);
+  }
 `;
 
 export const StyledOutput = styled.output`
@@ -38,6 +56,14 @@ export const StyledDescriptionUl = styled.ul`
 export const StyledWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0.75rem;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
