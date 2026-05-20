@@ -3,6 +3,7 @@ import useLocalStorageState from "use-local-storage-state";
 import LeaseTimeForm from "../../components/LeaseTimeForm";
 import { useAtom } from "jotai";
 import { inputDateAtom } from "@/store/atoms";
+import { calculateRentalPrice } from "@/utils/calculateRentalPrice";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
 import { useRouter } from "next/router";
@@ -18,6 +19,8 @@ export default function ShoppingCartPage() {
     email: "",
     phone: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bookingError, setBookingError] = useState("");
   const [toastAction, setToastAction] = useState("");
 
   function handleEmptyShoppingCart() {
@@ -48,17 +51,59 @@ export default function ShoppingCartPage() {
     }
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const formData = new FormData(event.target);
+
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setBookingError("");
+
+    const form = event.target;
+    const formData = new FormData(form);
     const data = Object.fromEntries(formData);
+    const initialDate = new Date(data.from).getTime();
+    const finalDate = new Date(data.until).getTime();
+    const amountDays =
+      Math.round((finalDate - initialDate) / (24 * 60 * 60 * 1000)) + 1;
+    const bookingPayload = {
+      customerName: data.name,
+      customerEmail: data.email,
+      customerPhone: data.phone,
+      selectedBikes: selectedProducts.map((product) => product._id),
+      fromDate: data.from,
+      untilDate: data.until,
+      totalPrice: calculateRentalPrice(selectedProducts.length, amountDays),
+    };
 
-    setInputDateValues({ from: "", until: "" });
-    setCustomerInfo({ name: "", email: "", phone: "" });
-    removeItem();
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookingPayload),
+      });
 
-    setToastAction("enter");
-    setTimeout(() => setToastAction("exit"), 3000);
+      if (!response.ok) {
+        setBookingError("Booking could not be created");
+        return;
+      }
+
+      setInputDateValues({ from: "", until: "" });
+      setCustomerInfo({ name: "", email: "", phone: "" });
+      form.reset();
+      removeItem();
+
+      setToastAction("enter");
+      setTimeout(() => setToastAction("exit"), 3000);
+    } catch (error) {
+      setBookingError("Booking could not be created");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -68,6 +113,7 @@ export default function ShoppingCartPage() {
         handleEmptyShoppingCart={handleEmptyShoppingCart}
         onRemoveFromShopCart={handleRemoveFromShopCart}
       />
+      {bookingError && <p>{bookingError}</p>}
       <LeaseTimeForm
         handleChange={handleChange}
         onSubmit={handleSubmit}
@@ -75,6 +121,7 @@ export default function ShoppingCartPage() {
         fromDate={inputDateValues.from}
         untilDate={inputDateValues.until}
         customerInfo={customerInfo}
+        isSubmitting={isSubmitting}
       />
       <ToastNotification
         toastAction={toastAction}
