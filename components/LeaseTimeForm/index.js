@@ -24,6 +24,7 @@ export default function LeaseTimeForm({
   howManyBikes,
   fromDate,
   untilDate,
+  customerInfo,
 }) {
   const initialDate = new Date(fromDate).getTime();
   const finalDate = new Date(untilDate).getTime();
@@ -34,17 +35,53 @@ export default function LeaseTimeForm({
     }
   };
 
+  const hasValidDates = finalDate >= initialDate;
+  const hasSelectedBikes = howManyBikes >= 1;
+  const hasRequiredCustomerInfo =
+    customerInfo.name.trim() !== "" && customerInfo.email.trim() !== "";
+  const isBookingDisabled =
+    !hasSelectedBikes || !hasValidDates || !hasRequiredCustomerInfo;
+
   return (
     <StyledSection>
       <StyledForm onChange={handleChange} onSubmit={onSubmit}>
         <StyledFieldset>
+          <StyledInputContainer>
+            <label htmlFor="name">*Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={customerInfo.name}
+              required
+            />
+          </StyledInputContainer>
+          <StyledInputContainer>
+            <label htmlFor="email">*Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={customerInfo.email}
+              required
+            />
+          </StyledInputContainer>
+          <StyledInputContainer>
+            <label htmlFor="phone">Phone / WhatsApp:</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={customerInfo.phone}
+            />
+          </StyledInputContainer>
           <StyledInputContainer>
             <label htmlFor="from">*From:</label>
             <input
               type="date"
               id="from"
               name="from"
-              defaultValue={fromDate}
+              value={fromDate}
               required
             />
           </StyledInputContainer>
@@ -54,14 +91,14 @@ export default function LeaseTimeForm({
               type="date"
               id="until"
               name="until"
-              defaultValue={untilDate}
+              value={untilDate}
               required
             />
           </StyledInputContainer>
         </StyledFieldset>
         <StyledWrapper>
           <StyledOutput>
-            {finalDate >= initialDate && howManyBikes >= 1 ? (
+            {hasValidDates && hasSelectedBikes ? (
               <StyledDescriptionUl>
                 <li>
                   <strong>Selected bikes:</strong> {howManyBikes} bike
@@ -91,9 +128,7 @@ export default function LeaseTimeForm({
           </StyledOutput>
           <StyledButton
             type="submit"
-            disabled={
-              finalDate >= initialDate && howManyBikes >= 1 ? false : true
-            }
+            disabled={isBookingDisabled}
           >
             Book
           </StyledButton>

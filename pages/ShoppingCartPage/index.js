@@ -13,6 +13,11 @@ export default function ShoppingCartPage() {
     useLocalStorageState("selectedProducts", { defaultValue: [] });
 
   const [inputDateValues, setInputDateValues] = useAtom(inputDateAtom);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
   const [toastAction, setToastAction] = useState("");
 
   function handleEmptyShoppingCart() {
@@ -31,6 +36,15 @@ export default function ShoppingCartPage() {
       setInputDateValues({ ...inputDateValues, from: event.target.value });
     } else if (event.target.name === "until") {
       setInputDateValues({ ...inputDateValues, until: event.target.value });
+    } else if (
+      event.target.name === "name" ||
+      event.target.name === "email" ||
+      event.target.name === "phone"
+    ) {
+      setCustomerInfo({
+        ...customerInfo,
+        [event.target.name]: event.target.value,
+      });
     }
   }
 
@@ -40,8 +54,7 @@ export default function ShoppingCartPage() {
     const data = Object.fromEntries(formData);
 
     setInputDateValues({ from: "", until: "" });
-    event.target.elements.from.value = "";
-    event.target.elements.until.value = "";
+    setCustomerInfo({ name: "", email: "", phone: "" });
     removeItem();
 
     setToastAction("enter");
@@ -61,6 +74,7 @@ export default function ShoppingCartPage() {
         howManyBikes={selectedProducts.length}
         fromDate={inputDateValues.from}
         untilDate={inputDateValues.until}
+        customerInfo={customerInfo}
       />
       <ToastNotification
         toastAction={toastAction}
