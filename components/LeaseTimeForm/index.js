@@ -25,6 +25,7 @@ export default function LeaseTimeForm({
   fromDate,
   untilDate,
   customerInfo,
+  isSubmitting,
 }) {
   const initialDate = new Date(fromDate).getTime();
   const finalDate = new Date(untilDate).getTime();
@@ -40,11 +41,14 @@ export default function LeaseTimeForm({
   const hasRequiredCustomerInfo =
     customerInfo.name.trim() !== "" && customerInfo.email.trim() !== "";
   const isBookingDisabled =
-    !hasSelectedBikes || !hasValidDates || !hasRequiredCustomerInfo;
+    !hasSelectedBikes ||
+    !hasValidDates ||
+    !hasRequiredCustomerInfo ||
+    isSubmitting;
 
   return (
     <StyledSection>
-      <StyledForm onChange={handleChange} onSubmit={onSubmit}>
+      <StyledForm onSubmit={onSubmit}>
         <StyledFieldset>
           <StyledInputContainer>
             <label htmlFor="name">*Name:</label>
@@ -52,7 +56,7 @@ export default function LeaseTimeForm({
               type="text"
               id="name"
               name="name"
-              value={customerInfo.name}
+              onChange={handleChange}
               required
             />
           </StyledInputContainer>
@@ -62,7 +66,7 @@ export default function LeaseTimeForm({
               type="email"
               id="email"
               name="email"
-              value={customerInfo.email}
+              onChange={handleChange}
               required
             />
           </StyledInputContainer>
@@ -72,7 +76,7 @@ export default function LeaseTimeForm({
               type="tel"
               id="phone"
               name="phone"
-              value={customerInfo.phone}
+              onChange={handleChange}
             />
           </StyledInputContainer>
           <StyledInputContainer>
@@ -82,6 +86,7 @@ export default function LeaseTimeForm({
               id="from"
               name="from"
               value={fromDate}
+              onChange={handleChange}
               required
             />
           </StyledInputContainer>
@@ -92,6 +97,7 @@ export default function LeaseTimeForm({
               id="until"
               name="until"
               value={untilDate}
+              onChange={handleChange}
               required
             />
           </StyledInputContainer>
@@ -130,7 +136,7 @@ export default function LeaseTimeForm({
             type="submit"
             disabled={isBookingDisabled}
           >
-            Book
+            {isSubmitting ? "Booking..." : "Book"}
           </StyledButton>
         </StyledWrapper>
       </StyledForm>
