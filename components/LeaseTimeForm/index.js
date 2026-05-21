@@ -11,11 +11,10 @@ import styled from "styled-components";
 import { StyledButton } from "../Button/Button.styled";
 
 const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 20px;
+  background-color: var(--color-surface);
+  padding: var(--space-l);
   position: relative;
   width: 100%;
-  overflow: hidden;
 `;
 
 export default function LeaseTimeForm({

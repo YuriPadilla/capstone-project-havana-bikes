@@ -6,8 +6,8 @@ import {
   StyledBikePreviewLi,
   StyledWrapperHeading,
   StyledHeadingH3,
+  StyledSectionLink,
 } from "./BikesPreview.styled.js";
-import { StyledLinkAsButton } from "../Button/Button.styled.js";
 
 export default function BikesPreview({ bikes }) {
 
@@ -35,7 +35,7 @@ export default function BikesPreview({ bikes }) {
             );
           })}
         </StyledBikesPreviewUl>
-        <StyledLinkAsButton href="/Bikes">Show all</StyledLinkAsButton>
+        <StyledSectionLink href="/Bikes">Show all</StyledSectionLink>
       </StyledPreviewSection>
     </>
   );

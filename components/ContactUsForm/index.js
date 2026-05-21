@@ -51,7 +51,6 @@ export default function ContactUsForm({
               id="message"
               name="message"
               rows="9"
-              cols="40"
               maxLength={inicialAmountChar}
               placeholder="Write your message here..."
               required
@@ -62,7 +61,14 @@ export default function ContactUsForm({
             </StyledOutput>
           </StyledInputContainer>
           <StyledButtonContainer>
-            <StyledButton type="submit" disabled={inputName === "" || inputEmail === "" || amountCharLeft === 250 ? true : false}>
+            <StyledButton
+              type="submit"
+              disabled={
+                inputName === "" || inputEmail === "" || amountCharLeft === 250
+                  ? true
+                  : false
+              }
+            >
               Send
             </StyledButton>
           </StyledButtonContainer>

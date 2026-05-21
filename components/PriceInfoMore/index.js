@@ -1,12 +1,7 @@
 import PriceCalculatorForm from "../PriceCalculatorForm";
 import { useState } from "react";
 import StandardSectionApp from "../StandardSectionApp";
-import {
-  StyledTable,
-  StyledTr,
-  StyledTd,
-  StyledP,
-} from "./PriceInfoMore.styled.js";
+import { StyledTable, StyledTr, StyledTd } from "./PriceInfoMore.styled.js";
 
 export default function PriceInfoMore() {
   const [inputAmountBikesDays, setInputAmountBikesDays] = useState({
@@ -30,7 +25,7 @@ export default function PriceInfoMore() {
 
   return (
     <>
-      <StandardSectionApp sectionTitle="Lease Time & Price" sectionHeight={30}>
+      <StandardSectionApp sectionTitle="Lease Time & Price">
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -48,14 +43,14 @@ export default function PriceInfoMore() {
           </tbody>
         </StyledTable>
       </StandardSectionApp>
-      <StandardSectionApp sectionTitle="Price calculator" sectionHeight={24}>
+      <StandardSectionApp sectionTitle="Price calculator">
         <PriceCalculatorForm
           handleChangePrices={handleChangePrices}
           amountBikes={inputAmountBikesDays.amountBikes}
           amountDays={inputAmountBikesDays.amountDays}
         />
       </StandardSectionApp>
-      <StandardSectionApp sectionTitle="Hours" sectionHeight={21}>
+      <StandardSectionApp sectionTitle="Hours">
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -65,7 +60,7 @@ export default function PriceInfoMore() {
           </tbody>
         </StyledTable>
       </StandardSectionApp>
-      <StandardSectionApp sectionTitle="Deposit" sectionHeight={25}>
+      <StandardSectionApp sectionTitle="Deposit">
         <StyledTable>
           <tbody>
             <StyledTr>

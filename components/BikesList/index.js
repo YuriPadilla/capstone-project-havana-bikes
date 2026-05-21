@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link.js";
-import { StyledBikesUl, StyledBikeLi } from "./BikesList.styled";
+import {
+  StyledBikeLi,
+  StyledBikeLink,
+  StyledBikesUl,
+} from "./BikesList.styled";
 import useLocalStorageState from "use-local-storage-state";
 import useSWR from "swr";
 import StandardSectionApp from "../StandardSectionApp";
@@ -33,14 +37,16 @@ export default function BikesList() {
             bikesToShow.map((bike) => {
               return (
                 <StyledBikeLi key={bike._id}>
-                  <Link href={`/Bikes/${bike._id}`}>
-                    <Image
-                      src={bike.imageSource}
-                      height={85}
-                      width={146}
-                      alt={bike.brand}
-                      priority
-                    />
+                  <Link href={`/Bikes/${bike._id}`} passHref legacyBehavior>
+                    <StyledBikeLink>
+                      <Image
+                        src={bike.imageSource}
+                        height={85}
+                        width={146}
+                        alt={bike.brand}
+                        priority
+                      />
+                    </StyledBikeLink>
                   </Link>
                 </StyledBikeLi>
               );

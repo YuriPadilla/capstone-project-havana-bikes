@@ -3,9 +3,16 @@ import styled from "styled-components";
 
 const StyledForm = styled.form`
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 0.35rem;
+  align-items: stretch;
+  gap: var(--space-m);
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
 `;
 
 const StyledWrapper = styled.div`
@@ -18,15 +25,16 @@ const StyledWrapper = styled.div`
 
 const StyledInput = styled.input`
   width: 100%;
+  min-width: 0;
+  padding: 0.45rem;
 `;
-// font-family: Arial, Helvetica, sans-serif;
-// font-size: 79%;
 
 const StyledOutput = styled.output`
+  min-height: 2.5rem;
   width: 100%;
   border: 1px solid rgb(83, 82, 82);
   color: green;
-  padding: 0 0 0 1em;
+  padding: 0.55rem 0.75rem;
 `;
 
 export default function PriceCalculatorForm({

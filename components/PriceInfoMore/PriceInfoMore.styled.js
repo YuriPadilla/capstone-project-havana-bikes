@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const StyledTable = styled.table`
   width: 100%;
   border: none;
+  border-spacing: 0;
 `;
 
 export const StyledTr = styled.tr`
@@ -16,5 +17,7 @@ export const StyledTr = styled.tr`
 `;
 
 export const StyledTd = styled.td`
-  padding: 0.1rem;
+  padding: 0.45rem;
+  vertical-align: top;
+  overflow-wrap: anywhere;
 `;

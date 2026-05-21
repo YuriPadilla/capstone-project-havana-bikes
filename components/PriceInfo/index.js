@@ -1,11 +1,15 @@
-import { StyledLinkAsButton } from "../Button/Button.styled.js";
 import StandardSectionApp from "../StandardSectionApp/index.js";
-import { StyledTable, StyledTr, StyledTd } from "./PriceInfo.styled.js";
+import {
+  StyledSectionLink,
+  StyledTable,
+  StyledTr,
+  StyledTd,
+} from "./PriceInfo.styled.js";
 
 export default function PriceInfo() {
   return (
     <>
-      <StandardSectionApp sectionTitle="Lease Time & Price" sectionHeight={33}>
+      <StandardSectionApp sectionTitle="Lease Time & Price">
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -22,7 +26,7 @@ export default function PriceInfo() {
             </StyledTr>
           </tbody>
         </StyledTable>
-        <StyledLinkAsButton href="/InfoPage">Show more</StyledLinkAsButton>
+        <StyledSectionLink href="/InfoPage">Show more</StyledSectionLink>
       </StandardSectionApp>
     </>
   );
