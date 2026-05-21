@@ -4,8 +4,8 @@ export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: stretch;
+  gap: var(--space-m);
   width: 100%;
 `;
 
@@ -15,6 +15,17 @@ export const StyledInputContainer = styled.div`
   gap: 0.2rem;
   justify-content: space-between;
   width: 100%;
+
+  input,
+  textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 0.45rem;
+  }
+
+  textarea {
+    resize: vertical;
+  }
 `;
 
 export const StyledOutput = styled.output`
@@ -28,5 +39,5 @@ export const StyledButtonContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: 20px 20px 108px 0;
+  padding-top: var(--space-m);
 `;

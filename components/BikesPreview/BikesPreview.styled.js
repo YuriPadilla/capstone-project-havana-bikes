@@ -1,37 +1,49 @@
 import styled from "styled-components";
+import { StyledLinkAsButton } from "../Button/Button.styled";
 
 export const StyledPreviewSection = styled.section`
-  background-color: rgb(254, 254, 254);
+  background-color: var(--color-surface);
   position: relative;
   width: 100%;
-  height: 34%;
+  padding: var(--space-l);
 `;
 
 export const StyledBikesPreviewUl = styled.ul`
   list-style-type: none;
   display: flex;
+  gap: var(--space-s);
   overflow: auto;
   &::-webkit-scrollbar {
     display: none;
   }
   padding: 0;
-  margin-top: 0;
-  margin-bottom: 45px;
+  margin: 0 0 var(--space-m);
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    overflow: visible;
+  }
 `;
 
 export const StyledBikePreviewLi = styled.li`
   border-radius: 5px;
   box-shadow: 0px 0px 5px rgb(95, 117, 129);
-  margin: 3px;
-  padding 2px;
+  padding: 0.25rem;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
 `;
 
 export const StyledWrapperHeading = styled.div`
-  padding: 1.25rem 1.25rem 0 1.25rem;
   width: 100%;
 `;
 
 export const StyledHeadingH3 = styled.h3`
   margin: 0;
   padding: 0;
+`;
+
+export const StyledSectionLink = styled(StyledLinkAsButton)`
+  position: static;
 `;

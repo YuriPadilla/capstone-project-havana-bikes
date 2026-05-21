@@ -4,8 +4,9 @@ export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: stretch;
+  gap: var(--space-m);
+  width: 100%;
 `;
 
 export const StyledFieldset = styled.fieldset`
@@ -14,7 +15,7 @@ export const StyledFieldset = styled.fieldset`
   justify-content: space-between;
   align-items: flex-start;
   align-self: center;
-  gap: 0.75rem;
+  gap: var(--space-s);
   width: 100%;
   min-width: 0;
   padding: 0;
@@ -32,19 +33,22 @@ export const StyledInputContainer = styled.div`
 
   input {
     width: 100%;
+    min-width: 0;
+    padding: 0.45rem;
   }
 
   @media (min-width: 480px) {
-    flex-basis: calc(50% - 0.75rem);
+    flex-basis: calc(50% - var(--space-s));
   }
 
   @media (min-width: 768px) {
-    flex-basis: calc(33.333% - 0.75rem);
+    flex-basis: calc(33.333% - var(--space-s));
   }
 `;
 
 export const StyledOutput = styled.output`
-  height: 56px;
+  min-height: 3.5rem;
+  overflow-wrap: anywhere;
 `;
 
 export const StyledDescriptionUl = styled.ul`
@@ -59,11 +63,11 @@ export const StyledWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  gap: 0.75rem;
+  gap: var(--space-m);
 
   @media (min-width: 480px) {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
   }
 `;

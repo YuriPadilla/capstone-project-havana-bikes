@@ -2,10 +2,13 @@ import styled, { css } from "styled-components";
 
 export const StyledToast = styled.div`
   position: fixed;
-  top: 20px;
-  right: 25px;
+  top: var(--space-m);
+  right: var(--space-s);
+  left: var(--space-s);
   z-index: 30;
-  padding: 1rem 2rem;
+  max-width: 24rem;
+  margin-left: auto;
+  padding: 1rem;
   border: none;
   font-size: 0.8rem;
   background: rgb(81, 229, 106);

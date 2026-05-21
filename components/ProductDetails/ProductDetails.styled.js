@@ -5,18 +5,29 @@ import Image from "next/image";
 export const StyledUlDetails = styled.ul`
   list-style-type: none;
   padding: 0;
+  margin: var(--space-m) 0 0;
 `;
 
 export const StyledWrapper = styled.div`
-  position: relative;
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+  align-items: center;
+  gap: var(--space-s);
+  width: 100%;
 `;
 
 export const StyledImage = styled(Image)`
+  width: 100%;
+  height: auto;
+  max-width: 33rem;
   border-radius: 8px;
   box-shadow: 0px 0px 8px rgb(95, 117, 129);
+  justify-self: center;
 `;
 
 export const StyledPreviousLink = styled(Link)`
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -24,9 +35,6 @@ export const StyledPreviousLink = styled(Link)`
   box-shadow: 1px 3px 8px #272727;
   border: 1px solid transparent;
   background-color: transparent;
-  position: absolute;
-  bottom: 50%;
-  left: -17px;
   transition: border 1s, background-color 1s;
   &:active {
     border: 1px solid black;
@@ -35,19 +43,20 @@ export const StyledPreviousLink = styled(Link)`
 `;
 
 export const StyledPreviousWrapper = styled.div`
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid transparent;
   background-color: transparent;
-  position: absolute;
-  bottom: 50%;
-  left: -17px;
   transition: border 1s, background-color 1s;
 `;
 
 export const StyledNextLink = styled(Link)`
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -55,9 +64,6 @@ export const StyledNextLink = styled(Link)`
   box-shadow: 1px 3px 8px #272727;
   border: 1px solid transparent;
   background-color: transparent;
-  position: absolute;
-  bottom: 50%;
-  right: -17px;
   transition: border 1s, background-color 1s;
   &:active {
     border: 1px solid black;
@@ -66,38 +72,39 @@ export const StyledNextLink = styled(Link)`
 `;
 
 export const StyledNextWrapper = styled.div`
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid transparent;
   background-color: transparent;
-  position: absolute;
-  bottom: 50%;
-  right: -17px;
   transition: border 1s, background-color 1s;
 `;
 
 export const StyledButtonCartWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-start;
-  padding: 20px;
-  margin: 14px 0;
+  padding: var(--space-m) 0 0;
+  margin: 0;
 `;
 
 export const StyledButtonBackWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 20px;
-  margin: 15px 0;
+  padding: var(--space-m) 0 0;
+  margin: 0;
 `;
 
 export const StyledLinkAsButton = styled(Link)`
   border: 1px solid rgb(205, 211, 205);
   border-radius: 50%;
-  padding: 6px;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.4rem;
   background: rgb(222, 245, 234);
   display: flex;
   justify-content: center;

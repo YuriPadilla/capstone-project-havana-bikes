@@ -1,11 +1,18 @@
 import styled from "styled-components";
 
 export const StyledMain = styled.main`
-  margin-top: 10vh;
-  margin-bottom: 8vh;
+  min-height: 100vh;
   width: 100%;
-  height: 82vh;
+  max-width: var(--layout-content-max);
+  margin: 0 auto;
+  padding: calc(4.5rem + var(--space-s)) var(--space-s)
+    calc(4rem + var(--space-s));
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: var(--space-s);
+
+  @media (min-width: 768px) {
+    padding-left: var(--space-m);
+    padding-right: var(--space-m);
+  }
 `;

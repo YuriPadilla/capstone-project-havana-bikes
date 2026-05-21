@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 const StyledSection = styled.section`
-  background-color: rgb(254, 254, 254);
-  padding: 1.25rem;
+  background-color: var(--color-surface);
+  padding: var(--space-l);
   position: relative;
   width: 100%;
-  height: ${({sectionHeight}) => sectionHeight}%;
-  overflow: hidden;
+  min-height: ${({ sectionHeight }) =>
+    sectionHeight ? `${sectionHeight}vh` : "auto"};
+  overflow-wrap: break-word;
 `;
 
 const StyledHeadingH3 = styled.h3`
@@ -14,7 +15,11 @@ const StyledHeadingH3 = styled.h3`
   padding: 0;
 `;
 
-export default function StandardSectionApp({ sectionTitle, sectionHeight, children }) {
+export default function StandardSectionApp({
+  sectionTitle,
+  sectionHeight,
+  children,
+}) {
   return (
     <StyledSection sectionHeight={sectionHeight}>
       <StyledHeadingH3>{sectionTitle}</StyledHeadingH3>

@@ -1,12 +1,16 @@
-import { StyledLinkAsButton } from "../Button/Button.styled.js";
 import SVGIcon from "../SVGIcon";
 import StandardSectionApp from "../StandardSectionApp/index.js";
-import { StyledTable, StyledTr, StyledTd } from "./ContactInfo.styled";
+import {
+  StyledSectionLink,
+  StyledTable,
+  StyledTr,
+  StyledTd,
+} from "./ContactInfo.styled";
 
 export default function ContactInfo() {
   return (
     <>
-      <StandardSectionApp sectionTitle="Contact Information" sectionHeight={33}>
+      <StandardSectionApp sectionTitle="Contact Information">
         <StyledTable>
           <tbody>
             <StyledTr>
@@ -31,9 +35,9 @@ export default function ContactInfo() {
             </StyledTr>
           </tbody>
         </StyledTable>
-        <StyledLinkAsButton href="/ContactUsPage">
+        <StyledSectionLink href="/ContactUsPage">
           Send a message
-        </StyledLinkAsButton>
+        </StyledSectionLink>
       </StandardSectionApp>
     </>
   );
