@@ -89,7 +89,17 @@ export default function ShoppingCartPage() {
       });
 
       if (!response.ok) {
-        setBookingError("Booking could not be created");
+        const errorData = await response.json();
+
+        if (response.status === 409) {
+          setBookingError(
+            errorData.error ||
+              "One or more selected bikes are not available for the selected dates."
+          );
+        } else {
+          setBookingError("Booking could not be created");
+        }
+
         return;
       }
 
