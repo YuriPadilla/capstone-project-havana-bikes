@@ -19,11 +19,25 @@ export const StyledBikeLi = styled.li`
 export const StyledBikeLink = styled.a`
   min-height: 8rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--space-s);
+  color: inherit;
+  text-decoration: none;
 
   img {
     width: 100%;
     height: auto;
   }
+`;
+
+export const StyledBikeName = styled.h4`
+  margin: 0;
+  text-align: center;
+`;
+
+export const StyledBikeInfo = styled.p`
+  margin: 0;
+  text-align: center;
 `;

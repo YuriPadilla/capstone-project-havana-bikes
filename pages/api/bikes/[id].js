@@ -8,7 +8,7 @@ export default async function handler(request, response) {
   if (request.method === "GET") {
     const bike = await Bike.findById(id);
 
-    if (!bike) {
+    if (!bike || bike.isActive === false) {
       return response.status(404).json({ status: "Not Found" });
     }
 
