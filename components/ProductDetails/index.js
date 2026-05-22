@@ -9,6 +9,8 @@ import {
   StyledButtonCartWrapper,
   StyledButtonBackWrapper,
   StyledLinkAsButton,
+  StyledProductName,
+  StyledDescription,
 } from "./ProductDetails.styled";
 import SVGIcon from "../SVGIcon";
 import useSWR from "swr";
@@ -59,13 +61,27 @@ export default function ProductDetails({
             </StyledNextWrapper>
           )}
         </StyledWrapper>
+        <StyledProductName>{product.name || product.brand}</StyledProductName>
+        {product.description && (
+          <StyledDescription>{product.description}</StyledDescription>
+        )}
         <StyledUlDetails>
+          {product.type && (
+            <li>
+              <strong>Type:</strong> {product.type}
+            </li>
+          )}
           <li>
             <strong>Brand:</strong> {product.brand}
           </li>
           <li>
             <strong>Size:</strong> {product.size}
           </li>
+          {product.pricePerDay && (
+            <li>
+              <strong>Price per day:</strong> {product.pricePerDay} USD
+            </li>
+          )}
         </StyledUlDetails>
         <StyledButtonCartWrapper>
           <StyledButton

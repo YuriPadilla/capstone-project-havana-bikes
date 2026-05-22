@@ -4,6 +4,9 @@ import {
   StyledPreviewSection,
   StyledBikesPreviewUl,
   StyledBikePreviewLi,
+  StyledBikePreviewLink,
+  StyledBikePreviewName,
+  StyledBikePreviewPrice,
   StyledWrapperHeading,
   StyledHeadingH3,
   StyledSectionLink,
@@ -22,14 +25,24 @@ export default function BikesPreview({ bikes }) {
           {bikes.map((bike) => {
             return (
               <StyledBikePreviewLi key={bike._id}>
-                <Link href={`/Bikes/${bike._id}`}>
-                  <Image
-                    src={bike.imageSource}
-                    height={74}
-                    width={125}
-                    alt={bike.brand}
-                    priority
-                  />
+                <Link href={`/Bikes/${bike._id}`} passHref legacyBehavior>
+                  <StyledBikePreviewLink>
+                    <Image
+                      src={bike.imageSource}
+                      height={74}
+                      width={125}
+                      alt={bike.brand}
+                      priority
+                    />
+                    <StyledBikePreviewName>
+                      {bike.name || bike.brand}
+                    </StyledBikePreviewName>
+                    {bike.pricePerDay && (
+                      <StyledBikePreviewPrice>
+                        {bike.pricePerDay} USD / day
+                      </StyledBikePreviewPrice>
+                    )}
+                  </StyledBikePreviewLink>
                 </Link>
               </StyledBikePreviewLi>
             );

@@ -6,6 +6,11 @@ const bikeSchema = new Schema({
   brand: { type: String, required: true },
   size: { type: String, required: true },
   imageSource: { type: String, required: true },
+  name: { type: String },
+  description: { type: String },
+  type: { type: String },
+  pricePerDay: { type: Number },
+  isActive: { type: Boolean, default: true },
 });
 
 const Bike = mongoose.models.Bike || mongoose.model("Bike", bikeSchema);

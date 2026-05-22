@@ -35,6 +35,26 @@ export const StyledBikePreviewLi = styled.li`
   justify-content: center;
 `;
 
+export const StyledBikePreviewLink = styled.a`
+  min-width: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  color: inherit;
+  text-decoration: none;
+`;
+
+export const StyledBikePreviewName = styled.h4`
+  margin: 0;
+  text-align: center;
+`;
+
+export const StyledBikePreviewPrice = styled.p`
+  margin: 0;
+  text-align: center;
+`;
+
 export const StyledWrapperHeading = styled.div`
   width: 100%;
 `;

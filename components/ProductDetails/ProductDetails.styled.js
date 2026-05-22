@@ -8,6 +8,15 @@ export const StyledUlDetails = styled.ul`
   margin: var(--space-m) 0 0;
 `;
 
+export const StyledProductName = styled.h3`
+  margin: var(--space-m) 0 0;
+`;
+
+export const StyledDescription = styled.p`
+  margin: var(--space-s) 0 0;
+  overflow-wrap: anywhere;
+`;
+
 export const StyledWrapper = styled.div`
   display: grid;
   grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;

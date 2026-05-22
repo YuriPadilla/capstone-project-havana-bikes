@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link.js";
 import {
+  StyledBikeInfo,
   StyledBikeLi,
   StyledBikeLink,
+  StyledBikeName,
   StyledBikesUl,
 } from "./BikesList.styled";
 import useLocalStorageState from "use-local-storage-state";
@@ -46,6 +48,11 @@ export default function BikesList() {
                         alt={bike.brand}
                         priority
                       />
+                      <StyledBikeName>{bike.name || bike.brand}</StyledBikeName>
+                      {bike.type && <StyledBikeInfo>{bike.type}</StyledBikeInfo>}
+                      {bike.pricePerDay && (
+                        <StyledBikeInfo>{bike.pricePerDay} USD / day</StyledBikeInfo>
+                      )}
                     </StyledBikeLink>
                   </Link>
                 </StyledBikeLi>
