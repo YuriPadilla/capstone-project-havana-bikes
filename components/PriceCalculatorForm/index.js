@@ -64,7 +64,7 @@ export default function PriceCalculatorForm({
           />
         </StyledWrapper>
         <StyledWrapper>
-          <label htmlFor="price">Price:</label>
+          <label htmlFor="price">Estimated rental price:</label>
           <StyledOutput id="price">
             {amountBikes >= 1 && amountDays >= 1 ? (
               <strong>${calculateRentalPrice(amountBikes, amountDays)}</strong>

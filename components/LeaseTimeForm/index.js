@@ -17,6 +17,10 @@ const StyledSection = styled.section`
   width: 100%;
 `;
 
+const StyledBookingNote = styled.p`
+  margin: 0;
+`;
+
 export default function LeaseTimeForm({
   handleChange,
   onSubmit,
@@ -114,8 +118,12 @@ export default function LeaseTimeForm({
                   {leaseDays() > 1 && "s"}
                 </li>
                 <li>
-                  <strong>Final price:</strong> $
+                  <strong>Estimated rental price:</strong> $
                   {calculateRentalPrice(howManyBikes, leaseDays())}
+                </li>
+                <li>
+                  Security deposit: $50 per bike, returned at the end of the
+                  rental.
                 </li>
               </StyledDescriptionUl>
             ) : (
@@ -131,11 +139,15 @@ export default function LeaseTimeForm({
               </p>
             )}
           </StyledOutput>
+          <StyledBookingNote>
+            This is a booking request. We will review bike availability and
+            contact you to confirm your reservation.
+          </StyledBookingNote>
           <StyledButton
             type="submit"
             disabled={isBookingDisabled}
           >
-            {isSubmitting ? "Booking..." : "Book"}
+            {isSubmitting ? "Booking..." : "Send booking request"}
           </StyledButton>
         </StyledWrapper>
       </StyledForm>

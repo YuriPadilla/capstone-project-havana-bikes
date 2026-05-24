@@ -24,7 +24,7 @@ export default function SelectedProducts({
 }) {
   return (
     <>
-      <StandardSectionApp sectionTitle="Your selection">
+      <StandardSectionApp sectionTitle="Your selected bikes">
         <StyledSelectionUl>
           {products.length > 0 ? (
             products.map((product) => {
@@ -60,7 +60,7 @@ export default function SelectedProducts({
               );
             })
           ) : (
-            <p>No products to show</p>
+            <p>No bikes selected yet</p>
           )}
         </StyledSelectionUl>
         <StyledButtonWrapper>
@@ -69,7 +69,7 @@ export default function SelectedProducts({
             onClick={handleEmptyShoppingCart}
             disabled={!(products.length > 0)}
           >
-            Empty shopping cart
+            Clear selected bikes
           </StyledButton>
         </StyledButtonWrapper>
       </StandardSectionApp>

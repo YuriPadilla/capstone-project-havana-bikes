@@ -69,10 +69,14 @@ export default function BookingConfirmationPage() {
     <StyledSection>
       <StyledContent>
         <div>
-          <StyledHeading>Booking request received</StyledHeading>
+          <StyledHeading>Thank you for your booking request!</StyledHeading>
           <p>
-            Thank you{customerName && `, ${customerName}`}. Your bike rental
-            request was sent successfully.
+            {customerName && `${customerName}, `}we received your bike rental
+            request. This is not an automatic confirmation yet.
+          </p>
+          <p>
+            Havana Bikes will review availability and contact you to confirm
+            your reservation.
           </p>
         </div>
         <StyledDetailsSection>
@@ -97,16 +101,17 @@ export default function BookingConfirmationPage() {
           </p>
         </StyledDetailsSection>
         <StyledDetailsSection>
-          <StyledSubHeading>Total price</StyledSubHeading>
+          <StyledSubHeading>Estimated rental price</StyledSubHeading>
           <p>
             <strong>${totalPrice}</strong>
           </p>
+          <p>Security deposit: $50 per bike, returned at the end of the rental.</p>
         </StyledDetailsSection>
         <StyledDetailsSection>
           <StyledSubHeading>What happens next</StyledSubHeading>
           <p>
-            Your booking is not confirmed yet. Havana Bikes will contact you to
-            confirm availability and finalize your reservation.
+            We will coordinate pickup and return details after your booking
+            request is reviewed.
           </p>
         </StyledDetailsSection>
         <StyledLink href="/Bikes">Back to bikes</StyledLink>
