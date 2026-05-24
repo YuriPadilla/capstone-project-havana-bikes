@@ -17,16 +17,18 @@ export default function PriceInfo() {
               <StyledTd>$4</StyledTd>
             </StyledTr>
             <StyledTr>
-              <StyledTd>1 day, first day (until 8:00 PM)</StyledTd>
+              <StyledTd>First rental day</StyledTd>
               <StyledTd>$15</StyledTd>
             </StyledTr>
             <StyledTr>
-              <StyledTd>1 day, after the second day on</StyledTd>
+              <StyledTd>Additional days</StyledTd>
               <StyledTd>$10</StyledTd>
             </StyledTr>
           </tbody>
         </StyledTable>
-        <StyledSectionLink href="/InfoPage">Show more</StyledSectionLink>
+        <StyledSectionLink href="/InfoPage">
+          See full rental details
+        </StyledSectionLink>
       </StandardSectionApp>
     </>
   );

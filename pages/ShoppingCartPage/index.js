@@ -150,7 +150,7 @@ export default function ShoppingCartPage() {
       />
       <ToastNotification
         toastAction={toastAction}
-        toastMessage="Booking successful"
+        toastMessage="Booking request sent"
       />
     </>
   );

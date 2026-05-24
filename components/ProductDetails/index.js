@@ -89,7 +89,7 @@ export default function ProductDetails({
             onClick={handleAddToShoppingCart}
             disabled={isInShoppingCart}
           >
-            Add to Shopping Cart
+            Add to selected bikes
           </StyledButton>
         </StyledButtonCartWrapper>
         <StyledButtonBackWrapper>

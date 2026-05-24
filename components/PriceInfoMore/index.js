@@ -33,11 +33,11 @@ export default function PriceInfoMore() {
               <StyledTd>$4</StyledTd>
             </StyledTr>
             <StyledTr>
-              <StyledTd>1 day, first day (until 8:00 PM)</StyledTd>
+              <StyledTd>First rental day</StyledTd>
               <StyledTd>$15</StyledTd>
             </StyledTr>
             <StyledTr>
-              <StyledTd>1 day, after the second day on</StyledTd>
+              <StyledTd>Additional days</StyledTd>
               <StyledTd>$10</StyledTd>
             </StyledTr>
           </tbody>
@@ -69,7 +69,16 @@ export default function PriceInfoMore() {
             </StyledTr>
           </tbody>
         </StyledTable>
-        <p>The Deposit will be returned at the end.</p>
+        <p>
+          The deposit is returned at the end of the rental when the bike is
+          returned in good condition.
+        </p>
+      </StandardSectionApp>
+      <StandardSectionApp sectionTitle="Pickup & Return">
+        <p>
+          Pickup and return details will be coordinated after your booking
+          request is reviewed.
+        </p>
       </StandardSectionApp>
     </>
   );
