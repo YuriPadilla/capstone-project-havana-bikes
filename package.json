@@ -7,15 +7,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "create-admin": "node scripts/create-admin-user.js"
   },
   "dependencies": {
     "@next/font": "13.1.2",
+    "bcryptjs": "^3.0.3",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.2",
     "jotai": "^2.0.0",
     "mongoose": "^6.9.1",
     "next": "13.1.2",
+    "next-auth": "^4.24.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "^5.3.6",
