@@ -1,10 +1,19 @@
 import Link from "next/link";
 import SVGIcon from "../SVGIcon";
-import { StyledNavBar, StyledNavLabel, StyledNavLink } from "./NavBar.styled";
+import {
+  StyledNavBar,
+  StyledNavLabel,
+  StyledNavLink,
+  StyledTextIcon,
+} from "./NavBar.styled";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 export default function NavBar() {
   const router = useRouter();
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "admin";
+
   return (
     <>
       <StyledNavBar>
@@ -68,6 +77,19 @@ export default function NavBar() {
             <StyledNavLabel>Contact</StyledNavLabel>
           </StyledNavLink>
         </Link>
+        {isAdmin && (
+          <Link href="/admin" passHref legacyBehavior>
+            <StyledNavLink
+              aria-label="Admin"
+              $active={router.pathname.startsWith("/admin")}
+            >
+              <StyledTextIcon $active={router.pathname.startsWith("/admin")}>
+                A
+              </StyledTextIcon>
+              <StyledNavLabel>Admin</StyledNavLabel>
+            </StyledNavLink>
+          </Link>
+        )}
       </StyledNavBar>
     </>
   );
