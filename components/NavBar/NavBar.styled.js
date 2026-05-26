@@ -42,3 +42,14 @@ export const StyledNavLabel = styled.span`
     display: inline;
   }
 `;
+
+export const StyledTextIcon = styled.span`
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: ${({ $active }) => ($active ? "#213327" : "#acacac")};
+`;

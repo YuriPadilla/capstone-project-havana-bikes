@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import styled from "styled-components";
 import AdminNavigation from "@/components/AdminNavigation";
 import StandardSectionApp from "@/components/StandardSectionApp";
@@ -14,11 +15,11 @@ const StyledText = styled.p`
   line-height: 1.5;
 `;
 
-const StyledEmail = styled.p`
-  font-weight: 700;
+const StyledAdminLink = styled(Link)`
+  color: inherit;
 `;
 
-export default function AdminPage() {
+export default function AdminBookingsPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -34,7 +35,7 @@ export default function AdminPage() {
 
   if (status === "loading") {
     return (
-      <StandardSectionApp sectionTitle="Admin area">
+      <StandardSectionApp sectionTitle="Admin Bookings">
         <StyledAdminWrapper>
           <StyledText>Loading...</StyledText>
         </StyledAdminWrapper>
@@ -47,14 +48,11 @@ export default function AdminPage() {
   }
 
   return (
-    <StandardSectionApp sectionTitle="Admin Dashboard">
+    <StandardSectionApp sectionTitle="Admin Bookings">
       <StyledAdminWrapper>
         <AdminNavigation />
-        <StyledText>
-          This area will be used to manage bookings and business tools for
-          Havana Bikes.
-        </StyledText>
-        <StyledEmail>Logged in as: {session.user.email}</StyledEmail>
+        <StyledText>Bookings management will be added here.</StyledText>
+        <StyledAdminLink href="/admin">Back to admin dashboard</StyledAdminLink>
       </StyledAdminWrapper>
     </StandardSectionApp>
   );
