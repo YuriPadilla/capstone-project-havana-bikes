@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import useSWR from "swr";
 import styled from "styled-components";
 import AdminBookingsList from "@/components/AdminBookingsList";
@@ -38,13 +39,57 @@ const fetchAdminBookings = async (url) => {
   return response.json();
 };
 
+async function getErrorMessage(response) {
+  try {
+    const errorData = await response.json();
+
+    return (
+      errorData.message ||
+      errorData.error ||
+      "Booking status could not be updated. Please try again."
+    );
+  } catch (error) {
+    return "Booking status could not be updated. Please try again.";
+  }
+}
+
 export default function AdminBookingsPage() {
   const { status } = useSession();
   const {
     data: bookings,
     error,
     isLoading,
+    mutate,
   } = useSWR("/api/admin/bookings", fetchAdminBookings);
+  const [updateError, setUpdateError] = useState("");
+  const [updatingBookingId, setUpdatingBookingId] = useState("");
+
+  async function updateBookingStatus(bookingId, nextStatus) {
+    setUpdateError("");
+    setUpdatingBookingId(bookingId);
+
+    try {
+      const response = await fetch(`/api/admin/bookings/${bookingId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: nextStatus }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await getErrorMessage(response);
+        setUpdateError(errorMessage);
+        return;
+      }
+
+      await mutate();
+    } catch (error) {
+      setUpdateError("Booking status could not be updated. Please try again.");
+    } finally {
+      setUpdatingBookingId("");
+    }
+  }
 
   if (status === "loading") {
     return (
@@ -75,10 +120,17 @@ export default function AdminBookingsPage() {
             Booking requests could not be loaded. Please try again later.
           </StyledErrorMessage>
         )}
+        {updateError && <StyledErrorMessage>{updateError}</StyledErrorMessage>}
         {bookings?.length === 0 && (
           <StyledStateMessage>No booking requests yet.</StyledStateMessage>
         )}
-        {bookings?.length > 0 && <AdminBookingsList bookings={bookings} />}
+        {bookings?.length > 0 && (
+          <AdminBookingsList
+            bookings={bookings}
+            onUpdateStatus={updateBookingStatus}
+            updatingBookingId={updatingBookingId}
+          />
+        )}
       </StyledAdminWrapper>
     </StandardSectionApp>
   );

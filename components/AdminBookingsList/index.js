@@ -9,12 +9,20 @@ const StyledList = styled.ul`
   list-style: none;
 `;
 
-export default function AdminBookingsList({ bookings }) {
+export default function AdminBookingsList({
+  bookings,
+  onUpdateStatus,
+  updatingBookingId,
+}) {
   return (
     <StyledList>
       {bookings.map((booking) => (
         <li key={booking._id}>
-          <AdminBookingCard booking={booking} />
+          <AdminBookingCard
+            booking={booking}
+            onUpdateStatus={onUpdateStatus}
+            isUpdating={updatingBookingId === booking._id}
+          />
         </li>
       ))}
     </StyledList>

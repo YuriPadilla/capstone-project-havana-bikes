@@ -52,6 +52,33 @@ const StyledBikeList = styled.ul`
   padding-left: 1.2rem;
 `;
 
+const StyledActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+`;
+
+const StyledActionButton = styled.button`
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgb(205, 211, 205);
+  border-radius: 8px;
+  background: rgb(222, 245, 234);
+  box-shadow: 3px 3px 8px rgb(95, 117, 129);
+  color: black;
+  font: inherit;
+  touch-action: manipulation;
+
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 2px;
+  }
+`;
+
 function formatDate(date) {
   if (!date) {
     return "Not set";
@@ -76,10 +103,17 @@ function getBikeSize(bike) {
   return bike.size || "";
 }
 
-export default function AdminBookingCard({ booking }) {
+export default function AdminBookingCard({
+  booking,
+  onUpdateStatus,
+  isUpdating,
+}) {
   const selectedBikes = Array.isArray(booking.selectedBikes)
     ? booking.selectedBikes
     : [];
+  const canConfirm = booking.status === "pending";
+  const canCancel =
+    booking.status === "pending" || booking.status === "confirmed";
 
   return (
     <StyledCard>
@@ -126,6 +160,33 @@ export default function AdminBookingCard({ booking }) {
         <StyledSection>
           <StyledSectionTitle>Total price</StyledSectionTitle>
           <StyledText>${booking.totalPrice}</StyledText>
+        </StyledSection>
+        <StyledSection>
+          <StyledSectionTitle>Actions</StyledSectionTitle>
+          {canConfirm || canCancel ? (
+            <StyledActions>
+              {canConfirm && (
+                <StyledActionButton
+                  type="button"
+                  disabled={isUpdating}
+                  onClick={() => onUpdateStatus(booking._id, "confirmed")}
+                >
+                  {isUpdating ? "Updating..." : "Confirm"}
+                </StyledActionButton>
+              )}
+              {canCancel && (
+                <StyledActionButton
+                  type="button"
+                  disabled={isUpdating}
+                  onClick={() => onUpdateStatus(booking._id, "cancelled")}
+                >
+                  {isUpdating ? "Updating..." : "Cancel"}
+                </StyledActionButton>
+              )}
+            </StyledActions>
+          ) : (
+            <StyledText>No actions available.</StyledText>
+          )}
         </StyledSection>
       </StyledDetailsGrid>
     </StyledCard>
