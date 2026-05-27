@@ -1,9 +1,8 @@
-import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import AdminNavigation from "@/components/AdminNavigation";
 import StandardSectionApp from "@/components/StandardSectionApp";
+import { getAdminSession } from "@/utils/auth";
 
 const StyledAdminWrapper = styled.div`
   max-width: 44rem;
@@ -19,18 +18,7 @@ const StyledEmail = styled.p`
 `;
 
 export default function AdminPage() {
-  const router = useRouter();
   const { data: session, status } = useSession();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/login");
-    }
-
-    if (status === "authenticated" && session?.user?.role !== "admin") {
-      router.replace("/");
-    }
-  }, [router, session, status]);
 
   if (status === "loading") {
     return (
@@ -42,7 +30,7 @@ export default function AdminPage() {
     );
   }
 
-  if (status !== "authenticated" || session?.user?.role !== "admin") {
+  if (status !== "authenticated") {
     return null;
   }
 
@@ -58,4 +46,30 @@ export default function AdminPage() {
       </StyledAdminWrapper>
     </StandardSectionApp>
   );
+}
+
+export async function getServerSideProps({ req, res }) {
+  const { status } = await getAdminSession(req, res);
+
+  if (status === 401) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  if (status === 403) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }
