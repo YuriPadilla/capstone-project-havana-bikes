@@ -1,5 +1,6 @@
 import dbConnect from "../../../../db/connect";
 import Booking from "../../../../db/models/Booking";
+import "../../../../db/models/Bike";
 import { getAdminSession } from "@/utils/auth";
 
 export default async function handler(request, response) {
@@ -20,7 +21,7 @@ export default async function handler(request, response) {
   await dbConnect();
 
   const bookings = await Booking.find()
-    .populate("selectedBikes", "brand size name type pricePerDay")
+    .populate("selectedBikes")
     .sort({ createdAt: -1 });
 
   return response.status(200).json(bookings);

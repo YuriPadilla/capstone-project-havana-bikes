@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import useSWR from "swr";
 import styled from "styled-components";
+import AdminBookingsList from "@/components/AdminBookingsList";
 import AdminNavigation from "@/components/AdminNavigation";
 import StandardSectionApp from "@/components/StandardSectionApp";
 import { getAdminSession } from "@/utils/auth";
@@ -15,31 +15,17 @@ const StyledText = styled.p`
   line-height: 1.5;
 `;
 
-const StyledAdminLink = styled(Link)`
-  color: inherit;
+const StyledStateMessage = styled.p`
+  padding: var(--space-m);
+  border: 1px solid #d7ddd8;
+  border-radius: var(--radius-s);
+  background: #ffffff;
+  line-height: 1.5;
 `;
 
-const StyledTableWrapper = styled.div`
-  width: 100%;
-  overflow-x: auto;
-`;
-
-const StyledTable = styled.table`
-  width: 100%;
-  min-width: 42rem;
-  border-collapse: collapse;
-`;
-
-const StyledTableHeader = styled.th`
-  padding: 0.6rem;
-  text-align: left;
-  border-bottom: 1px solid #9a9e9b;
-`;
-
-const StyledTableCell = styled.td`
-  padding: 0.6rem;
-  vertical-align: top;
-  border-bottom: 1px solid #d7ddd8;
+const StyledErrorMessage = styled(StyledStateMessage)`
+  border-color: #8f1d1d;
+  color: #8f1d1d;
 `;
 
 const fetchAdminBookings = async (url) => {
@@ -51,26 +37,6 @@ const fetchAdminBookings = async (url) => {
 
   return response.json();
 };
-
-function formatDate(date) {
-  if (!date) {
-    return "";
-  }
-
-  return new Date(date).toLocaleDateString("en-US");
-}
-
-function getBikeLabel(bike) {
-  if (!bike) {
-    return "";
-  }
-
-  if (typeof bike === "string") {
-    return bike;
-  }
-
-  return bike.name || bike.brand || bike._id;
-}
 
 export default function AdminBookingsPage() {
   const { status } = useSession();
@@ -95,60 +61,24 @@ export default function AdminBookingsPage() {
   }
 
   return (
-    <StandardSectionApp sectionTitle="Admin Bookings">
+    <StandardSectionApp sectionTitle="Booking requests">
       <StyledAdminWrapper>
         <AdminNavigation />
-        {isLoading && <StyledText>Loading bookings...</StyledText>}
+        <StyledText>
+          This page shows rental booking requests received by Havana Bikes.
+        </StyledText>
+        {isLoading && (
+          <StyledStateMessage>Loading booking requests...</StyledStateMessage>
+        )}
         {error && (
-          <StyledText>
-            Bookings could not be loaded. Please try again later.
-          </StyledText>
+          <StyledErrorMessage>
+            Booking requests could not be loaded. Please try again later.
+          </StyledErrorMessage>
         )}
         {bookings?.length === 0 && (
-          <StyledText>No bookings have been created yet.</StyledText>
+          <StyledStateMessage>No booking requests yet.</StyledStateMessage>
         )}
-        {bookings?.length > 0 && (
-          <StyledTableWrapper>
-            <StyledTable>
-              <thead>
-                <tr>
-                  <StyledTableHeader>Customer</StyledTableHeader>
-                  <StyledTableHeader>Bikes</StyledTableHeader>
-                  <StyledTableHeader>Dates</StyledTableHeader>
-                  <StyledTableHeader>Total</StyledTableHeader>
-                  <StyledTableHeader>Status</StyledTableHeader>
-                </tr>
-              </thead>
-              <tbody>
-                {bookings.map((booking) => (
-                  <tr key={booking._id}>
-                    <StyledTableCell>
-                      {booking.customerName}
-                      <br />
-                      {booking.customerEmail}
-                      {booking.customerPhone && (
-                        <>
-                          <br />
-                          {booking.customerPhone}
-                        </>
-                      )}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {booking.selectedBikes?.map(getBikeLabel).join(", ")}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {formatDate(booking.fromDate)} -{" "}
-                      {formatDate(booking.untilDate)}
-                    </StyledTableCell>
-                    <StyledTableCell>${booking.totalPrice}</StyledTableCell>
-                    <StyledTableCell>{booking.status}</StyledTableCell>
-                  </tr>
-                ))}
-              </tbody>
-            </StyledTable>
-          </StyledTableWrapper>
-        )}
-        <StyledAdminLink href="/admin">Back to admin dashboard</StyledAdminLink>
+        {bookings?.length > 0 && <AdminBookingsList bookings={bookings} />}
       </StyledAdminWrapper>
     </StandardSectionApp>
   );
