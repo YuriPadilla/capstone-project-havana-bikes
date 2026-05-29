@@ -47,7 +47,34 @@ const StyledText = styled.p`
   line-height: 1.5;
 `;
 
-export default function AdminBikeCard({ bike }) {
+const StyledActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+`;
+
+const StyledActionButton = styled.button`
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgb(205, 211, 205);
+  border-radius: 8px;
+  background: rgb(222, 245, 234);
+  box-shadow: 3px 3px 8px rgb(95, 117, 129);
+  color: black;
+  font: inherit;
+  touch-action: manipulation;
+
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 2px;
+  }
+`;
+
+export default function AdminBikeCard({ bike, onUpdateStatus, isUpdating }) {
   const name = bike.name || "Unnamed bike";
   const brand = bike.brand || "No brand";
   const size = bike.size || "No size";
@@ -56,7 +83,10 @@ export default function AdminBikeCard({ bike }) {
     bike.pricePerDay || bike.pricePerDay === 0
       ? `$${bike.pricePerDay} per day`
       : "No price set";
-  const status = bike.isActive === false ? "Inactive" : "Active";
+  const isActive = bike.isActive !== false;
+  const status = isActive ? "Active" : "Inactive";
+  const nextIsActive = !isActive;
+  const actionLabel = isActive ? "Deactivate" : "Activate";
 
   return (
     <StyledCard>
@@ -80,6 +110,18 @@ export default function AdminBikeCard({ bike }) {
         <StyledSection>
           <StyledSectionTitle>Price</StyledSectionTitle>
           <StyledText>{price}</StyledText>
+        </StyledSection>
+        <StyledSection>
+          <StyledSectionTitle>Actions</StyledSectionTitle>
+          <StyledActions>
+            <StyledActionButton
+              type="button"
+              disabled={isUpdating}
+              onClick={() => onUpdateStatus(bike._id, nextIsActive)}
+            >
+              {isUpdating ? "Updating..." : actionLabel}
+            </StyledActionButton>
+          </StyledActions>
         </StyledSection>
       </StyledDetailsGrid>
     </StyledCard>
