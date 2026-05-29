@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import useSWR from "swr";
 import styled from "styled-components";
 import AdminBikesList from "@/components/AdminBikesList";
@@ -38,13 +39,57 @@ const fetchAdminBikes = async (url) => {
   return response.json();
 };
 
+async function getErrorMessage(response) {
+  try {
+    const errorData = await response.json();
+
+    return (
+      errorData.message ||
+      errorData.error ||
+      "Bike status could not be updated. Please try again."
+    );
+  } catch (error) {
+    return "Bike status could not be updated. Please try again.";
+  }
+}
+
 export default function AdminBikesPage() {
   const { status } = useSession();
   const {
     data: bikes,
     error,
     isLoading,
+    mutate,
   } = useSWR("/api/admin/bikes", fetchAdminBikes);
+  const [updateError, setUpdateError] = useState("");
+  const [updatingBikeId, setUpdatingBikeId] = useState("");
+
+  async function updateBikeStatus(bikeId, nextIsActive) {
+    setUpdateError("");
+    setUpdatingBikeId(bikeId);
+
+    try {
+      const response = await fetch(`/api/admin/bikes/${bikeId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isActive: nextIsActive }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await getErrorMessage(response);
+        setUpdateError(errorMessage);
+        return;
+      }
+
+      await mutate();
+    } catch (error) {
+      setUpdateError("Bike status could not be updated. Please try again.");
+    } finally {
+      setUpdatingBikeId("");
+    }
+  }
 
   if (status === "loading") {
     return (
@@ -73,10 +118,17 @@ export default function AdminBikesPage() {
             Bikes could not be loaded. Please try again later.
           </StyledErrorMessage>
         )}
+        {updateError && <StyledErrorMessage>{updateError}</StyledErrorMessage>}
         {bikes?.length === 0 && (
           <StyledStateMessage>No bikes have been added yet.</StyledStateMessage>
         )}
-        {bikes?.length > 0 && <AdminBikesList bikes={bikes} />}
+        {bikes?.length > 0 && (
+          <AdminBikesList
+            bikes={bikes}
+            onUpdateStatus={updateBikeStatus}
+            updatingBikeId={updatingBikeId}
+          />
+        )}
       </StyledAdminWrapper>
     </StandardSectionApp>
   );
