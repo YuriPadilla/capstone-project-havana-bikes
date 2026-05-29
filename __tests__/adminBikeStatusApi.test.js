@@ -15,6 +15,7 @@ jest.mock("mongoose", () => ({
 jest.mock("../db/connect", () => jest.fn());
 
 jest.mock("../db/models/Bike", () => ({
+  findById: jest.fn(),
   findByIdAndUpdate: jest.fn(),
 }));
 
@@ -56,8 +57,8 @@ describe("PATCH /api/admin/bikes/[id]", () => {
     dbConnect.mockResolvedValue();
   });
 
-  test("rejects methods other than PATCH with 405", async () => {
-    const request = createRequest({ method: "GET" });
+  test("rejects methods other than GET and PATCH with 405", async () => {
+    const request = createRequest({ method: "POST" });
     const response = createResponse();
 
     await handler(request, response);
@@ -66,6 +67,23 @@ describe("PATCH /api/admin/bikes/[id]", () => {
     expect(response.json).toHaveBeenCalledWith({
       status: "Method Not Allowed",
     });
+  });
+
+  test("returns 200 and one bike for GET requests", async () => {
+    const bike = {
+      _id: "bike-id",
+      brand: "Havana",
+      size: "M",
+    };
+    Bike.findById.mockResolvedValue(bike);
+    const request = createRequest({ method: "GET" });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(Bike.findById).toHaveBeenCalledWith("bike-id");
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith(bike);
   });
 
   test("rejects guests with 401", async () => {
