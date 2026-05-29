@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
 import styled from "styled-components";
@@ -27,6 +28,28 @@ const StyledStateMessage = styled.p`
 const StyledErrorMessage = styled(StyledStateMessage)`
   border-color: #8f1d1d;
   color: #8f1d1d;
+`;
+
+const StyledActionLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 2.75rem;
+  margin: var(--space-s) 0 var(--space-m);
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgb(205, 211, 205);
+  border-radius: 8px;
+  background: rgb(222, 245, 234);
+  box-shadow: 3px 3px 8px rgb(95, 117, 129);
+  color: black;
+  font: inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 2px;
+  }
 `;
 
 const fetchAdminBikes = async (url) => {
@@ -112,6 +135,7 @@ export default function AdminBikesPage() {
         <StyledText>
           This page shows all bikes in the inventory, including inactive bikes.
         </StyledText>
+        <StyledActionLink href="/admin/bikes/new">Add new bike</StyledActionLink>
         {isLoading && <StyledStateMessage>Loading bikes...</StyledStateMessage>}
         {error && (
           <StyledErrorMessage>

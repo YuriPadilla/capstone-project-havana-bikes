@@ -13,8 +13,10 @@
   "dependencies": {
     "@next/font": "13.1.2",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.10.0",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.2",
+    "formidable": "^3.5.4",
     "jotai": "^2.0.0",
     "mongoose": "^6.9.1",
     "next": "13.1.2",
