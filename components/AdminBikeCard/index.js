@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 const StyledCard = styled.article`
@@ -74,6 +75,26 @@ const StyledActionButton = styled.button`
   }
 `;
 
+const StyledActionLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgb(205, 211, 205);
+  border-radius: 8px;
+  background: rgb(222, 245, 234);
+  box-shadow: 3px 3px 8px rgb(95, 117, 129);
+  color: black;
+  font: inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 2px;
+  }
+`;
+
 export default function AdminBikeCard({ bike, onUpdateStatus, isUpdating }) {
   const name = bike.name || "Unnamed bike";
   const brand = bike.brand || "No brand";
@@ -114,6 +135,9 @@ export default function AdminBikeCard({ bike, onUpdateStatus, isUpdating }) {
         <StyledSection>
           <StyledSectionTitle>Actions</StyledSectionTitle>
           <StyledActions>
+            <StyledActionLink href={`/admin/bikes/${bike._id}/edit`}>
+              Edit
+            </StyledActionLink>
             <StyledActionButton
               type="button"
               disabled={isUpdating}

@@ -77,11 +77,11 @@ export default function ProductDetails({
           <li>
             <strong>Size:</strong> {product.size}
           </li>
-          {product.pricePerDay && (
+          {product.pricePerDay || product.pricePerDay === 0 ? (
             <li>
               <strong>Price per day:</strong> {product.pricePerDay} USD
             </li>
-          )}
+          ) : null}
         </StyledUlDetails>
         <StyledButtonCartWrapper>
           <StyledButton

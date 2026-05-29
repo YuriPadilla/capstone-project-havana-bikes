@@ -50,9 +50,9 @@ export default function BikesList() {
                       />
                       <StyledBikeName>{bike.name || bike.brand}</StyledBikeName>
                       {bike.type && <StyledBikeInfo>{bike.type}</StyledBikeInfo>}
-                      {bike.pricePerDay && (
+                      {bike.pricePerDay || bike.pricePerDay === 0 ? (
                         <StyledBikeInfo>{bike.pricePerDay} USD / day</StyledBikeInfo>
-                      )}
+                      ) : null}
                     </StyledBikeLink>
                   </Link>
                 </StyledBikeLi>
