@@ -75,6 +75,19 @@ const StyledActionButton = styled.button`
   }
 `;
 
+const StyledDangerButton = styled(StyledActionButton)`
+  background: #f7d7d7;
+  border-color: #8f1d1d;
+
+  &:disabled {
+    background: #e5e5e5;
+    border-color: #b8b8b8;
+    box-shadow: none;
+    color: #666666;
+    opacity: 1;
+  }
+`;
+
 const StyledActionLink = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -95,7 +108,13 @@ const StyledActionLink = styled(Link)`
   }
 `;
 
-export default function AdminBikeCard({ bike, onUpdateStatus, isUpdating }) {
+export default function AdminBikeCard({
+  bike,
+  onUpdateStatus,
+  isUpdating,
+  onDeleteBike,
+  isDeleting,
+}) {
   const name = bike.name || "Unnamed bike";
   const brand = bike.brand || "No brand";
   const size = bike.size || "No size";
@@ -108,6 +127,21 @@ export default function AdminBikeCard({ bike, onUpdateStatus, isUpdating }) {
   const status = isActive ? "Active" : "Inactive";
   const nextIsActive = !isActive;
   const actionLabel = isActive ? "Deactivate" : "Activate";
+  const deleteButtonTitle = isActive
+    ? "Deactivate this bike before deleting it permanently."
+    : "Delete this bike permanently.";
+
+  function handleDeleteClick() {
+    const shouldDelete = window.confirm(
+      "Are you sure you want to permanently delete this bike? This action cannot be undone."
+    );
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    onDeleteBike(bike._id);
+  }
 
   return (
     <StyledCard>
@@ -140,11 +174,20 @@ export default function AdminBikeCard({ bike, onUpdateStatus, isUpdating }) {
             </StyledActionLink>
             <StyledActionButton
               type="button"
-              disabled={isUpdating}
+              disabled={isUpdating || isDeleting}
               onClick={() => onUpdateStatus(bike._id, nextIsActive)}
             >
               {isUpdating ? "Updating..." : actionLabel}
             </StyledActionButton>
+            <StyledDangerButton
+              type="button"
+              disabled={isActive || isDeleting}
+              title={deleteButtonTitle}
+              aria-label={deleteButtonTitle}
+              onClick={handleDeleteClick}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </StyledDangerButton>
           </StyledActions>
         </StyledSection>
       </StyledDetailsGrid>

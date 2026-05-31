@@ -30,6 +30,11 @@ const StyledErrorMessage = styled(StyledStateMessage)`
   color: #8f1d1d;
 `;
 
+const StyledSuccessMessage = styled(StyledStateMessage)`
+  border-color: #2c6b3f;
+  color: #2c6b3f;
+`;
+
 const StyledActionLink = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -62,17 +67,16 @@ const fetchAdminBikes = async (url) => {
   return response.json();
 };
 
-async function getErrorMessage(response) {
+async function getErrorMessage(
+  response,
+  fallbackMessage = "Bike status could not be updated. Please try again."
+) {
   try {
     const errorData = await response.json();
 
-    return (
-      errorData.message ||
-      errorData.error ||
-      "Bike status could not be updated. Please try again."
-    );
+    return errorData.message || errorData.error || fallbackMessage;
   } catch (error) {
-    return "Bike status could not be updated. Please try again.";
+    return fallbackMessage;
   }
 }
 
@@ -84,11 +88,14 @@ export default function AdminBikesPage() {
     isLoading,
     mutate,
   } = useSWR("/api/admin/bikes", fetchAdminBikes);
-  const [updateError, setUpdateError] = useState("");
+  const [actionError, setActionError] = useState("");
   const [updatingBikeId, setUpdatingBikeId] = useState("");
+  const [deletingBikeId, setDeletingBikeId] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   async function updateBikeStatus(bikeId, nextIsActive) {
-    setUpdateError("");
+    setActionError("");
+    setSuccessMessage("");
     setUpdatingBikeId(bikeId);
 
     try {
@@ -101,16 +108,47 @@ export default function AdminBikesPage() {
       });
 
       if (!response.ok) {
-        const errorMessage = await getErrorMessage(response);
-        setUpdateError(errorMessage);
+        const errorMessage = await getErrorMessage(
+          response,
+          "Bike status could not be updated. Please try again."
+        );
+        setActionError(errorMessage);
         return;
       }
 
       await mutate();
     } catch (error) {
-      setUpdateError("Bike status could not be updated. Please try again.");
+      setActionError("Bike status could not be updated. Please try again.");
     } finally {
       setUpdatingBikeId("");
+    }
+  }
+
+  async function deleteBike(bikeId) {
+    setActionError("");
+    setSuccessMessage("");
+    setDeletingBikeId(bikeId);
+
+    try {
+      const response = await fetch(`/api/admin/bikes/${bikeId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorMessage = await getErrorMessage(
+          response,
+          "Bike could not be deleted. Please try again."
+        );
+        setActionError(errorMessage);
+        return;
+      }
+
+      setSuccessMessage("Bike deleted successfully.");
+      await mutate();
+    } catch (error) {
+      setActionError("Bike could not be deleted. Please try again.");
+    } finally {
+      setDeletingBikeId("");
     }
   }
 
@@ -142,7 +180,10 @@ export default function AdminBikesPage() {
             Bikes could not be loaded. Please try again later.
           </StyledErrorMessage>
         )}
-        {updateError && <StyledErrorMessage>{updateError}</StyledErrorMessage>}
+        {actionError && <StyledErrorMessage>{actionError}</StyledErrorMessage>}
+        {successMessage && (
+          <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+        )}
         {bikes?.length === 0 && (
           <StyledStateMessage>No bikes have been added yet.</StyledStateMessage>
         )}
@@ -151,6 +192,8 @@ export default function AdminBikesPage() {
             bikes={bikes}
             onUpdateStatus={updateBikeStatus}
             updatingBikeId={updatingBikeId}
+            onDeleteBike={deleteBike}
+            deletingBikeId={deletingBikeId}
           />
         )}
       </StyledAdminWrapper>

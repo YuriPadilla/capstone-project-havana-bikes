@@ -13,6 +13,8 @@ export default function AdminBikesList({
   bikes,
   onUpdateStatus,
   updatingBikeId,
+  onDeleteBike,
+  deletingBikeId,
 }) {
   return (
     <StyledList>
@@ -22,6 +24,8 @@ export default function AdminBikesList({
             bike={bike}
             onUpdateStatus={onUpdateStatus}
             isUpdating={updatingBikeId === bike._id}
+            onDeleteBike={onDeleteBike}
+            isDeleting={deletingBikeId === bike._id}
           />
         </li>
       ))}

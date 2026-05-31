@@ -6,6 +6,7 @@ const bikeSchema = new Schema({
   brand: { type: String, required: true },
   size: { type: String, required: true },
   imageSource: { type: String, required: true },
+  imagePublicId: { type: String },
   name: { type: String },
   description: { type: String },
   type: { type: String },
