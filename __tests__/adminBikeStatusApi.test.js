@@ -17,6 +17,17 @@ jest.mock("../db/connect", () => jest.fn());
 jest.mock("../db/models/Bike", () => ({
   findById: jest.fn(),
   findByIdAndUpdate: jest.fn(),
+  findByIdAndDelete: jest.fn(),
+}));
+
+jest.mock("../db/models/Booking", () => ({
+  findOne: jest.fn(),
+}));
+
+jest.mock("@/utils/cloudinary", () => ({
+  uploader: {
+    destroy: jest.fn(),
+  },
 }));
 
 jest.mock("@/utils/auth", () => ({
@@ -57,7 +68,7 @@ describe("PATCH /api/admin/bikes/[id]", () => {
     dbConnect.mockResolvedValue();
   });
 
-  test("rejects methods other than GET and PATCH with 405", async () => {
+  test("rejects methods other than GET, PATCH and DELETE with 405", async () => {
     const request = createRequest({ method: "POST" });
     const response = createResponse();
 

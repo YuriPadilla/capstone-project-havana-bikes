@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import dbConnect from "../../../../db/connect";
+import Booking from "../../../../db/models/Booking";
 import Bike from "../../../../db/models/Bike";
+import cloudinary from "@/utils/cloudinary";
 import { getAdminSession } from "@/utils/auth";
 
 const allowedFields = [
@@ -33,7 +35,11 @@ const editableFields = [
 const requiredEditableFields = editableFields;
 
 export default async function handler(request, response) {
-  if (request.method !== "GET" && request.method !== "PATCH") {
+  if (
+    request.method !== "GET" &&
+    request.method !== "PATCH" &&
+    request.method !== "DELETE"
+  ) {
     return response.status(405).json({ status: "Method Not Allowed" });
   }
 
@@ -64,6 +70,52 @@ export default async function handler(request, response) {
       }
 
       return response.status(200).json(bike);
+    }
+
+    if (request.method === "DELETE") {
+      const bike = await Bike.findById(id);
+
+      if (!bike) {
+        return response.status(404).json({ message: "Bike not found" });
+      }
+
+      if (bike.isActive !== false) {
+        return response.status(409).json({
+          message:
+            "This bike is active and cannot be permanently deleted. Deactivate it first.",
+        });
+      }
+
+      const bookingUsingBike = await Booking.findOne({ selectedBikes: id });
+
+      if (bookingUsingBike) {
+        return response.status(409).json({
+          message:
+            "This bike is used in existing bookings and cannot be permanently deleted. Deactivate it instead.",
+        });
+      }
+
+      if (bike.imagePublicId) {
+        try {
+          await cloudinary.uploader.destroy(bike.imagePublicId);
+        } catch (error) {
+          return response.status(502).json({
+            message: "Image could not be deleted. Please try again.",
+          });
+        }
+      }
+
+      try {
+        await Bike.findByIdAndDelete(id);
+      } catch (error) {
+        return response.status(500).json({
+          message: "Bike could not be deleted. Please try again.",
+        });
+      }
+
+      return response.status(200).json({
+        message: "Bike deleted successfully",
+      });
     }
 
     const requestBody = request.body || {};

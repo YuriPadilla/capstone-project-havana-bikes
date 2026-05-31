@@ -254,6 +254,7 @@ describe("GET /api/admin/bikes", () => {
       pricePerDay: 12,
       isActive: false,
       imageSource: "https://res.cloudinary.com/demo/bike.jpg",
+      imagePublicId: "havana-bikes/bikes/new-bike",
     };
     mockParsedForm({
       fields,
@@ -261,6 +262,7 @@ describe("GET /api/admin/bikes", () => {
     });
     cloudinary.uploader.upload.mockResolvedValue({
       secure_url: createdBike.imageSource,
+      public_id: createdBike.imagePublicId,
     });
     Bike.create.mockResolvedValue(createdBike);
     const request = createRequest({ method: "POST" });
@@ -280,6 +282,7 @@ describe("GET /api/admin/bikes", () => {
       pricePerDay: 12,
       isActive: false,
       imageSource: createdBike.imageSource,
+      imagePublicId: createdBike.imagePublicId,
     });
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith(createdBike);

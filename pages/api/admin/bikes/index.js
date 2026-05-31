@@ -147,6 +147,7 @@ export default async function handler(request, response) {
       newBike = await Bike.create({
         ...bikeData,
         imageSource: uploadResult.secure_url,
+        imagePublicId: uploadResult.public_id,
       });
     } catch (error) {
       return response.status(500).json({
