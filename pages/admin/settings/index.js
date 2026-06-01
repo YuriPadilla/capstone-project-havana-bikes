@@ -5,6 +5,8 @@ import styled from "styled-components";
 import AdminNavigation from "@/components/AdminNavigation";
 import StandardSectionApp from "@/components/StandardSectionApp";
 import { getAdminSession } from "@/utils/auth";
+import { getSiteSettingsWithDefaults } from "@/utils/defaultSiteSettings";
+import { validateSiteSettings } from "@/utils/validateSiteSettings";
 
 const StyledAdminWrapper = styled.div`
   max-width: 44rem;
@@ -67,6 +69,12 @@ const StyledField = styled.label`
   font-weight: 700;
 `;
 
+const StyledFieldError = styled.span`
+  color: #8f1d1d;
+  font-size: 0.9rem;
+  font-weight: 400;
+`;
+
 const StyledInput = styled.input`
   width: 100%;
   min-height: 2.75rem;
@@ -120,39 +128,25 @@ const fetchSiteSettings = async (url) => {
 };
 
 const initialFormValues = {
-  businessName: "",
-  currency: "",
-  hourlyPrice: "",
-  firstDayPrice: "",
-  additionalDayPrice: "",
-  depositAmount: "",
-  openingHours: "",
-  address: "",
-  phone: "",
-  whatsapp: "",
-  email: "",
-  pickupReturnInfo: "",
-  depositInfo: "",
+  ...getSiteSettingsWithDefaults(),
 };
 
-const numberFields = [
-  "hourlyPrice",
-  "firstDayPrice",
-  "additionalDayPrice",
-  "depositAmount",
-];
-
-async function getErrorMessage(response) {
+async function getErrorDetails(response) {
   try {
     const errorData = await response.json();
 
-    return (
-      errorData.message ||
-      errorData.error ||
-      "Business settings could not be saved. Please try again."
-    );
+    return {
+      message:
+        errorData.message ||
+        errorData.error ||
+        "Business settings could not be saved. Please try again.",
+      errors: errorData.errors || {},
+    };
   } catch (error) {
-    return "Business settings could not be saved. Please try again.";
+    return {
+      message: "Business settings could not be saved. Please try again.",
+      errors: {},
+    };
   }
 }
 
@@ -166,6 +160,7 @@ export default function AdminSettingsPage() {
   } = useSWR("/api/site-settings", fetchSiteSettings);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [submitError, setSubmitError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
@@ -174,21 +169,7 @@ export default function AdminSettingsPage() {
       return;
     }
 
-    setFormValues({
-      businessName: settings.businessName || "",
-      currency: settings.currency || "",
-      hourlyPrice: settings.hourlyPrice ?? "",
-      firstDayPrice: settings.firstDayPrice ?? "",
-      additionalDayPrice: settings.additionalDayPrice ?? "",
-      depositAmount: settings.depositAmount ?? "",
-      openingHours: settings.openingHours || "",
-      address: settings.address || "",
-      phone: settings.phone || "",
-      whatsapp: settings.whatsapp || "",
-      email: settings.email || "",
-      pickupReturnInfo: settings.pickupInfo || settings.pickupReturnInfo || "",
-      depositInfo: settings.depositInfo || "",
-    });
+    setFormValues(getSiteSettingsWithDefaults(settings));
   }, [settings]);
 
   function handleChange(event) {
@@ -198,49 +179,29 @@ export default function AdminSettingsPage() {
       ...currentValues,
       [name]: value,
     }));
-  }
 
-  function validateNumberFields() {
-    for (const field of numberFields) {
-      const value = Number(formValues[field]);
-
-      if (Number.isNaN(value) || value < 0) {
-        return "Price and deposit values must be numbers greater than or equal to 0";
-      }
-    }
-
-    return "";
+    setFieldErrors((currentErrors) => ({
+      ...currentErrors,
+      [name]: "",
+    }));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setSubmitError("");
+    setFieldErrors({});
     setSuccessMessage("");
 
-    const validationError = validateNumberFields();
+    const { isValid, errors, sanitizedSettings } =
+      validateSiteSettings(formValues);
 
-    if (validationError) {
-      setSubmitError(validationError);
+    if (!isValid) {
+      setFieldErrors(errors);
+      setSubmitError("Please check the business settings form.");
       return;
     }
 
     setIsSaving(true);
-
-    const payload = {
-      businessName: formValues.businessName.trim(),
-      currency: formValues.currency.trim(),
-      hourlyPrice: Number(formValues.hourlyPrice),
-      firstDayPrice: Number(formValues.firstDayPrice),
-      additionalDayPrice: Number(formValues.additionalDayPrice),
-      depositAmount: Number(formValues.depositAmount),
-      openingHours: formValues.openingHours.trim(),
-      address: formValues.address.trim(),
-      phone: formValues.phone.trim(),
-      whatsapp: formValues.whatsapp.trim(),
-      email: formValues.email.trim(),
-      pickupReturnInfo: formValues.pickupReturnInfo.trim(),
-      depositInfo: formValues.depositInfo.trim(),
-    };
 
     try {
       const response = await fetch("/api/site-settings", {
@@ -248,18 +209,20 @@ export default function AdminSettingsPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(sanitizedSettings),
       });
 
       if (!response.ok) {
-        const errorMessage = await getErrorMessage(response);
-        setSubmitError(errorMessage);
+        const { message, errors } = await getErrorDetails(response);
+        setSubmitError(message);
+        setFieldErrors(errors);
         return;
       }
 
       const updatedSettings = await response.json();
 
       await mutate(updatedSettings, false);
+      setFormValues(getSiteSettingsWithDefaults(updatedSettings));
       setSuccessMessage("Business settings saved successfully.");
     } catch (error) {
       setSubmitError("Business settings could not be saved. Please try again.");
@@ -316,6 +279,11 @@ export default function AdminSettingsPage() {
                     value={formValues.businessName}
                     onChange={handleChange}
                   />
+                  {fieldErrors.businessName && (
+                    <StyledFieldError>
+                      {fieldErrors.businessName}
+                    </StyledFieldError>
+                  )}
                 </StyledField>
                 <StyledField>
                   Currency
@@ -325,6 +293,9 @@ export default function AdminSettingsPage() {
                     value={formValues.currency}
                     onChange={handleChange}
                   />
+                  {fieldErrors.currency && (
+                    <StyledFieldError>{fieldErrors.currency}</StyledFieldError>
+                  )}
                 </StyledField>
               </StyledFieldGrid>
               <StyledField>
@@ -334,6 +305,9 @@ export default function AdminSettingsPage() {
                   value={formValues.address}
                   onChange={handleChange}
                 />
+                {fieldErrors.address && (
+                  <StyledFieldError>{fieldErrors.address}</StyledFieldError>
+                )}
               </StyledField>
             </StyledSettingsSection>
 
@@ -346,9 +320,15 @@ export default function AdminSettingsPage() {
                     type="number"
                     name="hourlyPrice"
                     min="0"
+                    step="0.01"
                     value={formValues.hourlyPrice}
                     onChange={handleChange}
                   />
+                  {fieldErrors.hourlyPrice && (
+                    <StyledFieldError>
+                      {fieldErrors.hourlyPrice}
+                    </StyledFieldError>
+                  )}
                 </StyledField>
                 <StyledField>
                   First day price
@@ -356,9 +336,15 @@ export default function AdminSettingsPage() {
                     type="number"
                     name="firstDayPrice"
                     min="0"
+                    step="0.01"
                     value={formValues.firstDayPrice}
                     onChange={handleChange}
                   />
+                  {fieldErrors.firstDayPrice && (
+                    <StyledFieldError>
+                      {fieldErrors.firstDayPrice}
+                    </StyledFieldError>
+                  )}
                 </StyledField>
                 <StyledField>
                   Additional day price
@@ -366,9 +352,15 @@ export default function AdminSettingsPage() {
                     type="number"
                     name="additionalDayPrice"
                     min="0"
+                    step="0.01"
                     value={formValues.additionalDayPrice}
                     onChange={handleChange}
                   />
+                  {fieldErrors.additionalDayPrice && (
+                    <StyledFieldError>
+                      {fieldErrors.additionalDayPrice}
+                    </StyledFieldError>
+                  )}
                 </StyledField>
                 <StyledField>
                   Deposit amount
@@ -376,9 +368,15 @@ export default function AdminSettingsPage() {
                     type="number"
                     name="depositAmount"
                     min="0"
+                    step="0.01"
                     value={formValues.depositAmount}
                     onChange={handleChange}
                   />
+                  {fieldErrors.depositAmount && (
+                    <StyledFieldError>
+                      {fieldErrors.depositAmount}
+                    </StyledFieldError>
+                  )}
                 </StyledField>
               </StyledFieldGrid>
             </StyledSettingsSection>
@@ -394,6 +392,9 @@ export default function AdminSettingsPage() {
                     value={formValues.phone}
                     onChange={handleChange}
                   />
+                  {fieldErrors.phone && (
+                    <StyledFieldError>{fieldErrors.phone}</StyledFieldError>
+                  )}
                 </StyledField>
                 <StyledField>
                   WhatsApp
@@ -403,6 +404,9 @@ export default function AdminSettingsPage() {
                     value={formValues.whatsapp}
                     onChange={handleChange}
                   />
+                  {fieldErrors.whatsapp && (
+                    <StyledFieldError>{fieldErrors.whatsapp}</StyledFieldError>
+                  )}
                 </StyledField>
                 <StyledField>
                   Email
@@ -412,6 +416,9 @@ export default function AdminSettingsPage() {
                     value={formValues.email}
                     onChange={handleChange}
                   />
+                  {fieldErrors.email && (
+                    <StyledFieldError>{fieldErrors.email}</StyledFieldError>
+                  )}
                 </StyledField>
               </StyledFieldGrid>
             </StyledSettingsSection>
@@ -425,6 +432,11 @@ export default function AdminSettingsPage() {
                   value={formValues.openingHours}
                   onChange={handleChange}
                 />
+                {fieldErrors.openingHours && (
+                  <StyledFieldError>
+                    {fieldErrors.openingHours}
+                  </StyledFieldError>
+                )}
               </StyledField>
               <StyledField>
                 Pickup information
@@ -433,6 +445,11 @@ export default function AdminSettingsPage() {
                   value={formValues.pickupReturnInfo}
                   onChange={handleChange}
                 />
+                {fieldErrors.pickupReturnInfo && (
+                  <StyledFieldError>
+                    {fieldErrors.pickupReturnInfo}
+                  </StyledFieldError>
+                )}
               </StyledField>
               <StyledField>
                 Deposit information
@@ -441,6 +458,9 @@ export default function AdminSettingsPage() {
                   value={formValues.depositInfo}
                   onChange={handleChange}
                 />
+                {fieldErrors.depositInfo && (
+                  <StyledFieldError>{fieldErrors.depositInfo}</StyledFieldError>
+                )}
               </StyledField>
             </StyledSettingsSection>
             <StyledSubmitButton type="submit" disabled={isSaving}>

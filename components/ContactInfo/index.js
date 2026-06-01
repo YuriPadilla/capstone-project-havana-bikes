@@ -22,12 +22,6 @@ export default function ContactInfo() {
                 {settings.address}
               </StyledTd>
             </StyledTr>
-            <StyledTr>
-              <StyledTd colSpan="2">
-                <SVGIcon variant="info" width="15px" />
-                {settings.openingHours}
-              </StyledTd>
-            </StyledTr>
             {(settings.phone || settings.whatsapp) && (
               <StyledTr>
                 {settings.phone && (
