@@ -1,4 +1,5 @@
 import { calculateRentalPrice } from "@/utils/calculateRentalPrice";
+import useSiteSettings from "@/hooks/useSiteSettings";
 import {
   StyledForm,
   StyledFieldset,
@@ -30,6 +31,7 @@ export default function LeaseTimeForm({
   customerInfo,
   isSubmitting,
 }) {
+  const { settings } = useSiteSettings();
   const initialDate = new Date(fromDate).getTime();
   const finalDate = new Date(untilDate).getTime();
 
@@ -122,8 +124,8 @@ export default function LeaseTimeForm({
                   {calculateRentalPrice(howManyBikes, leaseDays())}
                 </li>
                 <li>
-                  Security deposit: $50 per bike, returned at the end of the
-                  rental.
+                  Security deposit: {settings.currency}
+                  {settings.depositAmount} per bike. {settings.depositInfo}
                 </li>
               </StyledDescriptionUl>
             ) : (

@@ -1,5 +1,6 @@
 import SVGIcon from "../SVGIcon";
 import StandardSectionApp from "../StandardSectionApp/index.js";
+import useSiteSettings from "@/hooks/useSiteSettings";
 import {
   StyledSectionLink,
   StyledTable,
@@ -8,6 +9,8 @@ import {
 } from "./ContactInfo.styled";
 
 export default function ContactInfo() {
+  const { settings } = useSiteSettings();
+
   return (
     <>
       <StandardSectionApp sectionTitle="Contact Information">
@@ -16,23 +19,37 @@ export default function ContactInfo() {
             <StyledTr>
               <StyledTd colSpan="2">
                 <SVGIcon variant="location" width="15px" />
-                61 Consulado St. Centro Habana
-              </StyledTd>
-            </StyledTr>
-            <StyledTr>
-              <StyledTd>
-                <SVGIcon variant="mobile" width="15px" /> (+53) 5 391 2608
-              </StyledTd>
-              <StyledTd>
-                <SVGIcon variant="landline" width="15px" /> (+53) 7 867 6782
+                {settings.address}
               </StyledTd>
             </StyledTr>
             <StyledTr>
               <StyledTd colSpan="2">
-                <SVGIcon variant="email" width="15px" />{" "}
-                yuripadilla017@gmail.com
+                <SVGIcon variant="info" width="15px" />
+                {settings.openingHours}
               </StyledTd>
             </StyledTr>
+            {(settings.phone || settings.whatsapp) && (
+              <StyledTr>
+                {settings.phone && (
+                  <StyledTd>
+                    <SVGIcon variant="mobile" width="15px" /> {settings.phone}
+                  </StyledTd>
+                )}
+                {settings.whatsapp && (
+                  <StyledTd>
+                    <SVGIcon variant="landline" width="15px" />{" "}
+                    {settings.whatsapp}
+                  </StyledTd>
+                )}
+              </StyledTr>
+            )}
+            {settings.email && (
+              <StyledTr>
+                <StyledTd colSpan="2">
+                  <SVGIcon variant="email" width="15px" /> {settings.email}
+                </StyledTd>
+              </StyledTr>
+            )}
           </tbody>
         </StyledTable>
         <StyledSectionLink href="/ContactUsPage">

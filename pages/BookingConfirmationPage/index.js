@@ -1,3 +1,4 @@
+import useSiteSettings from "@/hooks/useSiteSettings";
 import { bookingConfirmationAtom } from "@/store/atoms";
 import { useAtomValue } from "jotai";
 import Link from "next/link";
@@ -44,6 +45,8 @@ const StyledLink = styled(Link)`
 
 export default function BookingConfirmationPage() {
   const bookingConfirmation = useAtomValue(bookingConfirmationAtom);
+  const { settings } = useSiteSettings();
+  const businessName = settings.businessName || "Havana Bikes";
 
   if (!bookingConfirmation) {
     return (
@@ -75,7 +78,7 @@ export default function BookingConfirmationPage() {
             request. This is not an automatic confirmation yet.
           </p>
           <p>
-            Havana Bikes will review availability and contact you to confirm
+            {businessName} will review availability and contact you to confirm
             your reservation.
           </p>
         </div>
@@ -103,16 +106,28 @@ export default function BookingConfirmationPage() {
         <StyledDetailsSection>
           <StyledSubHeading>Estimated rental price</StyledSubHeading>
           <p>
-            <strong>${totalPrice}</strong>
+            <strong>
+              {settings.currency}
+              {totalPrice}
+            </strong>
           </p>
-          <p>Security deposit: $50 per bike, returned at the end of the rental.</p>
+          <p>
+            Security deposit: {settings.currency}
+            {settings.depositAmount} per bike.
+          </p>
+          <p>{settings.depositInfo}</p>
         </StyledDetailsSection>
         <StyledDetailsSection>
           <StyledSubHeading>What happens next</StyledSubHeading>
-          <p>
-            We will coordinate pickup and return details after your booking
-            request is reviewed.
-          </p>
+          <p>{settings.pickupReturnInfo}</p>
+          {(settings.whatsapp || settings.phone || settings.email) && (
+            <p>
+              Contact:{" "}
+              {settings.whatsapp ||
+                settings.phone ||
+                settings.email}
+            </p>
+          )}
         </StyledDetailsSection>
         <StyledLink href="/Bikes">Back to bikes</StyledLink>
       </StyledContent>
