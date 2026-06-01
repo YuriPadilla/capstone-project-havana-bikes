@@ -1,113 +1,20 @@
 import dbConnect from "../../../db/connect";
 import SiteSettings from "../../../db/models/SiteSettings";
 import { getAdminSession } from "@/utils/auth";
-
-const defaultSettings = {
-  businessName: "Havana Bikes",
-  currency: "$",
-  hourlyPrice: 4,
-  firstDayPrice: 15,
-  additionalDayPrice: 10,
-  depositAmount: 50,
-  openingHours: "Monday - Sunday, 8:00 AM - 8:00 PM",
-  address: "La Habana, Cuba",
-  phone: "",
-  whatsapp: "",
-  email: "",
-  pickupInfo:
-    "Pickup and return details will be coordinated after your booking request is reviewed.",
-  depositInfo:
-    "The deposit is returned at the end of the rental when the bike is returned in good condition.",
-};
-
-const allowedFields = [
-  "businessName",
-  "currency",
-  "hourlyPrice",
-  "firstDayPrice",
-  "additionalDayPrice",
-  "depositAmount",
-  "openingHours",
-  "address",
-  "phone",
-  "whatsapp",
-  "email",
-  "pickupReturnInfo",
-  "pickupInfo",
-  "depositInfo",
-];
-
-const stringFields = [
-  "businessName",
-  "currency",
-  "openingHours",
-  "address",
-  "phone",
-  "whatsapp",
-  "email",
-  "pickupReturnInfo",
-  "pickupInfo",
-  "depositInfo",
-];
-
-const numberFields = [
-  "hourlyPrice",
-  "firstDayPrice",
-  "additionalDayPrice",
-  "depositAmount",
-];
-
-function sanitizeSettingsBody(body) {
-  const settingsData = {};
-  const fieldsToUpdate = Object.keys(body || {});
-  const hasInvalidField = fieldsToUpdate.some(
-    (field) => !allowedFields.includes(field)
-  );
-
-  if (hasInvalidField) {
-    return { error: "Invalid settings fields" };
-  }
-
-  for (const field of stringFields) {
-    if (field in body) {
-      if (typeof body[field] !== "string") {
-        return { error: "Invalid settings fields" };
-      }
-
-      const fieldName = field === "pickupReturnInfo" ? "pickupInfo" : field;
-
-      settingsData[fieldName] = body[field].trim();
-    }
-  }
-
-  for (const field of numberFields) {
-    if (field in body) {
-      const value = Number(body[field]);
-
-      if (Number.isNaN(value) || value < 0) {
-        return {
-          error: "Price and deposit values must be numbers greater than or equal to 0",
-        };
-      }
-
-      settingsData[field] = value;
-    }
-  }
-
-  return { settingsData };
-}
+import {
+  defaultSiteSettings,
+  getSiteSettingsWithDefaults,
+} from "@/utils/defaultSiteSettings";
+import { validateSiteSettings } from "@/utils/validateSiteSettings";
 
 export default async function handler(request, response) {
   await dbConnect();
 
   if (request.method === "GET") {
     const siteSettings = await SiteSettings.findOne();
+    const safeSettings = getSiteSettingsWithDefaults(siteSettings?.toObject());
 
-    if (siteSettings) {
-      return response.status(200).json(siteSettings);
-    }
-
-    return response.status(200).json(defaultSettings);
+    return response.status(200).json(safeSettings);
   }
 
   if (request.method === "PUT") {
@@ -121,22 +28,35 @@ export default async function handler(request, response) {
       return response.status(403).json({ message: "Admin access required" });
     }
 
-    const { error, settingsData } = sanitizeSettingsBody(request.body || {});
+    const { isValid, errors, sanitizedSettings } = validateSiteSettings(
+      request.body || {}
+    );
 
-    if (error) {
-      return response.status(400).json({ message: error });
+    if (!isValid) {
+      return response.status(400).json({
+        message: "Please check the business settings form.",
+        errors,
+      });
     }
 
     try {
       const existingSettings = await SiteSettings.findOne();
+      const settingsData = {
+        ...sanitizedSettings,
+        pickupInfo: sanitizedSettings.pickupReturnInfo,
+      };
+      delete settingsData.pickupReturnInfo;
 
       if (!existingSettings) {
         const newSettings = await SiteSettings.create({
-          ...defaultSettings,
+          ...defaultSiteSettings,
           ...settingsData,
         });
+        const safeSettings = getSiteSettingsWithDefaults(
+          newSettings.toObject()
+        );
 
-        return response.status(200).json(newSettings);
+        return response.status(200).json(safeSettings);
       }
 
       const updatedSettings = await SiteSettings.findByIdAndUpdate(
@@ -144,8 +64,11 @@ export default async function handler(request, response) {
         { $set: settingsData },
         { new: true }
       );
+      const safeSettings = getSiteSettingsWithDefaults(
+        updatedSettings.toObject()
+      );
 
-      return response.status(200).json(updatedSettings);
+      return response.status(200).json(safeSettings);
     } catch (error) {
       return response
         .status(500)
