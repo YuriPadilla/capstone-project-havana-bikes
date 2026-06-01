@@ -11,6 +11,7 @@ export default function AdminNavigation() {
       <StyledAdminLink href="/admin">Dashboard</StyledAdminLink>
       <StyledAdminLink href="/admin/bookings">Bookings</StyledAdminLink>
       <StyledAdminLink href="/admin/bikes">Bikes</StyledAdminLink>
+      <StyledAdminLink href="/admin/settings">Settings</StyledAdminLink>
       <StyledLogoutButton
         type="button"
         onClick={() => signOut({ callbackUrl: "/" })}
