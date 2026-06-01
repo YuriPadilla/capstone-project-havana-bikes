@@ -1,3 +1,4 @@
+import ContactInfo from "@/components/ContactInfo";
 import ContactUsForm from "../../components/ContactUsForm";
 import { useState } from "react";
 import ToastNotification from "../../components/ToastNotification";
@@ -39,6 +40,7 @@ export default function ContactUsPage() {
 
   return (
     <>
+      <ContactInfo />
       <ContactUsForm
         handleSubmit={handleSubmit}
         onNameChange={handleNameChange}
