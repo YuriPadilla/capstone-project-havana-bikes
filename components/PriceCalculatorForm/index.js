@@ -41,6 +41,9 @@ export default function PriceCalculatorForm({
   handleChangePrices,
   amountBikes,
   amountDays,
+  firstDayPrice,
+  additionalDayPrice,
+  currency = "$",
 }) {
   return (
     <>
@@ -67,7 +70,15 @@ export default function PriceCalculatorForm({
           <label htmlFor="price">Estimated rental price:</label>
           <StyledOutput id="price">
             {amountBikes >= 1 && amountDays >= 1 ? (
-              <strong>${calculateRentalPrice(amountBikes, amountDays)}</strong>
+              <strong>
+                {currency}
+                {calculateRentalPrice(
+                  amountBikes,
+                  amountDays,
+                  firstDayPrice,
+                  additionalDayPrice
+                )}
+              </strong>
             ) : (
               "???"
             )}
