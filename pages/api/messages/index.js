@@ -1,16 +1,44 @@
 import dbConnect from "../../../db/connect";
 import Conversation from "../../../db/models/Conversation";
+import { getAdminSession } from "@/utils/auth";
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 export default async function handler(request, response) {
-  await dbConnect();
+  if (request.method === "GET") {
+    const { status } = await getAdminSession(request, response);
+
+    if (status === 401) {
+      return response.status(401).json({ message: "Authentication required" });
+    }
+
+    if (status === 403) {
+      return response.status(403).json({ message: "Admin access required" });
+    }
+
+    try {
+      await dbConnect();
+
+      const conversations = await Conversation.find().sort({
+        updatedAt: -1,
+        createdAt: -1,
+      });
+
+      return response.status(200).json(conversations);
+    } catch (error) {
+      return response.status(500).json({
+        message: "Messages could not be loaded",
+      });
+    }
+  }
 
   if (request.method !== "POST") {
     return response.status(405).json({ status: "Method Not Allowed" });
   }
+
+  await dbConnect();
 
   const { customerName, customerEmail, message } = request.body || {};
   const cleanCustomerName =
