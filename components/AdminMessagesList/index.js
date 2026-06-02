@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Link from "next/link";
 import AdminMessageCard from "@/components/AdminMessageCard";
 
 const StyledList = styled.ul`
@@ -9,12 +10,29 @@ const StyledList = styled.ul`
   list-style: none;
 `;
 
+const StyledConversationLink = styled(Link)`
+  display: block;
+  color: inherit;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 3px;
+  }
+`;
+
 export default function AdminMessagesList({ conversations }) {
   return (
     <StyledList>
       {conversations.map((conversation, index) => (
         <li key={conversation._id || index}>
-          <AdminMessageCard conversation={conversation} />
+          {conversation._id ? (
+            <StyledConversationLink href={`/admin/messages/${conversation._id}`}>
+              <AdminMessageCard conversation={conversation} />
+            </StyledConversationLink>
+          ) : (
+            <AdminMessageCard conversation={conversation} />
+          )}
         </li>
       ))}
     </StyledList>
