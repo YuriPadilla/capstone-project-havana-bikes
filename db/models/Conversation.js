@@ -11,7 +11,11 @@ const conversationSchema = new Schema(
       trim: true,
       lowercase: true,
     },
-    status: { type: String, default: "open" },
+    status: {
+      type: String,
+      enum: ["open", "replied", "closed"],
+      default: "open",
+    },
     messages: [
       {
         sender: {

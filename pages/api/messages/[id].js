@@ -4,7 +4,7 @@ import Conversation from "../../../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
 
 export default async function handler(request, response) {
-  if (request.method !== "GET") {
+  if (!["GET", "PATCH"].includes(request.method)) {
     return response.status(405).json({ status: "Method Not Allowed" });
   }
 
@@ -22,6 +22,43 @@ export default async function handler(request, response) {
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
     return response.status(400).json({ message: "Invalid conversation id" });
+  }
+
+  if (request.method === "PATCH") {
+    const cleanMessage =
+      typeof request.body?.message === "string"
+        ? request.body.message.trim()
+        : "";
+
+    if (!cleanMessage) {
+      return response.status(400).json({
+        message: "Message is required",
+      });
+    }
+
+    try {
+      await dbConnect();
+
+      const conversation = await Conversation.findById(id);
+
+      if (!conversation) {
+        return response.status(404).json({ message: "Conversation not found" });
+      }
+
+      conversation.messages.push({
+        sender: "admin",
+        message: cleanMessage,
+      });
+      conversation.status = "replied";
+
+      const updatedConversation = await conversation.save();
+
+      return response.status(200).json(updatedConversation);
+    } catch (error) {
+      return response.status(500).json({
+        message: "Conversation could not be updated",
+      });
+    }
   }
 
   try {

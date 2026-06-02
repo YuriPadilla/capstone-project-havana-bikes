@@ -1,7 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
+import { useSWRConfig } from "swr";
 import styled from "styled-components";
 import AdminNavigation from "@/components/AdminNavigation";
 import StandardSectionApp from "@/components/StandardSectionApp";
@@ -77,6 +79,49 @@ const StyledMessageMeta = styled.p`
   font-weight: 700;
 `;
 
+const StyledReplyForm = styled.form`
+  display: grid;
+  gap: var(--space-s);
+`;
+
+const StyledTextarea = styled.textarea`
+  width: 100%;
+  min-height: 8rem;
+  padding: var(--space-s);
+  border: 1px solid #d7ddd8;
+  border-radius: var(--radius-s);
+  font: inherit;
+  resize: vertical;
+`;
+
+const StyledSubmitButton = styled.button`
+  width: fit-content;
+  min-height: 2.75rem;
+  padding: var(--space-s) var(--space-m);
+  border: none;
+  border-radius: var(--radius-s);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 2px;
+  }
+`;
+
+const StyledSuccessMessage = styled(StyledStateMessage)`
+  border-color: #2c6b3f;
+  color: #2c6b3f;
+`;
+
 const fetchConversation = async (url) => {
   const response = await fetch(url);
 
@@ -118,16 +163,83 @@ function getSenderLabel(sender) {
   return "Customer";
 }
 
+async function getErrorMessage(response) {
+  try {
+    const errorData = await response.json();
+
+    return (
+      errorData.message ||
+      errorData.error ||
+      "Reply could not be saved. Please try again."
+    );
+  } catch (error) {
+    return "Reply could not be saved. Please try again.";
+  }
+}
+
 export default function AdminMessageDetailPage() {
   const { status } = useSession();
   const router = useRouter();
   const { id } = router.query;
+  const { mutate: mutateMessagesList } = useSWRConfig();
   const {
     data: conversation,
     error,
     isLoading,
+    mutate: mutateConversation,
   } = useSWR(id ? `/api/messages/${id}` : null, fetchConversation);
+  const [replyMessage, setReplyMessage] = useState("");
+  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
+  const [replySuccess, setReplySuccess] = useState("");
+  const [replyError, setReplyError] = useState("");
   const sortedMessages = getSortedMessages(conversation?.messages);
+
+  function handleReplyMessageChange(event) {
+    setReplyMessage(event.target.value);
+    setReplySuccess("");
+  }
+
+  async function handleSubmitReply(event) {
+    event.preventDefault();
+    const cleanMessage = replyMessage.trim();
+
+    setReplySuccess("");
+    setReplyError("");
+
+    if (!cleanMessage) {
+      setReplyError("Please write a reply before sending.");
+      return;
+    }
+
+    setIsSubmittingReply(true);
+
+    try {
+      const response = await fetch(`/api/messages/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: cleanMessage }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await getErrorMessage(response);
+        setReplyError(errorMessage);
+        return;
+      }
+
+      const updatedConversation = await response.json();
+
+      setReplyMessage("");
+      setReplySuccess("Reply saved successfully.");
+      await mutateConversation(updatedConversation, false);
+      await mutateMessagesList("/api/messages");
+    } catch (error) {
+      setReplyError("Reply could not be saved. Please try again.");
+    } finally {
+      setIsSubmittingReply(false);
+    }
+  }
 
   if (status === "loading") {
     return (
@@ -200,6 +312,31 @@ export default function AdminMessageDetailPage() {
               ) : (
                 <StyledText>No messages yet.</StyledText>
               )}
+            </StyledSection>
+            <StyledSection>
+              <StyledSectionTitle>Reply to this conversation</StyledSectionTitle>
+              {replySuccess && (
+                <StyledSuccessMessage>{replySuccess}</StyledSuccessMessage>
+              )}
+              {replyError && (
+                <StyledErrorMessage>{replyError}</StyledErrorMessage>
+              )}
+              <StyledReplyForm onSubmit={handleSubmitReply}>
+                <label htmlFor="replyMessage">Admin reply</label>
+                <StyledTextarea
+                  id="replyMessage"
+                  name="replyMessage"
+                  value={replyMessage}
+                  onChange={handleReplyMessageChange}
+                  placeholder="Write a reply..."
+                />
+                <StyledSubmitButton
+                  type="submit"
+                  disabled={isSubmittingReply || replyMessage.trim() === ""}
+                >
+                  {isSubmittingReply ? "Sending..." : "Send reply"}
+                </StyledSubmitButton>
+              </StyledReplyForm>
             </StyledSection>
           </>
         )}
