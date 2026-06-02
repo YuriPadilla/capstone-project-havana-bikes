@@ -14,8 +14,10 @@ export default function ContactUsForm({
   onMessageChange,
   inputName,
   inputEmail,
+  inputMessage,
   inicialAmountChar,
   amountCharLeft,
+  isSubmitting,
 }) {
   return (
     <>
@@ -64,12 +66,13 @@ export default function ContactUsForm({
             <StyledButton
               type="submit"
               disabled={
-                inputName === "" || inputEmail === "" || amountCharLeft === 250
-                  ? true
-                  : false
+                inputName.trim() === "" ||
+                inputEmail.trim() === "" ||
+                inputMessage.trim() === "" ||
+                isSubmitting
               }
             >
-              Send
+              {isSubmitting ? "Sending..." : "Send"}
             </StyledButton>
           </StyledButtonContainer>
         </StyledForm>
