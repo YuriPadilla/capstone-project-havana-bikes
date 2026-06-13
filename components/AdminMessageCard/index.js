@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import AdminMessageStatusBadge from "@/components/AdminMessageStatusBadge";
 
 const StyledCard = styled.article`
   display: grid;
@@ -19,10 +20,6 @@ const StyledHeader = styled.div`
 
 const StyledTitle = styled.h4`
   margin: 0;
-`;
-
-const StyledStatus = styled.span`
-  font-weight: 700;
 `;
 
 const StyledDetails = styled.div`
@@ -58,18 +55,18 @@ function getLatestMessagePreview(messages) {
 }
 
 export default function AdminMessageCard({ conversation }) {
-  const status = conversation.status || "open";
+  const status = conversation.status || "new";
   const isUnread =
     conversation.unread === true ||
     conversation.isRead === false ||
-    (!conversation.readAt && status === "open");
+    (!conversation.readAt && status === "new");
   const date = conversation.updatedAt || conversation.createdAt;
 
   return (
     <StyledCard $isUnread={isUnread}>
       <StyledHeader>
         <StyledTitle>{conversation.customerName || "Unknown customer"}</StyledTitle>
-        <StyledStatus>{status}</StyledStatus>
+        <AdminMessageStatusBadge status={status} />
       </StyledHeader>
       <StyledDetails>
         <StyledText>{conversation.customerEmail || "No email available"}</StyledText>

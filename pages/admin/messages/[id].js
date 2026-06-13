@@ -1,11 +1,12 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
 import { useSWRConfig } from "swr";
 import styled from "styled-components";
 import AdminNavigation from "@/components/AdminNavigation";
+import AdminMessageStatusBadge from "@/components/AdminMessageStatusBadge";
 import StandardSectionApp from "@/components/StandardSectionApp";
 import { getAdminSession } from "@/utils/auth";
 
@@ -117,6 +118,11 @@ const StyledSubmitButton = styled.button`
   }
 `;
 
+const StyledArchiveButton = styled(StyledSubmitButton)`
+  margin-top: var(--space-s);
+  background: #4b5563;
+`;
+
 const StyledSuccessMessage = styled(StyledStateMessage)`
   border-color: #2c6b3f;
   color: #2c6b3f;
@@ -163,17 +169,16 @@ function getSenderLabel(sender) {
   return "Customer";
 }
 
-async function getErrorMessage(response) {
+async function getErrorMessage(
+  response,
+  fallback = "Reply could not be saved. Please try again."
+) {
   try {
     const errorData = await response.json();
 
-    return (
-      errorData.message ||
-      errorData.error ||
-      "Reply could not be saved. Please try again."
-    );
+    return errorData.message || errorData.error || fallback;
   } catch (error) {
-    return "Reply could not be saved. Please try again.";
+    return fallback;
   }
 }
 
@@ -192,11 +197,92 @@ export default function AdminMessageDetailPage() {
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [replySuccess, setReplySuccess] = useState("");
   const [replyError, setReplyError] = useState("");
+  const [isArchiving, setIsArchiving] = useState(false);
+  const [archiveSuccess, setArchiveSuccess] = useState("");
+  const [archiveError, setArchiveError] = useState("");
+  const hasAttemptedMarkAsRead = useRef(false);
   const sortedMessages = getSortedMessages(conversation?.messages);
+
+  useEffect(() => {
+    async function markConversationAsRead() {
+      try {
+        const response = await fetch(`/api/messages/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "read" }),
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const updatedConversation = await response.json();
+
+        await mutateConversation(updatedConversation, false);
+        await mutateMessagesList("/api/messages");
+      } catch (error) {
+        return;
+      }
+    }
+
+    if (
+      !id ||
+      conversation?.status !== "new" ||
+      hasAttemptedMarkAsRead.current
+    ) {
+      return;
+    }
+
+    hasAttemptedMarkAsRead.current = true;
+    markConversationAsRead();
+  }, [
+    conversation?.status,
+    id,
+    mutateConversation,
+    mutateMessagesList,
+  ]);
 
   function handleReplyMessageChange(event) {
     setReplyMessage(event.target.value);
     setReplySuccess("");
+  }
+
+  async function handleArchiveConversation() {
+    setArchiveSuccess("");
+    setArchiveError("");
+
+    setIsArchiving(true);
+
+    try {
+      const response = await fetch(`/api/messages/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: "archived" }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await getErrorMessage(
+          response,
+          "Conversation could not be archived. Please try again."
+        );
+        setArchiveError(errorMessage);
+        return;
+      }
+
+      const updatedConversation = await response.json();
+
+      setArchiveSuccess("Conversation archived successfully.");
+      await mutateConversation(updatedConversation, false);
+      await mutateMessagesList("/api/messages");
+    } catch (error) {
+      setArchiveError("Conversation could not be archived. Please try again.");
+    } finally {
+      setIsArchiving(false);
+    }
   }
 
   async function handleSubmitReply(event) {
@@ -284,11 +370,26 @@ export default function AdminMessageDetailPage() {
               <StyledText>
                 {conversation.customerEmail || "No email available"}
               </StyledText>
-              <StyledText>Status: {conversation.status || "open"}</StyledText>
+              <AdminMessageStatusBadge status={conversation.status} />
               <StyledText>
                 Last update:{" "}
                 {formatDate(conversation.updatedAt || conversation.createdAt)}
               </StyledText>
+              {archiveSuccess && (
+                <StyledSuccessMessage>{archiveSuccess}</StyledSuccessMessage>
+              )}
+              {archiveError && (
+                <StyledErrorMessage>{archiveError}</StyledErrorMessage>
+              )}
+              {conversation.status !== "archived" && (
+                <StyledArchiveButton
+                  type="button"
+                  disabled={isArchiving}
+                  onClick={handleArchiveConversation}
+                >
+                  {isArchiving ? "Archiving..." : "Archive conversation"}
+                </StyledArchiveButton>
+              )}
             </StyledSection>
             <StyledSection>
               <StyledSectionTitle>Message history</StyledSectionTitle>

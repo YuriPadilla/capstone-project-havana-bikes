@@ -25,10 +25,11 @@ function createResponse() {
   };
 }
 
-function createRequest({ method = "GET", body = {} } = {}) {
+function createRequest({ method = "GET", body = {}, query = {} } = {}) {
   return {
     method,
     body,
+    query,
   };
 }
 
@@ -74,7 +75,7 @@ describe("GET /api/messages", () => {
         _id: "conversation-id",
         customerName: "Test User",
         customerEmail: "test@example.com",
-        status: "open",
+        status: "new",
       },
     ];
     const sort = jest.fn().mockResolvedValue(conversations);
@@ -85,10 +86,46 @@ describe("GET /api/messages", () => {
     await handler(request, response);
 
     expect(dbConnect).toHaveBeenCalled();
-    expect(Conversation.find).toHaveBeenCalledWith();
+    expect(Conversation.find).toHaveBeenCalledWith({
+      status: { $in: ["new", "read", "replied"] },
+    });
     expect(sort).toHaveBeenCalledWith({ updatedAt: -1, createdAt: -1 });
     expect(response.status).toHaveBeenCalledWith(200);
     expect(response.json).toHaveBeenCalledWith(conversations);
+  });
+
+  test("returns archived conversations for archived view", async () => {
+    const conversations = [
+      {
+        _id: "conversation-id",
+        customerName: "Test User",
+        customerEmail: "test@example.com",
+        status: "archived",
+      },
+    ];
+    const sort = jest.fn().mockResolvedValue(conversations);
+    Conversation.find.mockReturnValue({ sort });
+    const request = createRequest({ query: { view: "archived" } });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(Conversation.find).toHaveBeenCalledWith({ status: "archived" });
+    expect(sort).toHaveBeenCalledWith({ updatedAt: -1, createdAt: -1 });
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith(conversations);
+  });
+
+  test("rejects unsupported views with 400", async () => {
+    const request = createRequest({ query: { view: "closed" } });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.json).toHaveBeenCalledWith({
+      message: "Unsupported messages view",
+    });
   });
 
   test("returns 500 if conversations could not be loaded", async () => {
@@ -114,6 +151,45 @@ describe("GET /api/messages", () => {
     expect(response.status).toHaveBeenCalledWith(405);
     expect(response.json).toHaveBeenCalledWith({
       status: "Method Not Allowed",
+    });
+  });
+});
+
+describe("POST /api/messages", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    dbConnect.mockResolvedValue();
+    Conversation.create.mockResolvedValue({});
+  });
+
+  test("creates a conversation with status new", async () => {
+    const request = createRequest({
+      method: "POST",
+      body: {
+        customerName: "Test User",
+        customerEmail: "test@example.com",
+        message: "Hello Havana Bikes",
+      },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(Conversation.create).toHaveBeenCalledWith({
+      customerName: "Test User",
+      customerEmail: "test@example.com",
+      status: "new",
+      messages: [
+        {
+          sender: "customer",
+          message: "Hello Havana Bikes",
+        },
+      ],
+    });
+    expect(response.status).toHaveBeenCalledWith(201);
+    expect(response.json).toHaveBeenCalledWith({
+      status: "success",
+      message: "Message saved successfully",
     });
   });
 });
