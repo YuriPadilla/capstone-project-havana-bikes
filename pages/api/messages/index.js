@@ -9,6 +9,7 @@ function isValidEmail(email) {
 export default async function handler(request, response) {
   if (request.method === "GET") {
     const { status } = await getAdminSession(request, response);
+    const { view = "inbox" } = request.query || {};
 
     if (status === 401) {
       return response.status(401).json({ message: "Authentication required" });
@@ -18,10 +19,21 @@ export default async function handler(request, response) {
       return response.status(403).json({ message: "Admin access required" });
     }
 
+    if (!["inbox", "archived"].includes(view)) {
+      return response.status(400).json({
+        message: "Unsupported messages view",
+      });
+    }
+
     try {
       await dbConnect();
 
-      const conversations = await Conversation.find().sort({
+      const filter =
+        view === "archived"
+          ? { status: "archived" }
+          : { status: { $in: ["new", "read", "replied"] } };
+
+      const conversations = await Conversation.find(filter).sort({
         updatedAt: -1,
         createdAt: -1,
       });
@@ -65,7 +77,7 @@ export default async function handler(request, response) {
     await Conversation.create({
       customerName: cleanCustomerName,
       customerEmail: cleanCustomerEmail,
-      status: "open",
+      status: "new",
       messages: [
         {
           sender: "customer",

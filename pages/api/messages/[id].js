@@ -3,6 +3,8 @@ import dbConnect from "../../../db/connect";
 import Conversation from "../../../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
 
+const allowedStatuses = ["new", "read", "replied", "archived"];
+
 export default async function handler(request, response) {
   if (!["GET", "PATCH"].includes(request.method)) {
     return response.status(405).json({ status: "Method Not Allowed" });
@@ -25,12 +27,22 @@ export default async function handler(request, response) {
   }
 
   if (request.method === "PATCH") {
+    const requestedStatus = request.body?.status;
     const cleanMessage =
       typeof request.body?.message === "string"
         ? request.body.message.trim()
         : "";
 
-    if (!cleanMessage) {
+    if (
+      requestedStatus !== undefined &&
+      !allowedStatuses.includes(requestedStatus)
+    ) {
+      return response.status(400).json({
+        message: "Invalid conversation status",
+      });
+    }
+
+    if (requestedStatus === undefined && !cleanMessage) {
       return response.status(400).json({
         message: "Message is required",
       });
@@ -43,6 +55,14 @@ export default async function handler(request, response) {
 
       if (!conversation) {
         return response.status(404).json({ message: "Conversation not found" });
+      }
+
+      if (requestedStatus !== undefined) {
+        conversation.status = requestedStatus;
+
+        const updatedConversation = await conversation.save();
+
+        return response.status(200).json(updatedConversation);
       }
 
       conversation.messages.push({

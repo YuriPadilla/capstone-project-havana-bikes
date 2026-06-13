@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import useSWR from "swr";
 import styled from "styled-components";
 import AdminMessagesList from "@/components/AdminMessagesList";
@@ -28,6 +29,30 @@ const StyledErrorMessage = styled(StyledStateMessage)`
   color: #8f1d1d;
 `;
 
+const StyledFilterGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin: var(--space-m) 0;
+`;
+
+const StyledFilterButton = styled.button`
+  min-height: 2.5rem;
+  padding: var(--space-s) var(--space-m);
+  border: 1px solid ${({ $isActive }) => ($isActive ? "#5cafa5" : "#d7ddd8")};
+  border-radius: var(--radius-s);
+  background: ${({ $isActive }) => ($isActive ? "#eefaf8" : "#ffffff")};
+  color: black;
+  font: inherit;
+  font-weight: ${({ $isActive }) => ($isActive ? "700" : "400")};
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid #5cafa5;
+    outline-offset: 2px;
+  }
+`;
+
 const fetchAdminMessages = async (url) => {
   const response = await fetch(url);
 
@@ -40,11 +65,12 @@ const fetchAdminMessages = async (url) => {
 
 export default function AdminMessagesPage() {
   const { status } = useSession();
+  const [view, setView] = useState("inbox");
   const {
     data: conversations,
     error,
     isLoading,
-  } = useSWR("/api/messages", fetchAdminMessages);
+  } = useSWR(`/api/messages?view=${view}`, fetchAdminMessages);
 
   if (status === "loading") {
     return (
@@ -67,6 +93,24 @@ export default function AdminMessagesPage() {
         <StyledText>
           This page shows customer messages received from the contact form.
         </StyledText>
+        <StyledFilterGroup aria-label="Message filters">
+          <StyledFilterButton
+            type="button"
+            $isActive={view === "inbox"}
+            aria-pressed={view === "inbox"}
+            onClick={() => setView("inbox")}
+          >
+            Inbox
+          </StyledFilterButton>
+          <StyledFilterButton
+            type="button"
+            $isActive={view === "archived"}
+            aria-pressed={view === "archived"}
+            onClick={() => setView("archived")}
+          >
+            Archived
+          </StyledFilterButton>
+        </StyledFilterGroup>
         {isLoading && <StyledStateMessage>Loading messages...</StyledStateMessage>}
         {error && (
           <StyledErrorMessage>
@@ -74,7 +118,11 @@ export default function AdminMessagesPage() {
           </StyledErrorMessage>
         )}
         {conversations?.length === 0 && (
-          <StyledStateMessage>No messages yet.</StyledStateMessage>
+          <StyledStateMessage>
+            {view === "archived"
+              ? "No archived messages yet."
+              : "No messages yet."}
+          </StyledStateMessage>
         )}
         {conversations?.length > 0 && (
           <AdminMessagesList conversations={conversations} />

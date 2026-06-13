@@ -13,8 +13,8 @@ const conversationSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["open", "replied", "closed"],
-      default: "open",
+      enum: ["new", "read", "replied", "archived"],
+      default: "new",
     },
     messages: [
       {
