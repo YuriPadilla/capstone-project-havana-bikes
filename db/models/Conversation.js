@@ -16,6 +16,15 @@ const conversationSchema = new Schema(
       enum: ["new", "read", "replied", "archived"],
       default: "new",
     },
+    confirmationEmail: {
+      status: {
+        type: String,
+        enum: ["not_sent", "sent", "failed"],
+        default: "not_sent",
+      },
+      sentAt: Date,
+      failedAt: Date,
+    },
     messages: [
       {
         sender: {

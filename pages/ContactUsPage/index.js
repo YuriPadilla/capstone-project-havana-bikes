@@ -62,7 +62,9 @@ export default function ContactUsPage() {
       setAmountCharLeft(inicialAmountChar);
       event.target.elements.name.focus();
 
-      setToastMessage("Your message was sent");
+      setToastMessage(
+        "Your message was received. We will reply as soon as possible."
+      );
       setToastAction("enter");
       setTimeout(() => setToastAction("exit"), 3000);
     } catch (error) {
