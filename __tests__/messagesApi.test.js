@@ -184,6 +184,10 @@ describe("POST /api/messages", () => {
       adminNotificationEmail: {
         status: "not_sent",
       },
+      emailStatus: {
+        customerConfirmation: "not_sent",
+        adminNotification: "not_sent",
+      },
       save: jest.fn().mockResolvedValue(),
     };
     Conversation.create.mockResolvedValue(conversation);
@@ -262,6 +266,7 @@ describe("POST /api/messages", () => {
       status: "sent",
       sentAt: expect.any(Date),
     });
+    expect(conversation.emailStatus.customerConfirmation).toBe("sent");
     expect(sendAdminMessageNotificationEmail).toHaveBeenCalledWith({
       customerName: "Test User",
       customerEmail: "test@example.com",
@@ -272,6 +277,7 @@ describe("POST /api/messages", () => {
       status: "sent",
       sentAt: expect.any(Date),
     });
+    expect(conversation.emailStatus.adminNotification).toBe("sent");
     expect(conversation.save).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith({
@@ -301,11 +307,13 @@ describe("POST /api/messages", () => {
       status: "failed",
       failedAt: expect.any(Date),
     });
+    expect(conversation.emailStatus.customerConfirmation).toBe("failed");
     expect(sendAdminMessageNotificationEmail).toHaveBeenCalled();
     expect(conversation.adminNotificationEmail).toEqual({
       status: "sent",
       sentAt: expect.any(Date),
     });
+    expect(conversation.emailStatus.adminNotification).toBe("sent");
     expect(conversation.save).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith({
@@ -340,11 +348,13 @@ describe("POST /api/messages", () => {
       status: "sent",
       sentAt: expect.any(Date),
     });
+    expect(conversation.emailStatus.customerConfirmation).toBe("sent");
     expect(conversation.adminNotificationEmail).toEqual({
       status: "failed",
       failedAt: expect.any(Date),
       error: "Admin notification email could not be sent.",
     });
+    expect(conversation.emailStatus.adminNotification).toBe("failed");
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith({
       status: "success",
@@ -373,7 +383,9 @@ describe("POST /api/messages", () => {
     await handler(request, response);
 
     expect(conversation.confirmationEmail.status).toBe("failed");
+    expect(conversation.emailStatus.customerConfirmation).toBe("failed");
     expect(conversation.adminNotificationEmail.status).toBe("failed");
+    expect(conversation.emailStatus.adminNotification).toBe("failed");
     expect(conversation.save).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(201);
   });

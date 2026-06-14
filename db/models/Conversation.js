@@ -38,6 +38,18 @@ const conversationSchema = new Schema(
       type: emailTrackingSchema,
       default: () => ({}),
     },
+    emailStatus: {
+      customerConfirmation: {
+        type: String,
+        enum: ["not_sent", "sent", "failed"],
+        default: "not_sent",
+      },
+      adminNotification: {
+        type: String,
+        enum: ["not_sent", "sent", "failed"],
+        default: "not_sent",
+      },
+    },
     messages: [
       {
         sender: {
@@ -49,8 +61,8 @@ const conversationSchema = new Schema(
         createdAt: { type: Date, default: Date.now },
         emailStatus: {
           type: String,
-          enum: ["not_applicable", "pending", "sent", "failed"],
-          default: "not_applicable",
+          enum: ["not_sent", "sent", "failed"],
+          default: "not_sent",
         },
         emailSentAt: Date,
         emailError: { type: String, trim: true },
