@@ -1,6 +1,8 @@
 import dbConnect from "../../../db/connect";
 import Conversation from "../../../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
+import { getContactConfirmationEmail } from "@/utils/email/getContactConfirmationEmail";
+import { sendEmail } from "@/utils/email/sendEmail";
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -74,7 +76,7 @@ export default async function handler(request, response) {
   }
 
   try {
-    await Conversation.create({
+    const conversation = await Conversation.create({
       customerName: cleanCustomerName,
       customerEmail: cleanCustomerEmail,
       status: "new",
@@ -85,6 +87,41 @@ export default async function handler(request, response) {
         },
       ],
     });
+
+    let emailResult;
+
+    try {
+      const emailContent = await getContactConfirmationEmail({
+        customerName: cleanCustomerName,
+        message: cleanMessage,
+      });
+
+      emailResult = await sendEmail({
+        to: cleanCustomerEmail,
+        subject: emailContent.subject,
+        text: emailContent.text,
+      });
+    } catch (error) {
+      emailResult = { success: false };
+    }
+
+    const emailTimestamp = new Date();
+
+    conversation.confirmationEmail = emailResult.success
+      ? {
+          status: "sent",
+          sentAt: emailTimestamp,
+        }
+      : {
+          status: "failed",
+          failedAt: emailTimestamp,
+        };
+
+    try {
+      await conversation.save();
+    } catch (error) {
+      // The contact message remains saved even if email tracking cannot update.
+    }
 
     return response.status(201).json({
       status: "success",

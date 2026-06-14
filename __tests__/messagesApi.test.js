@@ -1,6 +1,8 @@
 import dbConnect from "../db/connect";
 import Conversation from "../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
+import { getContactConfirmationEmail } from "@/utils/email/getContactConfirmationEmail";
+import { sendEmail } from "@/utils/email/sendEmail";
 import handler from "@/pages/api/messages";
 
 jest.mock("../db/connect", () => jest.fn());
@@ -12,6 +14,14 @@ jest.mock("../db/models/Conversation", () => ({
 
 jest.mock("@/utils/auth", () => ({
   getAdminSession: jest.fn(),
+}));
+
+jest.mock("@/utils/email/getContactConfirmationEmail", () => ({
+  getContactConfirmationEmail: jest.fn(),
+}));
+
+jest.mock("@/utils/email/sendEmail", () => ({
+  sendEmail: jest.fn(),
 }));
 
 function createResponse() {
@@ -156,13 +166,29 @@ describe("GET /api/messages", () => {
 });
 
 describe("POST /api/messages", () => {
+  let conversation;
+
   beforeEach(() => {
     jest.clearAllMocks();
     dbConnect.mockResolvedValue();
-    Conversation.create.mockResolvedValue({});
+    conversation = {
+      confirmationEmail: {
+        status: "not_sent",
+      },
+      save: jest.fn().mockResolvedValue(),
+    };
+    Conversation.create.mockResolvedValue(conversation);
+    getContactConfirmationEmail.mockResolvedValue({
+      subject: "We received your message — Havana Bikes",
+      text: "Confirmation email",
+    });
+    sendEmail.mockResolvedValue({
+      success: true,
+      messageId: "message-id",
+    });
   });
 
-  test("creates a conversation with status new", async () => {
+  test("creates a conversation with status new and tracks a sent confirmation", async () => {
     const request = createRequest({
       method: "POST",
       body: {
@@ -186,10 +212,58 @@ describe("POST /api/messages", () => {
         },
       ],
     });
+    expect(getContactConfirmationEmail).toHaveBeenCalledWith({
+      customerName: "Test User",
+      message: "Hello Havana Bikes",
+    });
+    expect(sendEmail).toHaveBeenCalledWith({
+      to: "test@example.com",
+      subject: "We received your message — Havana Bikes",
+      text: "Confirmation email",
+    });
+    expect(conversation.confirmationEmail).toEqual({
+      status: "sent",
+      sentAt: expect.any(Date),
+    });
+    expect(conversation.save).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith({
       status: "success",
       message: "Message saved successfully",
     });
+  });
+
+  test("keeps the saved conversation and tracks a failed confirmation email", async () => {
+    sendEmail.mockResolvedValue({
+      success: false,
+      error: "Technical SMTP error",
+    });
+    const request = createRequest({
+      method: "POST",
+      body: {
+        customerName: "Test User",
+        customerEmail: "test@example.com",
+        message: "Hello Havana Bikes",
+      },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(conversation.confirmationEmail).toEqual({
+      status: "failed",
+      failedAt: expect.any(Date),
+    });
+    expect(conversation.save).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(201);
+    expect(response.json).toHaveBeenCalledWith({
+      status: "success",
+      message: "Message saved successfully",
+    });
+    expect(response.json).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        error: "Technical SMTP error",
+      })
+    );
   });
 });
