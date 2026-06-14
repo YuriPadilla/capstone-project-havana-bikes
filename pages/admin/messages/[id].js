@@ -7,6 +7,7 @@ import { useSWRConfig } from "swr";
 import styled from "styled-components";
 import AdminNavigation from "@/components/AdminNavigation";
 import AdminMessageStatusBadge from "@/components/AdminMessageStatusBadge";
+import EmailStatusBadge from "@/components/EmailStatusBadge";
 import StandardSectionApp from "@/components/StandardSectionApp";
 import { getAdminSession } from "@/utils/auth";
 
@@ -44,6 +45,25 @@ const StyledSection = styled.section`
 `;
 
 const StyledSectionTitle = styled.h4`
+  margin: 0;
+`;
+
+const StyledEmailStatusList = styled.dl`
+  display: grid;
+  gap: var(--space-m);
+  margin: 0;
+`;
+
+const StyledEmailStatusItem = styled.div`
+  display: grid;
+  gap: var(--space-xs);
+`;
+
+const StyledEmailStatusLabel = styled.dt`
+  font-weight: 700;
+`;
+
+const StyledEmailStatusValue = styled.dd`
   margin: 0;
 `;
 
@@ -134,10 +154,13 @@ const StyledWarningMessage = styled(StyledStateMessage)`
   background: #fff9e8;
 `;
 
-const StyledEmailStatus = styled.p`
-  margin: 0;
+const StyledReplyEmailStatus = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  margin-top: var(--space-xs);
   font-size: 0.875rem;
-  font-weight: 700;
 `;
 
 const fetchConversation = async (url) => {
@@ -179,22 +202,6 @@ function getSenderLabel(sender) {
   }
 
   return "Customer";
-}
-
-function getEmailStatusLabel(emailStatus) {
-  if (emailStatus === "sent") {
-    return "Email sent";
-  }
-
-  if (emailStatus === "failed") {
-    return "Email not sent";
-  }
-
-  if (emailStatus === "pending") {
-    return "Email pending";
-  }
-
-  return "";
 }
 
 async function getErrorMessage(
@@ -453,18 +460,51 @@ export default function AdminMessageDetailPage() {
                       <StyledText>
                         {message.message || "No message content available."}
                       </StyledText>
-                      {message.sender === "admin" &&
-                        getEmailStatusLabel(message.emailStatus) && (
-                          <StyledEmailStatus>
-                            {getEmailStatusLabel(message.emailStatus)}
-                          </StyledEmailStatus>
-                        )}
+                      {message.sender === "admin" && (
+                        <StyledReplyEmailStatus>
+                          <span>Reply email:</span>
+                          <EmailStatusBadge
+                            status={message.emailStatus || "not_sent"}
+                          />
+                        </StyledReplyEmailStatus>
+                      )}
                     </StyledMessageItem>
                   ))}
                 </StyledMessageList>
               ) : (
                 <StyledText>No messages yet.</StyledText>
               )}
+            </StyledSection>
+            <StyledSection>
+              <StyledSectionTitle>Email notifications</StyledSectionTitle>
+              <StyledEmailStatusList>
+                <StyledEmailStatusItem>
+                  <StyledEmailStatusLabel>
+                    Customer confirmation
+                  </StyledEmailStatusLabel>
+                  <StyledEmailStatusValue>
+                    <EmailStatusBadge
+                      status={
+                        conversation.emailStatus?.customerConfirmation ||
+                        "not_sent"
+                      }
+                    />
+                  </StyledEmailStatusValue>
+                </StyledEmailStatusItem>
+                <StyledEmailStatusItem>
+                  <StyledEmailStatusLabel>
+                    Admin notification
+                  </StyledEmailStatusLabel>
+                  <StyledEmailStatusValue>
+                    <EmailStatusBadge
+                      status={
+                        conversation.emailStatus?.adminNotification ||
+                        "not_sent"
+                      }
+                    />
+                  </StyledEmailStatusValue>
+                </StyledEmailStatusItem>
+              </StyledEmailStatusList>
             </StyledSection>
             <StyledSection>
               <StyledSectionTitle>Reply to this conversation</StyledSectionTitle>

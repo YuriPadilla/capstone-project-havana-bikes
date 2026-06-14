@@ -17,7 +17,9 @@ describe("Conversation email tracking", () => {
 
     expect(conversation.confirmationEmail.status).toBe("not_sent");
     expect(conversation.adminNotificationEmail.status).toBe("not_sent");
-    expect(conversation.messages[0].emailStatus).toBe("not_applicable");
+    expect(conversation.emailStatus.customerConfirmation).toBe("not_sent");
+    expect(conversation.emailStatus.adminNotification).toBe("not_sent");
+    expect(conversation.messages[0].emailStatus).toBe("not_sent");
     expect(conversation.validateSync()).toBeUndefined();
   });
 });

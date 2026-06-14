@@ -213,4 +213,44 @@ describe("PATCH /api/messages/[id]", () => {
       })
     );
   });
+
+  test("updates only the newly added admin message when multiple replies exist", async () => {
+    const existingAdminMessage = {
+      sender: "admin",
+      message: "Previous reply",
+      emailStatus: "sent",
+      emailSentAt: new Date("2026-06-13T10:00:00.000Z"),
+    };
+    const conversation = {
+      customerName: "Test User",
+      customerEmail: "test@example.com",
+      status: "replied",
+      messages: [
+        {
+          sender: "customer",
+          message: "Original message",
+          emailStatus: "not_sent",
+        },
+        existingAdminMessage,
+      ],
+      save: jest.fn().mockResolvedValue(),
+    };
+    Conversation.findById.mockResolvedValue(conversation);
+    const request = createRequest({
+      body: { message: "New reply" },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(conversation.messages[1]).toEqual(existingAdminMessage);
+    expect(conversation.messages[2]).toEqual({
+      sender: "admin",
+      message: "New reply",
+      emailStatus: "sent",
+      emailSentAt: expect.any(Date),
+      emailError: undefined,
+    });
+    expect(response.status).toHaveBeenCalledWith(200);
+  });
 });

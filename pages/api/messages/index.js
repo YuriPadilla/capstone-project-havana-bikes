@@ -117,6 +117,9 @@ export default async function handler(request, response) {
           status: "failed",
           failedAt: confirmationEmailTimestamp,
         };
+    conversation.emailStatus.customerConfirmation = confirmationEmailResult.success
+      ? "sent"
+      : "failed";
 
     let adminNotificationResult;
 
@@ -143,6 +146,9 @@ export default async function handler(request, response) {
           failedAt: adminNotificationTimestamp,
           error: "Admin notification email could not be sent.",
         };
+    conversation.emailStatus.adminNotification = adminNotificationResult.success
+      ? "sent"
+      : "failed";
 
     try {
       await conversation.save();
