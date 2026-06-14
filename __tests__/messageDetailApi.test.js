@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import dbConnect from "../db/connect";
 import Conversation from "../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
+import { getAdminReplyEmail } from "@/utils/email/getAdminReplyEmail";
+import { sendEmail } from "@/utils/email/sendEmail";
 import handler from "@/pages/api/messages/[id]";
 
 jest.mock("mongoose", () => ({
@@ -20,6 +22,14 @@ jest.mock("../db/models/Conversation", () => ({
 
 jest.mock("@/utils/auth", () => ({
   getAdminSession: jest.fn(),
+}));
+
+jest.mock("@/utils/email/getAdminReplyEmail", () => ({
+  getAdminReplyEmail: jest.fn(),
+}));
+
+jest.mock("@/utils/email/sendEmail", () => ({
+  sendEmail: jest.fn(),
 }));
 
 function createResponse() {
@@ -54,6 +64,14 @@ describe("PATCH /api/messages/[id]", () => {
     });
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
     dbConnect.mockResolvedValue();
+    getAdminReplyEmail.mockResolvedValue({
+      subject: "Reply from Havana Bikes",
+      text: "Reply email",
+    });
+    sendEmail.mockResolvedValue({
+      success: true,
+      messageId: "message-id",
+    });
   });
 
   test("rejects invalid statuses with 400", async () => {
@@ -79,6 +97,8 @@ describe("PATCH /api/messages/[id]", () => {
     expect(response.json).toHaveBeenCalledWith({
       message: "Conversation not found",
     });
+    expect(getAdminReplyEmail).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
   });
 
   test("updates the conversation status to archived", async () => {
@@ -97,6 +117,8 @@ describe("PATCH /api/messages/[id]", () => {
 
     expect(conversation.status).toBe("archived");
     expect(conversation.save).toHaveBeenCalled();
+    expect(getAdminReplyEmail).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(200);
     expect(response.json).toHaveBeenCalledWith({
       _id: "conversation-id",
@@ -104,20 +126,13 @@ describe("PATCH /api/messages/[id]", () => {
     });
   });
 
-  test("adds an admin reply and changes status to replied", async () => {
+  test("saves an admin reply before sending email and tracks a successful send", async () => {
     const conversation = {
+      customerName: "Test User",
+      customerEmail: "test@example.com",
       status: "read",
       messages: [],
-      save: jest.fn().mockResolvedValue({
-        _id: "conversation-id",
-        status: "replied",
-        messages: [
-          {
-            sender: "admin",
-            message: "Yes, bikes are available.",
-          },
-        ],
-      }),
+      save: jest.fn().mockResolvedValue(),
     };
     Conversation.findById.mockResolvedValue(conversation);
     const request = createRequest({
@@ -131,10 +146,71 @@ describe("PATCH /api/messages/[id]", () => {
       {
         sender: "admin",
         message: "Yes, bikes are available.",
+        emailStatus: "sent",
+        emailSentAt: expect.any(Date),
+        emailError: undefined,
       },
     ]);
     expect(conversation.status).toBe("replied");
-    expect(conversation.save).toHaveBeenCalled();
+    expect(conversation.save).toHaveBeenCalledTimes(2);
+    expect(conversation.save.mock.invocationCallOrder[0]).toBeLessThan(
+      sendEmail.mock.invocationCallOrder[0]
+    );
+    expect(getAdminReplyEmail).toHaveBeenCalledWith({
+      customerName: "Test User",
+      message: "Yes, bikes are available.",
+    });
+    expect(sendEmail).toHaveBeenCalledWith({
+      to: "test@example.com",
+      subject: "Reply from Havana Bikes",
+      text: "Reply email",
+    });
     expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith(conversation);
+  });
+
+  test("keeps the saved reply and reports failed email delivery", async () => {
+    sendEmail.mockResolvedValue({
+      success: false,
+      error: "Email could not be sent.",
+    });
+    const conversation = {
+      customerName: "Test User",
+      customerEmail: "test@example.com",
+      status: "read",
+      messages: [],
+      save: jest.fn().mockResolvedValue(),
+    };
+    Conversation.findById.mockResolvedValue(conversation);
+    const request = createRequest({
+      body: { message: "Yes, bikes are available." },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(conversation.messages).toEqual([
+      {
+        sender: "admin",
+        message: "Yes, bikes are available.",
+        emailStatus: "failed",
+        emailError: "Email could not be sent",
+      },
+    ]);
+    expect(conversation.save).toHaveBeenCalledTimes(2);
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith(conversation);
+    expect(response.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        messages: expect.arrayContaining([
+          expect.objectContaining({
+            sender: "admin",
+            message: "Yes, bikes are available.",
+            emailStatus: "failed",
+            emailError: "Email could not be sent",
+          }),
+        ]),
+      })
+    );
   });
 });

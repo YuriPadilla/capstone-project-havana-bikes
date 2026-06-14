@@ -128,6 +128,18 @@ const StyledSuccessMessage = styled(StyledStateMessage)`
   color: #2c6b3f;
 `;
 
+const StyledWarningMessage = styled(StyledStateMessage)`
+  border-color: #8a6500;
+  color: #6b4f00;
+  background: #fff9e8;
+`;
+
+const StyledEmailStatus = styled.p`
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+`;
+
 const fetchConversation = async (url) => {
   const response = await fetch(url);
 
@@ -169,6 +181,22 @@ function getSenderLabel(sender) {
   return "Customer";
 }
 
+function getEmailStatusLabel(emailStatus) {
+  if (emailStatus === "sent") {
+    return "Email sent";
+  }
+
+  if (emailStatus === "failed") {
+    return "Email not sent";
+  }
+
+  if (emailStatus === "pending") {
+    return "Email pending";
+  }
+
+  return "";
+}
+
 async function getErrorMessage(
   response,
   fallback = "Reply could not be saved. Please try again."
@@ -196,6 +224,7 @@ export default function AdminMessageDetailPage() {
   const [replyMessage, setReplyMessage] = useState("");
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [replySuccess, setReplySuccess] = useState("");
+  const [replyWarning, setReplyWarning] = useState("");
   const [replyError, setReplyError] = useState("");
   const [isArchiving, setIsArchiving] = useState(false);
   const [archiveSuccess, setArchiveSuccess] = useState("");
@@ -247,6 +276,7 @@ export default function AdminMessageDetailPage() {
   function handleReplyMessageChange(event) {
     setReplyMessage(event.target.value);
     setReplySuccess("");
+    setReplyWarning("");
   }
 
   async function handleArchiveConversation() {
@@ -290,6 +320,7 @@ export default function AdminMessageDetailPage() {
     const cleanMessage = replyMessage.trim();
 
     setReplySuccess("");
+    setReplyWarning("");
     setReplyError("");
 
     if (!cleanMessage) {
@@ -315,9 +346,24 @@ export default function AdminMessageDetailPage() {
       }
 
       const updatedConversation = await response.json();
+      const latestMessage =
+        updatedConversation.messages?.[
+          updatedConversation.messages.length - 1
+        ];
 
       setReplyMessage("");
-      setReplySuccess("Reply saved successfully.");
+
+      if (
+        latestMessage?.sender === "admin" &&
+        latestMessage.emailStatus === "sent"
+      ) {
+        setReplySuccess("Reply saved and sent by email.");
+      } else {
+        setReplyWarning(
+          "Reply saved in the conversation history, but the email could not be sent. Please contact the customer manually."
+        );
+      }
+
       await mutateConversation(updatedConversation, false);
       await mutateMessagesList("/api/messages");
     } catch (error) {
@@ -407,6 +453,12 @@ export default function AdminMessageDetailPage() {
                       <StyledText>
                         {message.message || "No message content available."}
                       </StyledText>
+                      {message.sender === "admin" &&
+                        getEmailStatusLabel(message.emailStatus) && (
+                          <StyledEmailStatus>
+                            {getEmailStatusLabel(message.emailStatus)}
+                          </StyledEmailStatus>
+                        )}
                     </StyledMessageItem>
                   ))}
                 </StyledMessageList>
@@ -418,6 +470,9 @@ export default function AdminMessageDetailPage() {
               <StyledSectionTitle>Reply to this conversation</StyledSectionTitle>
               {replySuccess && (
                 <StyledSuccessMessage>{replySuccess}</StyledSuccessMessage>
+              )}
+              {replyWarning && (
+                <StyledWarningMessage>{replyWarning}</StyledWarningMessage>
               )}
               {replyError && (
                 <StyledErrorMessage>{replyError}</StyledErrorMessage>
