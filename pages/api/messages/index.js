@@ -2,6 +2,7 @@ import dbConnect from "../../../db/connect";
 import Conversation from "../../../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
 import { getContactConfirmationEmail } from "@/utils/email/getContactConfirmationEmail";
+import { sendAdminMessageNotificationEmail } from "@/utils/email/sendAdminMessageNotificationEmail";
 import { sendEmail } from "@/utils/email/sendEmail";
 
 function isValidEmail(email) {
@@ -88,7 +89,7 @@ export default async function handler(request, response) {
       ],
     });
 
-    let emailResult;
+    let confirmationEmailResult;
 
     try {
       const emailContent = await getContactConfirmationEmail({
@@ -96,25 +97,51 @@ export default async function handler(request, response) {
         message: cleanMessage,
       });
 
-      emailResult = await sendEmail({
+      confirmationEmailResult = await sendEmail({
         to: cleanCustomerEmail,
         subject: emailContent.subject,
         text: emailContent.text,
       });
     } catch (error) {
-      emailResult = { success: false };
+      confirmationEmailResult = { success: false };
     }
 
-    const emailTimestamp = new Date();
+    const confirmationEmailTimestamp = new Date();
 
-    conversation.confirmationEmail = emailResult.success
+    conversation.confirmationEmail = confirmationEmailResult.success
       ? {
           status: "sent",
-          sentAt: emailTimestamp,
+          sentAt: confirmationEmailTimestamp,
         }
       : {
           status: "failed",
-          failedAt: emailTimestamp,
+          failedAt: confirmationEmailTimestamp,
+        };
+
+    let adminNotificationResult;
+
+    try {
+      adminNotificationResult = await sendAdminMessageNotificationEmail({
+        customerName: cleanCustomerName,
+        customerEmail: cleanCustomerEmail,
+        message: cleanMessage,
+        createdAt: conversation.createdAt || new Date(),
+      });
+    } catch (error) {
+      adminNotificationResult = { success: false };
+    }
+
+    const adminNotificationTimestamp = new Date();
+
+    conversation.adminNotificationEmail = adminNotificationResult.success
+      ? {
+          status: "sent",
+          sentAt: adminNotificationTimestamp,
+        }
+      : {
+          status: "failed",
+          failedAt: adminNotificationTimestamp,
+          error: "Admin notification email could not be sent.",
         };
 
     try {

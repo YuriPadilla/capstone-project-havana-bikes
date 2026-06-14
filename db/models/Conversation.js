@@ -2,6 +2,20 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+const emailTrackingSchema = new Schema(
+  {
+    status: {
+      type: String,
+      enum: ["not_sent", "sent", "failed"],
+      default: "not_sent",
+    },
+    sentAt: Date,
+    failedAt: Date,
+    error: { type: String, trim: true },
+  },
+  { _id: false }
+);
+
 const conversationSchema = new Schema(
   {
     customerName: { type: String, required: true, trim: true },
@@ -17,13 +31,12 @@ const conversationSchema = new Schema(
       default: "new",
     },
     confirmationEmail: {
-      status: {
-        type: String,
-        enum: ["not_sent", "sent", "failed"],
-        default: "not_sent",
-      },
-      sentAt: Date,
-      failedAt: Date,
+      type: emailTrackingSchema,
+      default: () => ({}),
+    },
+    adminNotificationEmail: {
+      type: emailTrackingSchema,
+      default: () => ({}),
     },
     messages: [
       {
