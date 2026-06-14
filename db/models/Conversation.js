@@ -47,6 +47,13 @@ const conversationSchema = new Schema(
         },
         message: { type: String, required: true, trim: true },
         createdAt: { type: Date, default: Date.now },
+        emailStatus: {
+          type: String,
+          enum: ["not_applicable", "pending", "sent", "failed"],
+          default: "not_applicable",
+        },
+        emailSentAt: Date,
+        emailError: { type: String, trim: true },
       },
     ],
   },
