@@ -2,6 +2,7 @@ import dbConnect from "../db/connect";
 import Conversation from "../db/models/Conversation";
 import { getAdminSession } from "@/utils/auth";
 import { getContactConfirmationEmail } from "@/utils/email/getContactConfirmationEmail";
+import { sendAdminMessageNotificationEmail } from "@/utils/email/sendAdminMessageNotificationEmail";
 import { sendEmail } from "@/utils/email/sendEmail";
 import handler from "@/pages/api/messages";
 
@@ -18,6 +19,10 @@ jest.mock("@/utils/auth", () => ({
 
 jest.mock("@/utils/email/getContactConfirmationEmail", () => ({
   getContactConfirmationEmail: jest.fn(),
+}));
+
+jest.mock("@/utils/email/sendAdminMessageNotificationEmail", () => ({
+  sendAdminMessageNotificationEmail: jest.fn(),
 }));
 
 jest.mock("@/utils/email/sendEmail", () => ({
@@ -172,7 +177,11 @@ describe("POST /api/messages", () => {
     jest.clearAllMocks();
     dbConnect.mockResolvedValue();
     conversation = {
+      createdAt: new Date("2026-06-14T10:30:00.000Z"),
       confirmationEmail: {
+        status: "not_sent",
+      },
+      adminNotificationEmail: {
         status: "not_sent",
       },
       save: jest.fn().mockResolvedValue(),
@@ -186,9 +195,37 @@ describe("POST /api/messages", () => {
       success: true,
       messageId: "message-id",
     });
+    sendAdminMessageNotificationEmail.mockResolvedValue({
+      success: true,
+      messageId: "admin-message-id",
+    });
   });
 
-  test("creates a conversation with status new and tracks a sent confirmation", async () => {
+  test("saves the conversation before attempting either email", async () => {
+    const request = createRequest({
+      method: "POST",
+      body: {
+        customerName: "Test User",
+        customerEmail: "test@example.com",
+        message: "Hello Havana Bikes",
+      },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(Conversation.create.mock.invocationCallOrder[0]).toBeLessThan(
+      getContactConfirmationEmail.mock.invocationCallOrder[0]
+    );
+    expect(Conversation.create.mock.invocationCallOrder[0]).toBeLessThan(
+      sendAdminMessageNotificationEmail.mock.invocationCallOrder[0]
+    );
+    expect(sendEmail.mock.invocationCallOrder[0]).toBeLessThan(
+      sendAdminMessageNotificationEmail.mock.invocationCallOrder[0]
+    );
+  });
+
+  test("tracks successful customer confirmation and admin notification emails", async () => {
     const request = createRequest({
       method: "POST",
       body: {
@@ -225,6 +262,16 @@ describe("POST /api/messages", () => {
       status: "sent",
       sentAt: expect.any(Date),
     });
+    expect(sendAdminMessageNotificationEmail).toHaveBeenCalledWith({
+      customerName: "Test User",
+      customerEmail: "test@example.com",
+      message: "Hello Havana Bikes",
+      createdAt: new Date("2026-06-14T10:30:00.000Z"),
+    });
+    expect(conversation.adminNotificationEmail).toEqual({
+      status: "sent",
+      sentAt: expect.any(Date),
+    });
     expect(conversation.save).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith({
@@ -254,6 +301,11 @@ describe("POST /api/messages", () => {
       status: "failed",
       failedAt: expect.any(Date),
     });
+    expect(sendAdminMessageNotificationEmail).toHaveBeenCalled();
+    expect(conversation.adminNotificationEmail).toEqual({
+      status: "sent",
+      sentAt: expect.any(Date),
+    });
     expect(conversation.save).toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(201);
     expect(response.json).toHaveBeenCalledWith({
@@ -265,5 +317,64 @@ describe("POST /api/messages", () => {
         error: "Technical SMTP error",
       })
     );
+  });
+
+  test("returns 201 and tracks a failed admin notification", async () => {
+    sendAdminMessageNotificationEmail.mockResolvedValue({
+      success: false,
+      error: "Business contact email is not configured.",
+    });
+    const request = createRequest({
+      method: "POST",
+      body: {
+        customerName: "Test User",
+        customerEmail: "test@example.com",
+        message: "Hello Havana Bikes",
+      },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(conversation.confirmationEmail).toEqual({
+      status: "sent",
+      sentAt: expect.any(Date),
+    });
+    expect(conversation.adminNotificationEmail).toEqual({
+      status: "failed",
+      failedAt: expect.any(Date),
+      error: "Admin notification email could not be sent.",
+    });
+    expect(response.status).toHaveBeenCalledWith(201);
+    expect(response.json).toHaveBeenCalledWith({
+      status: "success",
+      message: "Message saved successfully",
+    });
+  });
+
+  test("returns 201 when both emails fail", async () => {
+    sendEmail.mockResolvedValue({
+      success: false,
+      error: "Email could not be sent.",
+    });
+    sendAdminMessageNotificationEmail.mockRejectedValue(
+      new Error("Unexpected notification error")
+    );
+    const request = createRequest({
+      method: "POST",
+      body: {
+        customerName: "Test User",
+        customerEmail: "test@example.com",
+        message: "Hello Havana Bikes",
+      },
+    });
+    const response = createResponse();
+
+    await handler(request, response);
+
+    expect(conversation.confirmationEmail.status).toBe("failed");
+    expect(conversation.adminNotificationEmail.status).toBe("failed");
+    expect(conversation.save).toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(201);
   });
 });
